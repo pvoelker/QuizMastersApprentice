@@ -1,0 +1,84 @@
+﻿<Window x:Class="QuizMastersApprenticeApp.EditTeamsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        xmlns:datagrid="clr-namespace:QuizMastersApprenticeApp.Controls.DataGrid"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="Edit Teams" Height="450" Width="800"
+        Icon="/QMA.ico">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Initialize}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="200">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                            <Setter Property="IsEnabled" Value="{Binding IsNotDeleted}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <datagrid:DataGridNumericColumn Header="Max Point&#x0a;Value" Binding="{Binding MaxPointValue, UpdateSourceTrigger=PropertyChanged}" Width="75">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                            <Setter Property="IsEnabled" Value="{Binding IsNotDeleted}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </datagrid:DataGridNumericColumn>
+                <DataGridTextColumn Header="Notes" Binding="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Width="275">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                            <Setter Property="IsEnabled" Value="{Binding IsNotDeleted}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource btnDrillDown}" Click="EditTeamMembersButton_Click" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}">Edit Members</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2">
+                                <Button Style="{StaticResource btnDelete}" Command="{Binding Delete}" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}">Delete</Button>
+                                <Button Style="{StaticResource btnRestore}" Command="{Binding Restore}" Visibility="{Binding Path=IsDeleted, Converter={StaticResource BoolToVis}}">Restore</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Visibility="{Binding Path=NotPersisted, Converter={StaticResource BoolToVis}}">💾</TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Style="{StaticResource txtNotes}" Grid.Row="2">Note: "Max Point Value" means that only questions up to this value will be asked for this team</TextBlock>
+        <Button Grid.Row="4" Style="{StaticResource btnAdd}" Command="{Binding Add}">
+            <AccessText>_Add Team</AccessText>
+        </Button>
+    </Grid>
+</Window>

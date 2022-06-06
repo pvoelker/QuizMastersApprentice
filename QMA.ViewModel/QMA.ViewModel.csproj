@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QMA.DataAccess.JsonFile\QMA.DataAccess.JsonFile.csproj" />
+    <ProjectReference Include="..\QMA.DataAccess\QMA.DataAccess.csproj" />
+    <ProjectReference Include="..\QMA.Importers.BibleFactPak\QMA.Importers.BibleFactPak.csproj" />
+    <ProjectReference Include="..\QMA.Model\QMA.Model.csproj" />
+    <ProjectReference Include="..\QMA.QuestionRepository.CSV\QMA.Importers.Csv.csproj" />
+  </ItemGroup>
+
+</Project>
