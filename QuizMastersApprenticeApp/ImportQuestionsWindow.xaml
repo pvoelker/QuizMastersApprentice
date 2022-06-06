@@ -1,0 +1,36 @@
+﻿<Window x:Class="QuizMastersApprenticeApp.ImportQuestionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="Import Questions" Height="450" Width="800"
+        Icon="/QMA.ico">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Initialize}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <RadioButton IsChecked="{Binding Path=CsvImport, Mode=TwoWay}">
+                <StackPanel>
+                    <TextBlock>Import from CSV</TextBlock>
+                    <TextBlock>File:</TextBlock>
+                    <TextBox Text="{Binding ImportFileName}"></TextBox>
+                </StackPanel>
+            </RadioButton>
+        </StackPanel>
+        <Button Grid.Row="2" Style="{StaticResource btnFunction}" Command="{Binding Import}">Import</Button>
+    </Grid>
+</Window>

@@ -1,0 +1,25 @@
+﻿<Window x:Class="QuizMastersApprenticeApp.MainMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        mc:Ignorable="d"
+        Title="Quiz Master's Apprentice" Height="525" Width="400"
+        WindowStartupLocation="CenterScreen" Icon="/QMA.ico" Loaded="Window_Loaded">
+    <StackPanel Margin="20">
+        <TextBlock Style="{StaticResource txtMainMenu}">Create a question set...</TextBlock>
+        <Button Style="{StaticResource btnMainMenu}" Click="QuestionSets_Click">Edit Question Sets</Button>
+        <Separator Height="20"></Separator>
+        <TextBlock Style="{StaticResource txtMainMenu}">Create your quizzers...</TextBlock>
+        <Button Style="{StaticResource btnMainMenu}" Click="Quizzers_Click">Edit Quizzers</Button>
+        <Separator Height="20"></Separator>
+        <TextBlock Style="{StaticResource txtMainMenu}">Create a quizzing season,</TextBlock>
+        <TextBlock Style="{StaticResource txtMainMenu}" Margin="10,0,0,0">edit teams...</TextBlock>
+        <Button Style="{StaticResource btnMainMenu}" Click="Seasons_Click">Edit Seasons</Button>
+        <Separator Height="20"></Separator>
+        <TextBlock Style="{StaticResource txtMainMenu}">Start a practice session...</TextBlock>
+        <Button Style="{StaticResource btnMainMenu}" Click="Practice_Click">Start Practice</Button>
+        <TextBlock HorizontalAlignment="Center" x:Name="tbVersion"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,60 @@
+﻿<Window x:Class="QuizMastersApprenticeApp.SelectDatabase"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="Select database..." Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Icon="/QMA.ico">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Initialize}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource txtMainMenu}">Previous Connections:</TextBlock>
+        <ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" SelectionMode="Single" MouseDoubleClick="Databases_MouseDoubleClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Type:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding TypeName}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Connection:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding Connection}" />
+                        <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource btnDelete}" Command="{Binding Delete}">Delete</Button>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock Grid.Row="4" Style="{StaticResource txtNotes}">Double click a previous connection to use it...</TextBlock>
+        <Button Grid.Row="6" Click="NewConnection_Click"  Style="{StaticResource btnAdd}">
+            <AccessText>_New Connection</AccessText>
+        </Button>
+    </Grid>
+</Window>
