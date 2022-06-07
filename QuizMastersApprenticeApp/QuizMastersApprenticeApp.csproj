@@ -8,7 +8,7 @@
     <ApplicationIcon>QMA.ico</ApplicationIcon>
     <AssemblyName>QMA</AssemblyName>
     <StartupObject>QuizMastersApprenticeApp.App</StartupObject>
-    <Version>$(VersionPrefix) 0.1.0</Version>
+    <Version>$(VersionPrefix) 0.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

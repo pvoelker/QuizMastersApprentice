@@ -1,5 +1,5 @@
 ;NSIS Modern User Interface
-;Quiz Masters Apprentice Script
+;Quiz Master's Apprentice Script
 ;Written by Paul Voelker
 
 ;--------------------------------
@@ -13,6 +13,7 @@
 ;--------------------------------
 
   !define APP_NAME "Quiz Masters Apprentice"
+  !define APP_FULL_NAME "Quiz Master's Apprentice"
 
 ;--------------------------------
 ;General
@@ -20,14 +21,14 @@
   !getdllversion ".\QuizMastersApprenticeApp\bin\Release\net6.0-windows\QMA.exe" MyVer_
 
   ;Name and file
-  Name "Quiz Masters Apprentice v${MyVer_1}.${MyVer_2}"
+  Name "Quiz Master's Apprentice v${MyVer_1}.${MyVer_2}"
   OutFile "QMAInstall.exe"
 
   VIProductVersion "${MyVer_1}.${MyVer_2}.${MyVer_3}.${MyVer_4}"
-  VIAddVersionKey ProductName "Quiz Masters Apprentice Install"
+  VIAddVersionKey ProductName "Quiz Master's Apprentice Install"
   VIAddVersionKey FileVersion "${MyVer_1}.${MyVer_2}.${MyVer_3}.${MyVer_4}"
   VIAddVersionKey ProductVersion "${MyVer_1}.${MyVer_2}.${MyVer_3}.${MyVer_4}"
-  VIAddVersionKey FileDescription "Installation Package for Quiz Masters Apprentice"
+  VIAddVersionKey FileDescription "Installation Package for Quiz Master's Apprentice"
   VIAddVersionKey LegalCopyright "Copyright © 2022 Paul Voelker"
 
   ;Default installation folder
@@ -76,7 +77,7 @@ Section
   
   ;'Programs and Features' entry (http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs)
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" \
-                   "DisplayName" "Quiz Masters Apprentice"
+                   "DisplayName" "Quiz Master's Apprentice"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" \
                    "Publisher" "Paul Voelker"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" \
@@ -139,7 +140,7 @@ Function .onInit
   StrCmp $R0 "" done
  
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  "'${APP_NAME}' is already installed. $\n$\nClick `OK` to remove the \
+  "'${APP_FULL_NAME}' is already installed. $\n$\nClick `OK` to remove the \
   previous version or `Cancel` to cancel this upgrade." \
   IDOK uninst
   Abort
