@@ -66,7 +66,7 @@ namespace QMA.ViewModel
             NewConnection = new RelayCommand(() =>
             {
                 var fileName = _openFileDialogService.Show(
-                    "Open file...",
+                    "Select file for local database...",
                     false,
                     new List<OpenFileFilter> {
                         new OpenFileFilter("QMA Database File", "*.qma")
