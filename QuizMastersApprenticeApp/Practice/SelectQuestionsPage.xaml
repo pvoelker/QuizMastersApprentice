@@ -36,8 +36,6 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="5"/>
@@ -45,12 +43,22 @@
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="2" Grid.Column="0"  IsChecked="{Binding OnlyUseImportQuestionsForPractice}">Only Use Imported Questions For Practice</CheckBox>
-                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Questions will be imported into: {0}'}" />
-                    <TextBox Grid.Row="4" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseFailed}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionSetImport, UpdateSourceTrigger=PropertyChanged}" />
-                    <Button Grid.Row="6" Grid.Column="0" Style="{StaticResource btnWizardNext}" Command="{Binding ParseImportedQuestions}">Parse Text</Button>
-                    <Button Grid.Row="6" Grid.Column="1" Style="{StaticResource btnWizardNext}" Command="{Binding ClearImportedQuestions}">Clear Import</Button>
-                    <DataGrid Grid.Row="8" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseSuccess}" ItemsSource="{Binding ParsedImportQuestions}" IsReadOnly="True" AutoGenerateColumns="False" CanUserDeleteRows="False">
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding OnlyUseImportQuestionsForPractice}">Only Use Imported Questions For Practice</CheckBox>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Questions will be imported into: {0}'}" />
+                        <TextBlock Grid.Row="0" Grid.Column="2">
+                            <Hyperlink Command="{Binding BibleFactPakHelp}">Help with Import</Hyperlink>   
+                        </TextBlock>
+                    </Grid>
+                    <TextBox Grid.Row="2" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseFailed}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionSetImport, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource btnWizardNext}" Command="{Binding ParseImportedQuestions}">Parse Text</Button>
+                    <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource btnWizardNext}" Command="{Binding ClearImportedQuestions}">Clear Import</Button>
+                    <DataGrid Grid.Row="6" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseSuccess}" ItemsSource="{Binding ParsedImportQuestions}" IsReadOnly="True" AutoGenerateColumns="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Num." Binding="{Binding Number}">
                             </DataGridTextColumn>

@@ -71,6 +71,10 @@ Section
   File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.exe
   File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.dll
   File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.runtimeconfig.json
+
+  SetOutPath "$INSTDIR\Help"
+
+  File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\Help\*.html
   
   ;Store installation folder
   WriteRegStr HKCU "Software\${APP_NAME}" "" $INSTDIR
@@ -89,6 +93,7 @@ Section
 
   ; Start Menu
   CreateDirectory "$SMPROGRAMS\${APP_NAME}"
+  CreateDirectory "$SMPROGRAMS\${APP_NAME}\Help"
   CreateShortCut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\QMA.exe"
 
   ;Create uninstaller
@@ -121,7 +126,9 @@ Section "Uninstall"
   Delete "$INSTDIR\*.exe"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\*.runtimeconfig.json"
+  Delete "$INSTDIR\Help\*.html"
 
+  RmDir "$INSTDIR\Help"
   RmDir "$INSTDIR"
 
   DeleteRegKey /ifempty HKCU "Software\${APP_NAME}"
