@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
@@ -214,6 +216,28 @@ namespace QMA.ViewModel.Practice
                     e.Cancel = true;
                 }
             });
+
+            BibleFactPakHelp = new RelayCommand(() =>
+            {
+                try
+                {
+                    var appLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+                    var appDirectory = Path.GetDirectoryName(appLocation);
+
+                    var helpFile = Path.Combine(appDirectory, "Help\\BibleFactPak.html");
+
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "file://" + helpFile,
+                        UseShellExecute = true
+                    });
+                }
+                catch
+                {
+                    _messageBoxService.ShowError("Unable to show help");
+                }
+            });
         }
 
         private void TeamQuizzers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -383,6 +407,8 @@ namespace QMA.ViewModel.Practice
         public IRelayCommand ClearImportedQuestions { get; }
 
         public IRelayCommand<CancelEventArgs> Closing { get; }
+
+        public IRelayCommand BibleFactPakHelp { get; }
 
         #endregion
 

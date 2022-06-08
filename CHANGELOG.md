@@ -9,3 +9,6 @@
 - Add CHANGELOG.md
 - Clean up install
 - Update text for selecting a local database file
+
+## 0.1.2
+- Add help for importing Bible Fact-Pak™ generated practice question sets
