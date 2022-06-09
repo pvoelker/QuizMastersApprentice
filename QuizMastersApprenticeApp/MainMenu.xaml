@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMastersApprenticeApp"
         mc:Ignorable="d"
-        Title="Quiz Master's Apprentice" Height="525" Width="400"
+        Title="Quiz Master's Apprentice" Height="550" Width="400"
         WindowStartupLocation="CenterScreen" Icon="/QMA.ico" Loaded="Window_Loaded">
     <StackPanel Margin="20">
         <TextBlock Style="{StaticResource txtMainMenu}">Create a question set...</TextBlock>
@@ -21,5 +21,7 @@
         <TextBlock Style="{StaticResource txtMainMenu}">Start a practice session...</TextBlock>
         <Button Style="{StaticResource btnMainMenu}" Click="Practice_Click">Start Practice</Button>
         <TextBlock HorizontalAlignment="Center" x:Name="tbVersion"/>
+        <TextBlock HorizontalAlignment="Center" x:Name="tbCopyright"/>
+        <TextBlock HorizontalAlignment="Center" Foreground="Red">Not for general distribution</TextBlock>
     </StackPanel>
 </Window>

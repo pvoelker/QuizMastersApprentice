@@ -17,3 +17,9 @@
 - Changed encoding on README and CHANGELOG files
 - Fix how data grids with unpersisted data handle drill downs (like *Questions Sets* → *Questions*)
 - Minor data grid layout fixes
+
+## 0.2.1
+- Implement visual styles for list boxes/views
+- Add copyright on main assembly and main menu window
+- Add 'not for general distribution' on main menu
+- Clean up terminology on select database window

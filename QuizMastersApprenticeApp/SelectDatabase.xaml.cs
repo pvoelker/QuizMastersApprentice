@@ -33,7 +33,7 @@ namespace QuizMastersApprenticeApp
             InitializeComponent();
         }
 
-        private void NewConnection_Click(object sender, RoutedEventArgs e)
+        private void NewDatabase_Click(object sender, RoutedEventArgs e)
         {
             var dataContext = (QMA.ViewModel.SelectDatabase)DataContext;
 
