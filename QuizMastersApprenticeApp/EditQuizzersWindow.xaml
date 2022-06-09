@@ -64,7 +64,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid Margin="2">
                                 <Button Style="{StaticResource btnDelete}" Command="{Binding Delete}" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}">Delete</Button>
                                 <Button Style="{StaticResource btnRestore}" Command="{Binding Restore}" Visibility="{Binding Path=IsDeleted, Converter={StaticResource BoolToVis}}">Restore</Button>
                             </Grid>    

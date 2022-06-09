@@ -41,7 +41,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource btnDrillDown}" Click="EditQuestionsButton_Click" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}" Margin="2">Edit Questions</Button>
+                            <Button Style="{StaticResource btnDrillDown}" Click="EditQuestionsButton_Click" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}" IsEnabled="{Binding Path=Persisted}" Margin="2">Edit Questions</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
