@@ -27,34 +27,48 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Style="{StaticResource txtMainMenu}">Previous Connections:</TextBlock>
-        <ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" SelectionMode="Single" MouseDoubleClick="Databases_MouseDoubleClick">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Type:</TextBlock>
-                        <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding TypeName}" />
-                        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Connection:</TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding Connection}" />
-                        <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource btnDelete}" Command="{Binding Delete}">Delete</Button>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <TextBlock Grid.Row="4" Style="{StaticResource txtNotes}">Double click a previous connection to use it...</TextBlock>
-        <Button Grid.Row="6" Click="NewConnection_Click"  Style="{StaticResource btnAdd}">
-            <AccessText>_New Connection</AccessText>
+        <TextBlock Grid.Row="0" Style="{StaticResource txtMainMenu}">Previous databases used:</TextBlock>
+        <Grid Grid.Row="2">
+            <ListView x:Name="lstDatabases" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" SelectionMode="Single" MouseDoubleClick="Databases_MouseDoubleClick">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Type:</TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding TypeName}" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource txtInfoBold}" TextAlignment="Right">Connection:</TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource txtInfo}" Text="{Binding Connection}" />
+                            <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource btnDelete}" Command="{Binding Delete}">Delete</Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" FontSize="40" Foreground="Red" Text="No previous databases..." >
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=lstDatabases, Path=Items.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+        <TextBlock Grid.Row="4" Style="{StaticResource txtNotes}">Double click a previous database to use it...</TextBlock>
+        <Button Grid.Row="6" Click="NewDatabase_Click"  Style="{StaticResource btnAdd}">
+            <AccessText>_New Database</AccessText>
         </Button>
     </Grid>
 </Window>

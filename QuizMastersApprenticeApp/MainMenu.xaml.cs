@@ -57,9 +57,27 @@ namespace QuizMastersApprenticeApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var assembly = Assembly.GetExecutingAssembly();
 
-            tbVersion.Text = $" version {version}";
+            var version = assembly.GetName().Version;
+
+            if (version != null)
+            {
+                tbVersion.Text = $" version {version}";
+            }
+            else
+            {
+                tbVersion.Text = "Error: Unable to retrieve version info";
+            }
+
+            var copyright = "Error: Unable to retrieve copyright";
+            object[] attribs = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), true);
+            if (attribs.Length > 0)
+            {
+                copyright = ((AssemblyCopyrightAttribute)attribs[0]).Copyright;
+            }
+
+            tbCopyright.Text = copyright;
         }
     }
 }

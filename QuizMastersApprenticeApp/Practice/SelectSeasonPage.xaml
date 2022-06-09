@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0">Select the Season for the Practice:</TextBlock>
         <Grid Grid.Row="2">
-            <ListBox x:Name="lstSeasons" ItemContainerStyle="{StaticResource lbStandard}" ItemsSource="{Binding Seasons}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSeason}" Margin="60,0,60,0">
+            <ListBox x:Name="lstSeasons" ItemsSource="{Binding Seasons}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSeason}" Margin="60,0,60,0">
             </ListBox>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" FontSize="40" Foreground="Red" Text="List is empty..." >
                 <TextBlock.Style>

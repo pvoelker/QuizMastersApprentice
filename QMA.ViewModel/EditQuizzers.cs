@@ -76,15 +76,7 @@ namespace QMA.ViewModel
                 }
                 else
                 {
-                    if (Selected.Persisted)
-                    {
-                        _repository.Update(Selected.GetModel());
-                    }
-                    else
-                    {
-                        _repository.Add(Selected.GetModel());
-                        Selected.Persisted = true;
-                    }
+                    SaveCommand();
                     Add.NotifyCanExecuteChanged();
                 }
             });
@@ -141,14 +133,14 @@ namespace QMA.ViewModel
         {
             if(Selected != null)
             {
-                if(Selected.PrimaryKey == default)
+                if (Selected.Persisted)
                 {
-                    Selected.GetModel().PrimaryKey = Guid.NewGuid().ToString();
-                    _repository.Add(Selected.GetModel());
+                    _repository.Update(Selected.GetModel());
                 }
                 else
                 {
-                    _repository.Update(Selected.GetModel());
+                    _repository.Add(Selected.GetModel());
+                    Selected.Persisted = true;
                 }
             }
             else

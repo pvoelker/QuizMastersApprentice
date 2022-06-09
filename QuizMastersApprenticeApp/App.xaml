@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/DataGridStyles.xaml" />
+                <ResourceDictionary Source="Styles/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Styles/ListViewStyles.xaml" />
                 <ResourceDictionary Source="Styles/PracticeStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -241,10 +242,6 @@
                         <Setter Property="Foreground" Value="Gray"/>
                     </Trigger>
                 </Style.Triggers>
-            </Style>
-
-            <Style TargetType="{x:Type ListBoxItem}" x:Key="lbStandard">
-                <Setter Property="FontSize" Value="20"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

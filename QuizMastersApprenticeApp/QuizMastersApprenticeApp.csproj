@@ -8,7 +8,8 @@
     <ApplicationIcon>QMA.ico</ApplicationIcon>
     <AssemblyName>QMA</AssemblyName>
     <StartupObject>QuizMastersApprenticeApp.App</StartupObject>
-    <Version>$(VersionPrefix) 0.2.0</Version>
+    <Version>$(VersionPrefix) 0.2.1</Version>
+    <Copyright>Copyright © 2022 Paul Voelker</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -105,6 +106,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Practice\SelectSeasonPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ListBoxStyles.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
