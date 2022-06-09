@@ -23,3 +23,4 @@
 - Add copyright on main assembly and main menu window
 - Add 'not for general distribution' on main menu
 - Clean up terminology on select database window
+- Clean up saving and updating code for grid views
