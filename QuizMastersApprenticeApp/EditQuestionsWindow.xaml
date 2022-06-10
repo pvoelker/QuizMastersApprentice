@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        xmlns:controls="clr-namespace:QuizMastersApprenticeApp.Controls"
         xmlns:datagrid="clr-namespace:QuizMastersApprenticeApp.Controls.DataGrid"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
@@ -70,10 +71,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Margin="2">
-                                <Button Style="{StaticResource btnDelete}" Command="{Binding Delete}" Visibility="{Binding Path=IsNotDeleted, Converter={StaticResource BoolToVis}}">Delete</Button>
-                                <Button Style="{StaticResource btnRestore}" Command="{Binding Restore}" Visibility="{Binding Path=IsDeleted, Converter={StaticResource BoolToVis}}">Restore</Button>
-                            </Grid>
+                            <controls:DataGridRowButtons Margin="2" DeleteCommand="{Binding Delete}" RestoreCommand="{Binding Restore}" IsDeleted="{Binding IsDeleted}" IsNotDeleted="{Binding IsNotDeleted}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -30,3 +30,6 @@
 - Fix Bible Fact-Pak™ help documentation
 - Minor fix to list box and list view UI style
 - Enhance the run practice window to include point values and question number
+
+## 0.2.3
+- Create data grid buttons control to centralized code

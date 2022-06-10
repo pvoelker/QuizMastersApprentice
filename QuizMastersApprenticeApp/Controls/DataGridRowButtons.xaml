@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="QuizMastersApprenticeApp.Controls.DataGridRowButtons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuizMastersApprenticeApp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="100">
+    <Grid>
+        <Button Style="{StaticResource btnDelete}" Command="{Binding Path=DeleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DataGridRowButtons}}}"
+                Visibility="{Binding Path=IsNotDeleted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DataGridRowButtons}}, Converter={StaticResource BoolToVis}}">Delete</Button>
+        <Button Style="{StaticResource btnRestore}" Command="{Binding Path=RestoreCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DataGridRowButtons}}}"
+                Visibility="{Binding Path=IsDeleted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DataGridRowButtons}}, Converter={StaticResource BoolToVis}}">Restore</Button>
+    </Grid>
+</UserControl>
