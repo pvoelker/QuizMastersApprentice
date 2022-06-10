@@ -143,8 +143,8 @@ namespace QMA.ViewModel.Practice
                 _runPracticeService.Start(this);
             },
             () => {
-                return (UseQuestionSetOnly || !OnlyUseImportQuestionsForPractice) ||
-                (UseGeneratedQuestionSet && OnlyUseImportQuestionsForPractice &&
+                return UseQuestionSetOnly ||
+                (UseGeneratedQuestionSet &&
                 (ParsedImportQuestions.Count() > 0) && !ParsedImportQuestions.Any(x => x.HasParseError));
             });
 

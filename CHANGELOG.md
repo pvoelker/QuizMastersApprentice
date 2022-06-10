@@ -24,3 +24,8 @@
 - Add 'not for general distribution' on main menu
 - Clean up terminology on select database window
 - Clean up saving and updating code for grid views
+
+## 0.2.2
+- Cleanup practice window select questions page
+- Fix Bible Fact-Pak™ help documentation
+- Minor fix to list box and list view UI style

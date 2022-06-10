@@ -78,7 +78,7 @@
                                 <VisualState x:Name="SelectedUnfocused" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center">
                         </ContentPresenter>
                     </Border>
                 </ControlTemplate>
