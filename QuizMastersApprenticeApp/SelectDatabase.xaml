@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Select database..." Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
-        Icon="/QMA.ico">
+        Icon="/QMA.ico" ResizeMode="NoResize">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Initialize}"/>

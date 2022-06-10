@@ -19,7 +19,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" CornerRadius="5" SnapsToDevicePixels="true">
                         <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </ScrollViewer>
@@ -78,7 +78,7 @@
                                 <VisualState x:Name="SelectedUnfocused" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center">
                         </ContentPresenter>
                     </Border>
                 </ControlTemplate>

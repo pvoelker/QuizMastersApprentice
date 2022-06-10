@@ -21,6 +21,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
@@ -66,7 +68,8 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="2" Style="{StaticResource btnAdd}" Command="{Binding Add}">
+        <TextBlock Style="{StaticResource txtNotes}" Grid.Row="2" TextWrapping="Wrap">Questions can be imported from certain sources during practice configuration. However a question set still needs to be created here, even if it is empty...</TextBlock>
+        <Button Grid.Row="4" Style="{StaticResource btnAdd}" Command="{Binding Add}">
             <AccessText>_Add Question Set</AccessText>
         </Button>
     </Grid>

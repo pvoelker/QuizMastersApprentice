@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:QuizMastersApprenticeApp.Converters"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="Run a Practice" Height="600" Width="1000"
+        Title="⚐ Run a Practice" Height="600" Width="1000"
         Icon="/QMA.ico">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -36,9 +36,20 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource txtPracticeQuestion}"  Margin="5" Text="{Binding CurrentQuestion.Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource txtBuzzInInfo}"  Margin="5" Text="{Binding CurrentQuestion.UsageCount, StringFormat='Times Asked: {0}'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource txtPracticeAnswer}" Margin="5" Text="{Binding CurrentQuestion.Answer}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource txtBuzzInInfo}" Foreground="DarkOrange"  Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Path=CurrentQuestion.JustLearned, Converter={StaticResource BoolToVisibilityConverter}}">🕮 Just Learned</TextBlock>
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource txtBuzzInInfo}"  Margin="5" Text="{Binding CurrentQuestion.UsageCount, StringFormat='Times Asked: {0}'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource txtBuzzInInfo}"  Margin="5" Text="{Binding CurrentQuestion.Points, StringFormat='Points: {0}'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource txtBuzzInInfo}"  Margin="5" Text="{Binding CurrentQuestion.Number, StringFormat='Question#: {0}'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource txtBuzzInInfo}" Foreground="DarkOrange"  Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Visibility="{Binding Path=CurrentQuestion.JustLearned, Converter={StaticResource BoolToVisibilityConverter}}">🕮 Just Learned</TextBlock>
+        </Grid>
         <ListView Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding PracticeQuizzers}" SelectedItem="{Binding SelectedQuizzer}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="5">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

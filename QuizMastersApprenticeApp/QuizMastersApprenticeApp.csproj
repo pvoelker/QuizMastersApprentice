@@ -8,7 +8,7 @@
     <ApplicationIcon>QMA.ico</ApplicationIcon>
     <AssemblyName>QMA</AssemblyName>
     <StartupObject>QuizMastersApprenticeApp.App</StartupObject>
-    <Version>$(VersionPrefix) 0.2.1</Version>
+    <Version>$(VersionPrefix) 0.2.2</Version>
     <Copyright>Copyright © 2022 Paul Voelker</Copyright>
   </PropertyGroup>
 
