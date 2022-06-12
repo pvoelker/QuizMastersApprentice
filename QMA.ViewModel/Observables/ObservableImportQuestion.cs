@@ -57,5 +57,13 @@ namespace QMA.ViewModel.Observables
         {
             get => _parseError != null;
         }
+
+        private bool _alreadyExists = false;
+
+        public bool AlreadyExists
+        {
+            get => _alreadyExists;
+            set => SetProperty(ref _alreadyExists, value);
+        }
     }
 }

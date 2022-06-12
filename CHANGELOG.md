@@ -33,3 +33,7 @@
 
 ## 0.2.3
 - Create data grid buttons control to centralized code
+
+## 0.3.0
+- Fix problem with Bible Fact Pak™ import where existing items will be re-imported a second time
+- Move Bible Fact Pak™ import user interface into a user control

@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+      xmlns:import="clr-namespace:QuizMastersApprenticeApp.Controls.Import"
       xmlns:converters="clr-namespace:QuizMastersApprenticeApp.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
@@ -38,10 +39,6 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
@@ -55,23 +52,7 @@
                             <Hyperlink Command="{Binding BibleFactPakHelp}">Help with Import</Hyperlink>   
                         </TextBlock>
                     </Grid>
-                    <TextBox Grid.Row="2" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseFailed}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionSetImport, UpdateSourceTrigger=PropertyChanged}" />
-                    <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource btnWizardNext}" Command="{Binding ParseImportedQuestions}">Parse Text</Button>
-                    <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource btnWizardNext}" Command="{Binding ClearImportedQuestions}">Clear Import</Button>
-                    <DataGrid Grid.Row="6" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseSuccess}" ItemsSource="{Binding ParsedImportQuestions}" IsReadOnly="True" AutoGenerateColumns="False" CanUserDeleteRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Num." Binding="{Binding Number}">
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Points" Binding="{Binding Points}" >
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" Width="300">
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Answer" Binding="{Binding Answer}" Width="300">
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Error" Binding="{Binding ParseError}" Width="200" Foreground="Red">
-                            </DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <import:BibleFactPakImport Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
         </TabControl>

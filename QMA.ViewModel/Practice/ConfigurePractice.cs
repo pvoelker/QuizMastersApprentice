@@ -129,15 +129,18 @@ namespace QMA.ViewModel.Practice
             {
                 foreach (var item in ParsedImportQuestions)
                 {
-                    _questionRepository.Add(new Question
+                    if (item.AlreadyExists == false)
                     {
-                        QuestionSetId = SelectedQuestionSet.PrimaryKey,
-                        Number = item.Number,
-                        Text = item.Text,
-                        Answer = item.Answer,
-                        Points = item.Points,
-                        Notes = $"Imported on {DateTimeOffset.Now}"
-                    });
+                        _questionRepository.Add(new Question
+                        {
+                            QuestionSetId = SelectedQuestionSet.PrimaryKey,
+                            Number = item.Number,
+                            Text = item.Text,
+                            Answer = item.Answer,
+                            Points = item.Points,
+                            Notes = $"Imported on {DateTimeOffset.Now}"
+                        });
+                    }
                 }
 
                 _runPracticeService.Start(this);
@@ -176,6 +179,8 @@ namespace QMA.ViewModel.Practice
                     var existing = _questionRepository.GetByQuestionNumber(SelectedQuestionSet.PrimaryKey, item.Number, false);
                     if (existing.Count() == 1)
                     {
+                        item.AlreadyExists = true;
+
                         var found = existing.First();
                         if (found.Text != item.Text)
                         {
@@ -192,6 +197,8 @@ namespace QMA.ViewModel.Practice
                     }
                     else if (existing.Count() > 1)
                     {
+                        item.AlreadyExists = true;
+
                         item.ParseError = "Multiples Found";
                     }
                 }

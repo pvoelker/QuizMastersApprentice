@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="QuizMastersApprenticeApp.Controls.Import.BibleFactPakImport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuizMastersApprenticeApp.Controls.Import"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseFailed}"
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
+                 Text="{Binding QuestionSetImport, UpdateSourceTrigger=PropertyChanged}" />
+        <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource btnWizardNext}"
+                Command="{Binding ParseImportedQuestions}">Parse Text</Button>
+        <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource btnWizardNext}"
+                Command="{Binding ClearImportedQuestions}">Clear Import</Button>
+        <DataGrid Grid.Row="4" Grid.ColumnSpan="2" IsEnabled="{Binding ImportParseSuccess}"
+                  ItemsSource="{Binding ParsedImportQuestions}" IsReadOnly="True"
+                  AutoGenerateColumns="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Binding="{Binding AlreadyExists}" Width="30">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="✓" ToolTip="Questions already exists in question set"/>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Num." Binding="{Binding Number}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Points" Binding="{Binding Points}" >
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Text" Binding="{Binding Text}" Width="275">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Answer" Binding="{Binding Answer}" Width="275">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Error" Binding="{Binding ParseError}" Width="200" Foreground="Red">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
