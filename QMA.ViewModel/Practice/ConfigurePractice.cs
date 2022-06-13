@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Importers;
 using QMA.Model;
 using QMA.Model.Season;
@@ -155,9 +156,9 @@ namespace QMA.ViewModel.Practice
             {
                 try
                 {
-                    var import = new Importers.BibleFactPak.QuestionImporter(QuestionSetImport);
+                    var import = new Importers.BibleFactPak.QuestionImporter();
 
-                    var importedQuestions = import.Import();
+                    var importedQuestions = import.Import(new StreamReader(QuestionSetImport.ToStream()));
 
                     ParsedImportQuestions.Clear();
                     foreach (var item in importedQuestions)

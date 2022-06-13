@@ -1,5 +1,7 @@
 using FluentAssertions;
+using QMA.Helpers;
 using QMA.Model;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -12,9 +14,9 @@ namespace QMA.Importers.BibleFactPak.UnitTests
         {
             var importText = "Question: Question #1 for 10 pointsWhat is sin? (#275)Sin is refusing to do God's will as revealed by His Word and His Spirit.(1 John 3:4; James 4:17)Question: Question #2 for 15 pointsWhat does \"testament\" mean? (#4)Covenant [contract or agreement]Question: Question #3 for 20 pointsWho wrote more books of the Bible than any other person? (#15)PaulQuestion: Question #4 for 10 pointsWho was king over Judea when Jesus was born? (#176)Herod(Matthew 2:3)Question: Question #5 for 10 pointsWhat happened to the Egyptians who tried to follow the Israelites through the Red Sea? (#79)They all drowned.(Exodus 14:23–28)";
 
-            var importer = new QuestionImporter(importText);
+            var importer = new QuestionImporter();
 
-            var result = importer.Import();
+            var result = importer.Import(new StreamReader(importText.ToStream()));
 
             result.Should().NotBeEmpty();
             result.Should().HaveCount(5);
@@ -47,9 +49,9 @@ namespace QMA.Importers.BibleFactPak.UnitTests
         {
             var importText = "Question: Question #8 for 10 pointsWhy did God reject Saul as king of Israel? (#131)He rejected God's command.(1 Samuel 15:22–23)Question: Question #9 for 10 pointsWho was the slave Paul won to the Lord while in prison? (#269)Onesimus(Philemon 10–13)Fire Bible Page Number: 1509Question: Question #10 for 10 pointsWho was the mother of Joseph and Benjamin? (#56)Rachel(Genesis 30:22–24; 35:16–18)";
 
-            var importer = new QuestionImporter(importText);
+            var importer = new QuestionImporter();
 
-            var result = importer.Import();
+            var result = importer.Import(new StreamReader(importText.ToStream()));
 
             result.Should().NotBeEmpty();
             result.Should().HaveCount(3);
@@ -80,9 +82,9 @@ namespace QMA.Importers.BibleFactPak.UnitTests
         [Fact]
         public void EmptyImport()
         {
-            var importer = new QuestionImporter(string.Empty);
+            var importer = new QuestionImporter();
 
-            var result = importer.Import();
+            var result = importer.Import(new StreamReader(string.Empty.ToStream()));
 
             result.Should().BeEmpty();
         }

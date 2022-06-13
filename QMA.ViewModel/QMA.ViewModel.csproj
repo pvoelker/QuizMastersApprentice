@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QMA.DataAccess.JsonFile\QMA.DataAccess.JsonFile.csproj" />
     <ProjectReference Include="..\QMA.DataAccess\QMA.DataAccess.csproj" />
+    <ProjectReference Include="..\QMA.Helpers\QMA.Helpers.csproj" />
     <ProjectReference Include="..\QMA.Importers.BibleFactPak\QMA.Importers.BibleFactPak.csproj" />
     <ProjectReference Include="..\QMA.Model\QMA.Model.csproj" />
     <ProjectReference Include="..\QMA.QuestionRepository.CSV\QMA.Importers.Csv.csproj" />

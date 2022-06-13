@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QMA.DataAccess.JsonFile\QMA.DataAccess.JsonFile.csproj" />
+    <ProjectReference Include="..\QMA.Helpers\QMA.Helpers.csproj" />
     <ProjectReference Include="..\QMA.ViewModel\QMA.ViewModel.csproj" />
   </ItemGroup>
 
