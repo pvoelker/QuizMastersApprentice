@@ -203,7 +203,7 @@ namespace QMA.ViewModel.Practice
             get => !_useQuestionSetOnly;
         }
 
-        public ObservableCollection<SeasonInfo> Seasons { get; set; } = new ObservableCollection<SeasonInfo>();
+        public ObservableCollection<SeasonInfo> Seasons { get; } = new ObservableCollection<SeasonInfo>();
 
         private SeasonInfo _selectedSeason = null;
         public SeasonInfo SelectedSeason
