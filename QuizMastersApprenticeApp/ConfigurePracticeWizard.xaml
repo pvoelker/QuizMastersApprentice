@@ -24,6 +24,6 @@
     <Grid>
         <practice:SelectSeasonPage Visibility="{Binding Path=OnSeasonPage, Converter={StaticResource BoolToVisibilityConverter}}"></practice:SelectSeasonPage>
         <practice:SelectQuizzersPage Visibility="{Binding Path=OnQuizzersPage, Converter={StaticResource BoolToVisibilityConverter}}"></practice:SelectQuizzersPage>
-        <practice:SelectQuestionsPage Visibility="{Binding Path=OnQuestionsPage, Converter={StaticResource BoolToVisibilityConverter}}"></practice:SelectQuestionsPage>
+        <practice:SelectQuestionsPage x:Name="_questionsPage" Visibility="{Binding Path=OnQuestionsPage, Converter={StaticResource BoolToVisibilityConverter}}"></practice:SelectQuestionsPage>
     </Grid>
 </Window>

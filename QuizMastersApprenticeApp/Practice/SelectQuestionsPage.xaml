@@ -5,9 +5,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:QuizMastersApprenticeApp"
       xmlns:import="clr-namespace:QuizMastersApprenticeApp.Controls.Import"
+      xmlns:bfpimporter="clr-namespace:QMA.Importers.BibleFactPak;assembly=QMA.Importers.BibleFactPak"
       xmlns:converters="clr-namespace:QuizMastersApprenticeApp.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <bfpimporter:QuestionImporter x:Key="bfpImporter" />
+    </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -52,7 +56,11 @@
                             <Hyperlink Command="{Binding BibleFactPakHelp}">Help with Import</Hyperlink>   
                         </TextBlock>
                     </Grid>
-                    <import:BibleFactPakImport Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <import:DirectTextImport x:Name="_directTextImport" Grid.Row="2" Grid.ColumnSpan="2"
+                                             Importer="{StaticResource bfpImporter}"
+                                             QuestionSetId="{Binding Path=SelectedQuestionSet.PrimaryKey}"
+                                             ImportParseSuccess="{Binding ImportParseSuccess}"
+                                             ParsedImportQuestions="{Binding Path=ParsedImportQuestions}"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -1,4 +1,5 @@
-﻿using QMA.ViewModel.Practice;
+﻿using QMA.DataAccess;
+using QMA.ViewModel.Practice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace QuizMastersApprenticeApp.Practice
         public SelectQuestionsPage()
         {
             InitializeComponent();
+        }
+
+        public void Initialize(IQuestionRepository repository)
+        {
+            _directTextImport.Initialize(repository);
         }
     }
 }

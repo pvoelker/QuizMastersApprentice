@@ -148,74 +148,8 @@ namespace QMA.ViewModel.Practice
             },
             () => {
                 return UseQuestionSetOnly ||
-                (UseGeneratedQuestionSet &&
-                (ParsedImportQuestions.Count() > 0) && !ParsedImportQuestions.Any(x => x.HasParseError));
+                (UseGeneratedQuestionSet && ImportParseSuccess && !ParsedImportQuestions.Any(x => x.HasParseError));
             });
-
-            ParseImportedQuestions = new RelayCommand(() =>
-            {
-                try
-                {
-                    var import = new Importers.BibleFactPak.QuestionImporter();
-
-                    var importedQuestions = import.Import(new StreamReader(QuestionSetImport.ToStream()));
-
-                    ParsedImportQuestions.Clear();
-                    foreach (var item in importedQuestions)
-                    {
-                        ParsedImportQuestions.Add(new ObservableImportQuestion(item));
-                    }
-
-                    ImportParseSuccess = true;
-                }
-                catch (ImportFailedException ex)
-                {
-                    ImportParseSuccess = false;
-
-                    _messageBoxService.ShowError($"Unable to parse text: {ex.Message}");
-                }
-
-                foreach (var item in ParsedImportQuestions)
-                {
-                    var existing = _questionRepository.GetByQuestionNumber(SelectedQuestionSet.PrimaryKey, item.Number, false);
-                    if (existing.Count() == 1)
-                    {
-                        item.AlreadyExists = true;
-
-                        var found = existing.First();
-                        if (found.Text != item.Text)
-                        {
-                            item.ParseError = "Question Mismatch";
-                        }
-                        else if (found.Answer != item.Answer)
-                        {
-                            item.ParseError = "Answer Mismatch";
-                        }
-                        else if (found.Points != item.Points)
-                        {
-                            item.ParseError = "Points Mismatch";
-                        }
-                    }
-                    else if (existing.Count() > 1)
-                    {
-                        item.AlreadyExists = true;
-
-                        item.ParseError = "Multiples Found";
-                    }
-                }
-
-                SelectQuestions.NotifyCanExecuteChanged();
-            },
-            () => String.IsNullOrWhiteSpace(QuestionSetImport) == false && ImportParseFailed && UseGeneratedQuestionSet);
-
-            ClearImportedQuestions = new RelayCommand(() =>
-            {
-                ParsedImportQuestions.Clear();
-                ImportParseSuccess = false;
-
-                SelectQuestions.NotifyCanExecuteChanged();
-            },
-            () => ImportParseSuccess && UseGeneratedQuestionSet);
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
@@ -261,8 +195,6 @@ namespace QMA.ViewModel.Practice
             {
                 SetProperty(ref _useQuestionSetOnly, value);
                 OnPropertyChanged(nameof(UseGeneratedQuestionSet));
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-                ClearImportedQuestions.NotifyCanExecuteChanged();
                 SelectQuestions.NotifyCanExecuteChanged();
             }
         }
@@ -271,7 +203,7 @@ namespace QMA.ViewModel.Practice
             get => !_useQuestionSetOnly;
         }
 
-        public ObservableCollection<SeasonInfo> Seasons { get; } = new ObservableCollection<SeasonInfo>();
+        public ObservableCollection<SeasonInfo> Seasons { get; set; } = new ObservableCollection<SeasonInfo>();
 
         private SeasonInfo _selectedSeason = null;
         public SeasonInfo SelectedSeason
@@ -315,14 +247,10 @@ namespace QMA.ViewModel.Practice
         public string QuestionSetImport
         {
             get => _questionSetImport;
-            set
-            {
-                SetProperty(ref _questionSetImport, value);
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-            }
+            set => SetProperty(ref _questionSetImport, value);
         }
 
-        public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions { get; } = new ObservableCollection<ObservableImportQuestion>();
+        public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions { get; set; } = new ObservableCollection<ObservableImportQuestion>();
 
         private bool _importParseSuccess = false;
         public bool ImportParseSuccess
@@ -332,8 +260,7 @@ namespace QMA.ViewModel.Practice
             {
                 SetProperty(ref _importParseSuccess, value);
                 OnPropertyChanged(nameof(ImportParseFailed));
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-                ClearImportedQuestions.NotifyCanExecuteChanged();
+                SelectQuestions.NotifyCanExecuteChanged();
             }
         }
         public bool ImportParseFailed
@@ -409,10 +336,6 @@ namespace QMA.ViewModel.Practice
         public IRelayCommand SelectSeason { get; }
         public IRelayCommand SelectQuizzers { get; }
         public IRelayCommand SelectQuestions { get; }
-
-        public IRelayCommand ParseImportedQuestions { get; }
-
-        public IRelayCommand ClearImportedQuestions { get; }
 
         public IRelayCommand<CancelEventArgs> Closing { get; }
 
