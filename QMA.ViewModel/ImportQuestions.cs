@@ -77,8 +77,8 @@ namespace QMA.ViewModel
                 {
                     using (var reader = new StreamReader(ImportFileName))
                     {
-                        var importer = new Importers.Csv.QuestionImporter(reader);
-                        var items = importer.Import();
+                        var importer = new Importers.Csv.QuestionImporter();
+                        var items = importer.Import(reader);
 
                         if (_messageBoxService.PromptToContinue($"Do you want to import {items.Count()} item(s)?"))
                         {

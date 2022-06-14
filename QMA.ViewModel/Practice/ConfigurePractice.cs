@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Importers;
 using QMA.Model;
 using QMA.Model.Season;
@@ -129,85 +130,26 @@ namespace QMA.ViewModel.Practice
             {
                 foreach (var item in ParsedImportQuestions)
                 {
-                    _questionRepository.Add(new Question
+                    if (item.AlreadyExists == false)
                     {
-                        QuestionSetId = SelectedQuestionSet.PrimaryKey,
-                        Number = item.Number,
-                        Text = item.Text,
-                        Answer = item.Answer,
-                        Points = item.Points,
-                        Notes = $"Imported on {DateTimeOffset.Now}"
-                    });
+                        _questionRepository.Add(new Question
+                        {
+                            QuestionSetId = SelectedQuestionSet.PrimaryKey,
+                            Number = item.Number,
+                            Text = item.Text,
+                            Answer = item.Answer,
+                            Points = item.Points,
+                            Notes = $"Imported on {DateTimeOffset.Now}"
+                        });
+                    }
                 }
 
                 _runPracticeService.Start(this);
             },
             () => {
                 return UseQuestionSetOnly ||
-                (UseGeneratedQuestionSet &&
-                (ParsedImportQuestions.Count() > 0) && !ParsedImportQuestions.Any(x => x.HasParseError));
+                (UseGeneratedQuestionSet && ImportParseSuccess && !ParsedImportQuestions.Any(x => x.HasParseError));
             });
-
-            ParseImportedQuestions = new RelayCommand(() =>
-            {
-                try
-                {
-                    var import = new Importers.BibleFactPak.QuestionImporter(QuestionSetImport);
-
-                    var importedQuestions = import.Import();
-
-                    ParsedImportQuestions.Clear();
-                    foreach (var item in importedQuestions)
-                    {
-                        ParsedImportQuestions.Add(new ObservableImportQuestion(item));
-                    }
-
-                    ImportParseSuccess = true;
-                }
-                catch (ImportFailedException ex)
-                {
-                    ImportParseSuccess = false;
-
-                    _messageBoxService.ShowError($"Unable to parse text: {ex.Message}");
-                }
-
-                foreach (var item in ParsedImportQuestions)
-                {
-                    var existing = _questionRepository.GetByQuestionNumber(SelectedQuestionSet.PrimaryKey, item.Number, false);
-                    if (existing.Count() == 1)
-                    {
-                        var found = existing.First();
-                        if (found.Text != item.Text)
-                        {
-                            item.ParseError = "Question Mismatch";
-                        }
-                        else if (found.Answer != item.Answer)
-                        {
-                            item.ParseError = "Answer Mismatch";
-                        }
-                        else if (found.Points != item.Points)
-                        {
-                            item.ParseError = "Points Mismatch";
-                        }
-                    }
-                    else if (existing.Count() > 1)
-                    {
-                        item.ParseError = "Multiples Found";
-                    }
-                }
-
-                SelectQuestions.NotifyCanExecuteChanged();
-            },
-            () => String.IsNullOrWhiteSpace(QuestionSetImport) == false && ImportParseFailed && UseGeneratedQuestionSet);
-
-            ClearImportedQuestions = new RelayCommand(() =>
-            {
-                ParsedImportQuestions.Clear();
-                ImportParseSuccess = false;
-
-                SelectQuestions.NotifyCanExecuteChanged();
-            },
-            () => ImportParseSuccess && UseGeneratedQuestionSet);
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
@@ -253,8 +195,6 @@ namespace QMA.ViewModel.Practice
             {
                 SetProperty(ref _useQuestionSetOnly, value);
                 OnPropertyChanged(nameof(UseGeneratedQuestionSet));
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-                ClearImportedQuestions.NotifyCanExecuteChanged();
                 SelectQuestions.NotifyCanExecuteChanged();
             }
         }
@@ -307,14 +247,10 @@ namespace QMA.ViewModel.Practice
         public string QuestionSetImport
         {
             get => _questionSetImport;
-            set
-            {
-                SetProperty(ref _questionSetImport, value);
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-            }
+            set => SetProperty(ref _questionSetImport, value);
         }
 
-        public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions { get; } = new ObservableCollection<ObservableImportQuestion>();
+        public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions { get; set; } = new ObservableCollection<ObservableImportQuestion>();
 
         private bool _importParseSuccess = false;
         public bool ImportParseSuccess
@@ -324,8 +260,7 @@ namespace QMA.ViewModel.Practice
             {
                 SetProperty(ref _importParseSuccess, value);
                 OnPropertyChanged(nameof(ImportParseFailed));
-                ParseImportedQuestions.NotifyCanExecuteChanged();
-                ClearImportedQuestions.NotifyCanExecuteChanged();
+                SelectQuestions.NotifyCanExecuteChanged();
             }
         }
         public bool ImportParseFailed
@@ -401,10 +336,6 @@ namespace QMA.ViewModel.Practice
         public IRelayCommand SelectSeason { get; }
         public IRelayCommand SelectQuizzers { get; }
         public IRelayCommand SelectQuestions { get; }
-
-        public IRelayCommand ParseImportedQuestions { get; }
-
-        public IRelayCommand ClearImportedQuestions { get; }
 
         public IRelayCommand<CancelEventArgs> Closing { get; }
 

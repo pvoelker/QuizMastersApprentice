@@ -1,37 +1,38 @@
 ﻿ using QMA.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace QMA.Importers.BibleFactPak
 {
+    /// <summary>
+    /// Question importer for text from Bible Fact-Pak™ generated practice sets
+    /// </summary>
     public class QuestionImporter : IQuestionImporter
     {
-        private string _text;
-
-        public QuestionImporter(string text)
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public QuestionImporter()
         {
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
-
-            _text = text;
         }
 
+        /// <inheritdoc />
         /// <exception cref="ImportFailedException">Import failed, see inner exception</exception>
-
-        public IEnumerable<ImportQuestion> Import()
+        public IEnumerable<ImportQuestion> Import(StreamReader stream)
         {
             try
             {
-                if(String.IsNullOrWhiteSpace(_text))
+                var text = stream.ReadToEnd();
+
+                if(String.IsNullOrWhiteSpace(text))
                 {
                     return Enumerable.Empty<ImportQuestion>();
                 }
 
-                var questions = _text.Split(new string[] { "Question: " }, StringSplitOptions.RemoveEmptyEntries);
+                var questions = text.Split(new string[] { "Question: " }, StringSplitOptions.RemoveEmptyEntries);
 
                 var retVal = new List<ImportQuestion>();
 

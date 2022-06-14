@@ -31,6 +31,8 @@ namespace QuizMastersApprenticeApp
 
             InitializeComponent();
 
+            _questionsPage.Initialize(repoFactory.GetQuestionRepository());
+
             DataContext = new ConfigurePractice(
                 new MessageBoxService(this),
                 new RunPracticeService(this),
@@ -39,7 +41,7 @@ namespace QuizMastersApprenticeApp
                 repoFactory.GetQuizzerRepository(),
                 repoFactory.GetTeamMemberRepository(),
                 repoFactory.GetQuestionSetRepository(),
-                repoFactory.GetQuestionRepository()); ;
+                repoFactory.GetQuestionRepository());
         }
 
         public IRepositoryFactory GetRepositoryFactory()

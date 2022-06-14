@@ -14,9 +14,9 @@ namespace QMA.Importers.Csv.UnitTests
 
             var fakeMemoryStream = new MemoryStream(fakeFileBytes);
 
-            var importer = new QuestionImporter(new StreamReader(fakeMemoryStream));
+            var importer = new QuestionImporter();
 
-            var result = importer.Import();
+            var result = importer.Import(new StreamReader(fakeMemoryStream));
 
             result.Should().HaveCount(1);
 
@@ -39,9 +39,9 @@ namespace QMA.Importers.Csv.UnitTests
 
             var fakeMemoryStream = new MemoryStream(fakeFileBytes);
 
-            var importer = new QuestionImporter(new StreamReader(fakeMemoryStream));
+            var importer = new QuestionImporter();
 
-            var result = importer.Import();
+            var result = importer.Import(new StreamReader(fakeMemoryStream));
 
             result.Should().HaveCount(3);
 
@@ -71,9 +71,9 @@ namespace QMA.Importers.Csv.UnitTests
 
             var fakeMemoryStream = new MemoryStream(fakeFileBytes);
 
-            var importer = new QuestionImporter(new StreamReader(fakeMemoryStream));
+            var importer = new QuestionImporter();
 
-            var act = () => importer.Import();
+            var act = () => importer.Import(new StreamReader(fakeMemoryStream));
 
             act.Should().Throw<ImportMissingHeadersException>();
         }
@@ -86,9 +86,9 @@ namespace QMA.Importers.Csv.UnitTests
 
             var fakeMemoryStream = new MemoryStream(fakeFileBytes);
 
-            var importer = new QuestionImporter(new StreamReader(fakeMemoryStream));
+            var importer = new QuestionImporter();
 
-            var act = () => importer.Import();
+            var act = () => importer.Import(new StreamReader(fakeMemoryStream));
 
             act.Should().Throw<ImportFailedException>();
         }

@@ -9,25 +9,26 @@ using System.Text;
 
 namespace QMA.Importers.Csv
 {
+    /// <summary>
+    /// Question importer for Comma-Separated Value (CSV) text
+    /// </summary>
     public class QuestionImporter : IQuestionImporter
     {
-        private StreamReader _reader;
-
-        public QuestionImporter(StreamReader reader)
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public QuestionImporter()
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            _reader = reader;
         }
 
+        /// <inheritdoc />
         /// <exception cref="ImportFailedException">Import failed, see inner exception</exception>
         /// <exception cref="ImportMissingHeadersException">Import failed due to missing or bad headers, see inner exception</exception>
-        public IEnumerable<ImportQuestion> Import()
+        public IEnumerable<ImportQuestion> Import(StreamReader reader)
         {
             try
             {
-                using (var csv = new CsvReader(_reader, CultureInfo.InvariantCulture))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
                     var records = csv.GetRecords<ImportQuestion>();
 

@@ -1,4 +1,5 @@
-﻿using QMA.ViewModel.Practice;
+﻿using QMA.DataAccess;
+using QMA.ViewModel.Practice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,32 +27,9 @@ namespace QuizMastersApprenticeApp.Practice
             InitializeComponent();
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var dataContext = (ConfigurePractice)DataContext;
-        //    if (dataContext.QuestionSetImport != null)
-        //    {
-        //        dataContext.SelectQuestions.Execute(null);
-        //    }
-
-        //    var parentWindow = Window.GetWindow(this);
-
-        //    var repositoryWindow = parentWindow as IRepositoryWindow;
-
-        //    if (repositoryWindow != null)
-        //    {
-        //        var runPracticeWindow = new RunPracticeWindow(repositoryWindow.GetRepositoryFactory(),
-        //            dataContext.TeamQuizzers.Where(x => x.IsSelected).Select(x => x.PrimaryKey),
-        //            dataContext.SelectedSeason.Name,
-        //            dataContext.PracticeQuestions());
-        //        runPracticeWindow.Show();
-
-        //        parentWindow.Close();
-        //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException($"The parent window does not implement {nameof(IRepositoryWindow)}");
-        //    }
-        //}
+        public void Initialize(IQuestionRepository repository)
+        {
+            _directTextImport.Initialize(repository);
+        }
     }
 }
