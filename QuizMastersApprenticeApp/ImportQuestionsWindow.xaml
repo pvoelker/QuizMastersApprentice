@@ -30,7 +30,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TabControl>
-            <TabItem Header="CSV Import" IsSelected="{Binding CsvImport}">
+            <TabItem Header="Comma-Separated Values (CSV) Import" IsSelected="{Binding CsvImport}">
                 <import:FileTextImport x:Name="_csvImport"
                     Filter="CSV (*.csv)|*.csv"
                     Importer="{StaticResource csvImporter}"

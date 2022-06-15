@@ -20,11 +20,19 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <controls:FileTextBox x:Name="_importFile"
-            Grid.Row="0" Grid.ColumnSpan="2"
-            FileNameChanged="_importFile_FileNameChanged"
-            Filter="{Binding Path=Filter, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileTextImport}}}"
-            />
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0">File to import:</TextBlock>        
+            <controls:FileTextBox x:Name="_importFile"
+                Grid.Column="2"
+                FileNameChanged="_importFile_FileNameChanged"
+                Filter="{Binding Path=Filter, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileTextImport}}}"
+                />
+            </Grid>
         <Button x:Name="_parseText"
             Grid.Row="2" Grid.Column="0" Style="{StaticResource btnWizardNext}"
             Click="ParseText_Click">Parse Text</Button>

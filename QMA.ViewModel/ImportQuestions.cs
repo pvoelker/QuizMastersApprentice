@@ -50,7 +50,7 @@ namespace QMA.ViewModel
             });
         }
 
-        private bool _csvImport;
+        private bool _csvImport = true;
         public bool CsvImport
         {
             get => _csvImport;
