@@ -37,6 +37,7 @@ namespace QMA.ViewModel
             {
                 var items = _repository.GetByQuestionSetId(_questionSetId, true);
 
+                Items.Clear();
                 foreach(var item in items)
                 {
                     var newItem = new ObservableQuestion(

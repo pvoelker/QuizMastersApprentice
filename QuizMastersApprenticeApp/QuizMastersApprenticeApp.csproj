@@ -8,7 +8,7 @@
     <ApplicationIcon>QMA.ico</ApplicationIcon>
     <AssemblyName>QMA</AssemblyName>
     <StartupObject>QuizMastersApprenticeApp.App</StartupObject>
-    <Version>$(VersionPrefix) 0.3.0</Version>
+    <Version>$(VersionPrefix) 0.4.0</Version>
     <Copyright>Copyright © 2022 Paul Voelker</Copyright>
   </PropertyGroup>
 
@@ -34,10 +34,14 @@
     <ProjectReference Include="..\QMA.DataAccess.JsonFile\QMA.DataAccess.JsonFile.csproj" />
     <ProjectReference Include="..\QMA.Helpers\QMA.Helpers.csproj" />
     <ProjectReference Include="..\QMA.Importers.BibleFactPak\QMA.Importers.BibleFactPak.csproj" />
+    <ProjectReference Include="..\QMA.Importers.ViewModel\QMA.Importers.ViewModel.csproj" />
     <ProjectReference Include="..\QMA.ViewModel\QMA.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Controls\Import\FileTextImport.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="PracticeReportWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -71,6 +75,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Controls\Import\FileTextImport.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="PracticeReportWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

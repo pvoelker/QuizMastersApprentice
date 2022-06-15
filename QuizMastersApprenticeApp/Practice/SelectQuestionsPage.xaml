@@ -44,19 +44,10 @@
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding OnlyUseImportQuestionsForPractice}">Only Use Imported Questions For Practice</CheckBox>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Questions will be imported into: {0}'}" />
-                        <TextBlock Grid.Row="0" Grid.Column="2">
-                            <Hyperlink Command="{Binding BibleFactPakHelp}">Help with Import</Hyperlink>   
-                        </TextBlock>
-                    </Grid>
+                    <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding OnlyUseImportQuestionsForPractice}">Only Use Imported Questions For Practice</CheckBox>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Questions will be imported into: {0}'}" />
                     <import:DirectTextImport x:Name="_directTextImport" Grid.Row="2" Grid.ColumnSpan="2"
+                                             HelpUrl="Help\BibleFactPak.html"
                                              Importer="{StaticResource bfpImporter}"
                                              QuestionSetId="{Binding Path=SelectedQuestionSet.PrimaryKey}"
                                              ImportParseSuccess="{Binding ImportParseSuccess}"

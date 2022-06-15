@@ -38,3 +38,9 @@
 - Fix problem with Bible Fact Pak™ import where existing items will be re-imported a second time
 - Refactor IQuestionImporter interface so default constructors can now be used
 - Refactor Bible Fact-Pak™ import user interface into a generic 'direct text import' user control
+
+## 0.4.0
+- Refactor question import check logic from 'direct text import' user control into a testable library
+- Move Bible Fact Pak™ import help into the user control
+- Complete implementation of question import on question edit window
+- Fixed binding bug on direct text import user control
