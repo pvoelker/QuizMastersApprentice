@@ -23,9 +23,17 @@ namespace QuizMastersApprenticeApp
     /// </summary>
     public partial class EditQuestionsWindow : Window
     {
+        private readonly string _questionsSetId;
+
+        private readonly IRepositoryFactory _repoFactory;
+
         public EditQuestionsWindow(string questionSetId, IRepositoryFactory repoFactory)
         {
             InitializeComponent();
+
+            _questionsSetId = questionSetId;
+
+            _repoFactory = repoFactory;
 
             DataContext = new EditQuestions(new SaveFileDialogService(this),
                 repoFactory.GetQuestionRepository(),
@@ -48,7 +56,7 @@ namespace QuizMastersApprenticeApp
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            var importDlg = new ImportQuestionsWindow();
+            var importDlg = new ImportQuestionsWindow(_questionsSetId, _repoFactory);
             importDlg.ShowDialog();
 
             var thisDataContext = DataContext as EditQuestions;

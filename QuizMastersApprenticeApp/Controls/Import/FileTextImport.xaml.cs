@@ -28,12 +28,12 @@ namespace QuizMastersApprenticeApp.Controls.Import
     /// <summary>
     /// Interaction logic for DirectTextImport.xaml
     /// </summary>
-    public partial class DirectTextImport : UserControl
+    public partial class FileTextImport : UserControl
     {
         private IMessageBoxService _messageBoxService;
         private IQuestionRepository _repository;
 
-        public DirectTextImport()
+        public FileTextImport()
         {
             InitializeComponent();
         }
@@ -52,9 +52,23 @@ namespace QuizMastersApprenticeApp.Controls.Import
             UpdateButtonsEnable();
         }
 
+        private void _importFile_FileNameChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnable();
+        }
+
         #region Data
 
-        public static readonly DependencyProperty ImporterProperty = DependencyProperty.Register(nameof(Importer), typeof(IQuestionImporter), typeof(DirectTextImport),
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(string), typeof(FileTextImport),
+            new FrameworkPropertyMetadata((string)string.Empty, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public string Filter
+        {
+            get { return (string)GetValue(FilterProperty) ?? string.Empty; }
+            set { SetValue(FilterProperty, value); }
+        }
+
+        public static readonly DependencyProperty ImporterProperty = DependencyProperty.Register(nameof(Importer), typeof(IQuestionImporter), typeof(FileTextImport),
             new FrameworkPropertyMetadata(null, null));
 
         public IQuestionImporter Importer
@@ -63,7 +77,7 @@ namespace QuizMastersApprenticeApp.Controls.Import
             set { SetValue(ImporterProperty, value); }
         }
 
-        public static readonly DependencyProperty QuestionSetIdProperty = DependencyProperty.Register(nameof(QuestionSetId), typeof(string), typeof(DirectTextImport),
+        public static readonly DependencyProperty QuestionSetIdProperty = DependencyProperty.Register(nameof(QuestionSetId), typeof(string), typeof(FileTextImport),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public string QuestionSetId
@@ -72,7 +86,7 @@ namespace QuizMastersApprenticeApp.Controls.Import
             set { SetValue(QuestionSetIdProperty, value); }
         }
 
-        public static readonly DependencyProperty ImportParseSuccessProperty = DependencyProperty.Register(nameof(ImportParseSuccess), typeof(bool), typeof(DirectTextImport),
+        public static readonly DependencyProperty ImportParseSuccessProperty = DependencyProperty.Register(nameof(ImportParseSuccess), typeof(bool), typeof(FileTextImport),
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public bool ImportParseSuccess
@@ -81,7 +95,7 @@ namespace QuizMastersApprenticeApp.Controls.Import
             set { SetValue(ImportParseSuccessProperty, value); }
         }
 
-        public static readonly DependencyProperty ParsedImportQuestionsProperty = DependencyProperty.Register(nameof(ParsedImportQuestions), typeof(ObservableCollection<ObservableImportQuestion>), typeof(DirectTextImport),
+        public static readonly DependencyProperty ParsedImportQuestionsProperty = DependencyProperty.Register(nameof(ParsedImportQuestions), typeof(ObservableCollection<ObservableImportQuestion>), typeof(FileTextImport),
             new FrameworkPropertyMetadata(new ObservableCollection<ObservableImportQuestion>(), FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions
@@ -99,32 +113,47 @@ namespace QuizMastersApprenticeApp.Controls.Import
                 throw new ArgumentNullException(nameof(Importer), "An importer must be specified on the control");
             }
 
-            try
+            if(File.Exists(_importFile.FilePath))
             {
-                var importedQuestions = Importer.Import(new StreamReader(_importText.Text.ToStream()));
-
-                ParsedImportQuestions.Clear();
-                foreach (var item in importedQuestions)
+                try
                 {
-                    ParsedImportQuestions.Add(new ObservableImportQuestion(item));
+                    var importedQuestions = Importer.Import(new StreamReader(_importFile.FilePath));
+
+                    ParsedImportQuestions.Clear();
+                    foreach (var item in importedQuestions)
+                    {
+                        ParsedImportQuestions.Add(new ObservableImportQuestion(item));
+                    }
+
+                    var checker = new QuestionImportCheck();
+
+                    checker.CheckAgainstQuestionSet(ParsedImportQuestions, _repository, QuestionSetId);
+
+                    // This needs to happen after after error checking
+                    ImportParseSuccess = true;
+
+                    UpdateButtonsEnable();
                 }
+                catch (ImportMissingHeadersException ex)
+                {
+                    ImportParseSuccess = false;
 
-                var checker = new QuestionImportCheck();
+                    UpdateButtonsEnable();
 
-                checker.CheckAgainstQuestionSet(ParsedImportQuestions, _repository, QuestionSetId);
+                    _messageBoxService.ShowError($"Unable to parse text: {ex.Message}");
+                }
+                catch (ImportFailedException ex)
+                {
+                    ImportParseSuccess = false;
 
-                // This needs to happen after after error checking
-                ImportParseSuccess = true;
+                    UpdateButtonsEnable();
 
-                UpdateButtonsEnable();
+                    _messageBoxService.ShowError($"Unable to parse text: {ex.Message}");
+                }
             }
-            catch (ImportFailedException ex)
+            else
             {
-                ImportParseSuccess = false;
-
-                UpdateButtonsEnable();
-
-                _messageBoxService.ShowError($"Unable to parse text: {ex.Message}");
+                _messageBoxService.ShowError($"File '{_importFile.FilePath}' not found");
             }
         }
 
@@ -141,16 +170,12 @@ namespace QuizMastersApprenticeApp.Controls.Import
             }
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateButtonsEnable();
-        }
-
         private void UpdateButtonsEnable()
-        {
+        {            
             _parseText.IsEnabled = (Importer != null) && (_repository != null) &&
-                (_importText.Text != null) && (_importText.Text.Count() > 0) &&
+                (_importFile.FilePath != null) && (_importFile.FilePath.Count() > 0) &&
                 !ImportParseSuccess;
+            _importFile.IsEnabled = !ImportParseSuccess;
             _clearImport.IsEnabled = ImportParseSuccess;
             _parsedData.IsEnabled = ImportParseSuccess;
         }

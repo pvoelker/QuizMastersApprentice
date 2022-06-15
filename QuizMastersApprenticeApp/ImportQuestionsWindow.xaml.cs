@@ -1,4 +1,5 @@
-﻿using QMA.ViewModel;
+﻿using QMA.DataAccess;
+using QMA.ViewModel;
 using QuizMastersApprenticeApp.Services;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,15 @@ namespace QuizMastersApprenticeApp
     /// </summary>
     public partial class ImportQuestionsWindow : Window
     {
-        public ImportQuestionsWindow()
+        public ImportQuestionsWindow(string questionSetId, IRepositoryFactory repoFactory)
         {
             InitializeComponent();
 
-            DataContext = new ImportQuestions(new MessageBoxService(this));
+            _csvImport.Initialize(repoFactory.GetQuestionRepository());
+            _bfpImport.Initialize(repoFactory.GetQuestionRepository());
+
+            DataContext = new ImportQuestions(repoFactory.GetQuestionRepository(),
+                new MessageBoxService(this), questionSetId);
         }
     }
 }

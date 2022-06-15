@@ -4,10 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+        xmlns:import="clr-namespace:QuizMastersApprenticeApp.Controls.Import"
+        xmlns:bfpimporter="clr-namespace:QMA.Importers.BibleFactPak;assembly=QMA.Importers.BibleFactPak"
+        xmlns:csvimporter="clr-namespace:QMA.Importers.Csv;assembly=QMA.Importers.CSV"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Import Questions" Height="450" Width="800"
         Icon="/QMA.ico">
+    <Window.Resources>
+        <bfpimporter:QuestionImporter x:Key="bfpImporter" />
+        <csvimporter:QuestionImporter x:Key="csvImporter" />
+    </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Initialize}"/>
@@ -22,15 +29,23 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel>
-            <RadioButton IsChecked="{Binding Path=CsvImport, Mode=TwoWay}">
-                <StackPanel>
-                    <TextBlock>Import from CSV</TextBlock>
-                    <TextBlock>File:</TextBlock>
-                    <TextBox Text="{Binding ImportFileName}"></TextBox>
-                </StackPanel>
-            </RadioButton>
-        </StackPanel>
-        <Button Grid.Row="2" Style="{StaticResource btnFunction}" Command="{Binding Import}">Import</Button>
+        <TabControl>
+            <TabItem Header="CSV Import" IsSelected="{Binding CsvImport}">
+                <import:FileTextImport x:Name="_csvImport"
+                    Filter="CSV (*.csv)|*.csv"
+                    Importer="{StaticResource csvImporter}"
+                    QuestionSetId="{Binding Path=QuestionSetId}"
+                    ImportParseSuccess="{Binding CsvImportParseSuccess}"
+                    ParsedImportQuestions="{Binding Path=CsvParsedImportQuestions}"/>
+            </TabItem>
+            <TabItem Header="Bible Fact-Pak™ Import" IsSelected="{Binding BibleFactPacImport, Mode=OneWay}">
+                <import:DirectTextImport x:Name="_bfpImport"
+                    Importer="{StaticResource bfpImporter}"
+                    QuestionSetId="{Binding Path=QuestionSetId}"
+                    ImportParseSuccess="{Binding BfpImportParseSuccess}"
+                    ParsedImportQuestions="{Binding Path=BfpParsedImportQuestions}"/>
+            </TabItem>
+        </TabControl>
+            <Button Grid.Row="2" Style="{StaticResource btnFunction}" Command="{Binding Import}">Import</Button>
     </Grid>
 </Window>
