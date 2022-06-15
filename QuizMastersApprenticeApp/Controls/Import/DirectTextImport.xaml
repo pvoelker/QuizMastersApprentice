@@ -10,6 +10,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,17 +21,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="_importText"
-                 Grid.Row="0" Grid.ColumnSpan="2"
+                 Grid.Row="0" Grid.ColumnSpan="3"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
                  TextChanged="TextBox_TextChanged" />
         <Button x:Name="_parseText"
             Grid.Row="2" Grid.Column="0" Style="{StaticResource btnWizardNext}"
             Click="ParseText_Click">Parse Text</Button>
+        <TextBlock x:Name="_help" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="20,0">
+            <Hyperlink Click="Help_Click">Help with Import</Hyperlink>
+        </TextBlock>
         <Button x:Name="_clearImport"
-            Grid.Row="2" Grid.Column="1" Style="{StaticResource btnWizardNext}"
+            Grid.Row="2" Grid.Column="2" Style="{StaticResource btnWizardNext}"
             Click="ClearImport_Click">Clear Import</Button>
         <DataGrid x:Name="_parsedData"
-            Grid.Row="4" Grid.ColumnSpan="2" IsEnabled="{Binding Path=ImportParseSuccess, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DirectTextImport}}}"
+            Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="{Binding Path=ImportParseSuccess, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DirectTextImport}}}"
             ItemsSource="{Binding Path=ParsedImportQuestions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:DirectTextImport}}}"
             IsReadOnly="True" AutoGenerateColumns="False" CanUserDeleteRows="False">
             <DataGrid.Columns>

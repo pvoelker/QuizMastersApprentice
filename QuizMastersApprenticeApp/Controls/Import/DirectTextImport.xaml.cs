@@ -9,6 +9,7 @@ using QuizMastersApprenticeApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace QuizMastersApprenticeApp.Controls.Import
 {
@@ -90,6 +90,15 @@ namespace QuizMastersApprenticeApp.Controls.Import
             set { SetValue(ParsedImportQuestionsProperty, value); }
         }
 
+        public static readonly DependencyProperty HelpUrlProperty = DependencyProperty.Register(nameof(HelpUrl), typeof(string), typeof(DirectTextImport),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public string HelpUrl
+        {
+            get { return (string)GetValue(HelpUrlProperty); }
+            set { SetValue(HelpUrlProperty, value); }
+        }
+
         #endregion
 
         private void ParseText_Click(object sender, RoutedEventArgs e)
@@ -146,8 +155,31 @@ namespace QuizMastersApprenticeApp.Controls.Import
             UpdateButtonsEnable();
         }
 
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var appLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+                var appDirectory = Path.GetDirectoryName(appLocation);
+
+                var helpFile = Path.Combine(appDirectory, HelpUrl);
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "file://" + helpFile,
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+                _messageBoxService.ShowError("Unable to show help");
+            }
+        }
+
         private void UpdateButtonsEnable()
         {
+            _help.Visibility = string.IsNullOrEmpty(HelpUrl) ? Visibility.Collapsed : Visibility.Visible;
             _parseText.IsEnabled = (Importer != null) && (_repository != null) &&
                 (_importText.Text != null) && (_importText.Text.Count() > 0) &&
                 !ImportParseSuccess;

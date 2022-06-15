@@ -41,5 +41,6 @@
 
 ## 0.4.0
 - Refactor question import check logic from 'direct text import' user control into a testable library
+- Move Bible Fact Pak™ import help into the user control
 - Complete implementation of question import on question edit window
 - Fixed binding bug on direct text import user control
