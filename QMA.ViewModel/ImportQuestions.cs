@@ -40,8 +40,9 @@ namespace QMA.ViewModel
             });
 
             Import = new RelayCommand(ImportCommand,
-                () => (CsvImport && CsvImportParseSuccess && !CsvParsedImportQuestions.Any(x => x.HasParseError)) ||
-                (BibleFactPacImport && BfpImportParseSuccess && !BfpParsedImportQuestions.Any(x => x.HasParseError))
+                () =>
+                (CsvImport && CsvImportParseSuccess && CsvParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !CsvParsedImportQuestions.Any(x => x.HasParseError)) ||
+                (BibleFactPacImport && BfpImportParseSuccess && BfpParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !BfpParsedImportQuestions.Any(x => x.HasParseError))
                 );
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
@@ -122,7 +123,7 @@ namespace QMA.ViewModel
         {
             if(CsvImport == true)
             {
-                if(_messageBoxService.PromptToContinue($"Are you sure you want to import {CsvParsedImportQuestions.Count} item(s)?"))
+                if(_messageBoxService.PromptToContinue($"Are you sure you want to import {CsvParsedImportQuestions.Where(x => x.AlreadyExists == false).Count()} item(s)?"))
                 {
                     try
                     {
@@ -136,7 +137,7 @@ namespace QMA.ViewModel
             }
             else if(BibleFactPacImport == true)
             {
-                if (_messageBoxService.PromptToContinue($"Are you sure you want to import {BfpParsedImportQuestions.Count} item(s)?"))
+                if (_messageBoxService.PromptToContinue($"Are you sure you want to import {BfpParsedImportQuestions.Where(x => x.AlreadyExists == false).Count()} item(s)?"))
                 {
                     try
                     {
@@ -156,7 +157,7 @@ namespace QMA.ViewModel
 
         private void AddQuestions(string questionSetId, ObservableCollection<ObservableImportQuestion> imported)
         {
-            foreach(var item in imported)
+            foreach(var item in imported.Where(x => x.AlreadyExists == false))
             {
                 _repository.Add(new Question
                 {

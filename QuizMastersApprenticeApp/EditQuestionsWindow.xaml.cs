@@ -60,14 +60,11 @@ namespace QuizMastersApprenticeApp
             importDlg.ShowDialog();
 
             var thisDataContext = DataContext as EditQuestions;
-            var dataContext = importDlg.DataContext as ImportQuestions;
 
-            if(dataContext != null)
+            if (thisDataContext != null)
             {
-            }
-            else
-            {
-                MessageBox.Show("Nothing to import");
+                // Reload data
+                thisDataContext.Initialize.Execute(null);
             }
         }
     }
