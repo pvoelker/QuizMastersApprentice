@@ -37,6 +37,16 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock>Assigned questions for team:</TextBlock>
+                        <DataGrid>
+                            <DataGridTextColumn Header="Help"/>
+                        </DataGrid>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>            
         </DataGrid>
         <Button Grid.Row="4" Style="{StaticResource btnAdd}" Command="{Binding Save}" Grid.ColumnSpan="2" Margin="4,4,4,4">
             <AccessText>_Save Changes</AccessText>

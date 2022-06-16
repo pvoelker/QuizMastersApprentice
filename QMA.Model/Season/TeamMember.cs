@@ -4,10 +4,8 @@ using System.Text;
 
 namespace QMA.Model.Season
 {
-    public class TeamMember
+    public class TeamMember : PrimaryKeyBase
     {
-        public string PrimaryKey { get; set; }
-
         public string TeamId { get; set; }
 
         public string QuizzerId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace QMA.Model
 {
-    public class Question : PrimaryKeyBase
+    public class Question : DeleteablePrimaryKeyBase
     {
         public string QuestionSetId { get; set; }
 

@@ -50,3 +50,6 @@
 - Minor adjustments to practice configuration user interface
 - Clean up dead code in practice configuration
 - Clean up code in practice run
+
+## 0.5.0
+- Implement assignment of questions to quizzers on a team

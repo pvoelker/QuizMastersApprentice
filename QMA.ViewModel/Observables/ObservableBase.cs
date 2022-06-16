@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel.Observables
 {
-    public abstract class ObservableBase<T> : ObservableValidator where T : PrimaryKeyBase
+    public abstract class ObservableBase<T> : ObservableValidator where T : DeleteablePrimaryKeyBase
     {
         protected readonly T _model;
 
