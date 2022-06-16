@@ -44,3 +44,9 @@
 - Move Bible Fact Pak™ import help into the user control
 - Complete implementation of question import on question edit window
 - Fixed binding bug on direct text import user control
+
+## 0.4.1
+- Properly handle max question point values in practices
+- Minor adjustments to practice configuration user interface
+- Clean up dead code in practice configuration
+- Clean up code in practice run

@@ -15,12 +15,19 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0">Select the Quizzers for the Practice:</TextBlock>
         <Grid Grid.Row="2">
             <DataGrid x:Name="lstTeamQuizzers" ItemsSource="{Binding TeamQuizzers}" AutoGenerateColumns="False" CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="150" Header="Team Name" IsReadOnly="True" Binding="{Binding TeamName}"/>
+                    <DataGridTextColumn Width="60" IsReadOnly="True" Binding="{Binding TeamMaxPointValue, TargetNullValue='--'}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Max🛈" ToolTip="Maximum question point value allowed for team"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Width="150" Header="First Name" IsReadOnly="True" Binding="{Binding FirstName}"/>
                     <DataGridTextColumn Width="150" Header="Last Name" IsReadOnly="True" Binding="{Binding LastName}"/>
                     <DataGridTemplateColumn Header="Selected">
@@ -61,7 +68,8 @@
                 </TextBlock.Style>
             </TextBlock>            
         </Grid>
-        <TextBlock Grid.Row="4" Style="{StaticResource txtNotes}">Quizzers can only be in a practice from one team at a time</TextBlock>
-        <Button Style="{StaticResource btnWizardNext}" Grid.Row="6" Command="{Binding SelectQuizzers}">▶▶▶ Next ▶▶▶</Button>
+        <TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="{Binding Path=MaxQuestionPointValue, TargetNullValue='No Limit on Question Point Values', StringFormat='Max Question Point Value: {0}'}" />
+        <TextBlock Grid.Row="6" Style="{StaticResource txtNotes}">Quizzers can only be in a practice from one team at a time</TextBlock>
+        <Button Style="{StaticResource btnWizardNext}" Grid.Row="8" Command="{Binding SelectQuizzers}">▶▶▶ Next ▶▶▶</Button>
     </Grid>
 </UserControl>

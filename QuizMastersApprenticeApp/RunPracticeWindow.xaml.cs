@@ -37,12 +37,7 @@ namespace QuizMastersApprenticeApp
 
             DataContext = new RunPractice(
                 new MessageBoxService(this),
-                repoFactory.GetSeasonRepository(),
-                repoFactory.GetTeamRepository(),
                 repoFactory.GetQuizzerRepository(),
-                repoFactory.GetTeamMemberRepository(),
-                repoFactory.GetQuestionSetRepository(),
-                repoFactory.GetQuestionRepository(),
                 quizzerIds,
                 seasonName,
                 questions);

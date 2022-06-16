@@ -1,8 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
-using QMA.Helpers;
-using QMA.Importers;
 using QMA.Model;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables;
@@ -106,6 +104,7 @@ namespace QMA.ViewModel.Practice
                     TeamQuizzers.Add(new ObservableTeamQuizzer(
                         quizzer.PrimaryKey,
                         team.Name,
+                        team.MaxPointValue,
                         quizzer.FirstName,
                         quizzer.LastName));
                 }
@@ -116,7 +115,7 @@ namespace QMA.ViewModel.Practice
 
             SelectQuizzers = new RelayCommand(() =>
             {
-                ExistingQuestionCount = _questionRepository.CountByQuestionSetId(SelectedQuestionSet.PrimaryKey, false);
+                ExistingQuestionCount = _questionRepository.CountByQuestionSetId(SelectedQuestionSet.PrimaryKey, MaxQuestionPointValue, false);
 
                 WizardState = ConfigurePracticePage.Questions;
             }, () =>
@@ -147,43 +146,19 @@ namespace QMA.ViewModel.Practice
                 _runPracticeService.Start(this);
             },
             () => {
-                return UseQuestionSetOnly ||
-                (UseGeneratedQuestionSet && ImportParseSuccess && !ParsedImportQuestions.Any(x => x.HasParseError));
+                return (UseQuestionSetOnly)
+                || (UseGeneratedQuestionSet && ImportParseSuccess && !ParsedImportQuestions.Any(x => x.HasParseError));
             });
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
-                if (TeamQuizzers.Any(x => x.HasErrors))
-                {
-                    e.Cancel = true;
-                }
-            });
-
-            BibleFactPakHelp = new RelayCommand(() =>
-            {
-                try
-                {
-                    var appLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-                    var appDirectory = Path.GetDirectoryName(appLocation);
-
-                    var helpFile = Path.Combine(appDirectory, "Help\\BibleFactPak.html");
-
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "file://" + helpFile,
-                        UseShellExecute = true
-                    });
-                }
-                catch
-                {
-                    _messageBoxService.ShowError("Unable to show help");
-                }
             });
         }
 
         private void TeamQuizzers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            MaxQuestionPointValue = TeamQuizzers.Where(x => x.IsSelected).Min(x => x.TeamMaxPointValue);
+
             SelectQuizzers.NotifyCanExecuteChanged();
         }
 
@@ -223,6 +198,13 @@ namespace QMA.ViewModel.Practice
             set => SetProperty(ref _existingQuestionCount, value);
         }
 
+        private int? _maxQuestionPointValue;
+        public int? MaxQuestionPointValue
+        {
+            get => _maxQuestionPointValue;
+            set => SetProperty(ref _maxQuestionPointValue, value);
+        }
+
         private QuestionSet _selectedQuestionSet = null;
         public QuestionSet SelectedQuestionSet
         {
@@ -241,13 +223,6 @@ namespace QMA.ViewModel.Practice
                 SetProperty(ref _onlyUseImportQuestionsForPractice, value);
                 SelectQuestions.NotifyCanExecuteChanged();
             }
-        }
-
-        private string _questionSetImport;
-        public string QuestionSetImport
-        {
-            get => _questionSetImport;
-            set => SetProperty(ref _questionSetImport, value);
         }
 
         public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions { get; set; } = new ObservableCollection<ObservableImportQuestion>();
@@ -276,7 +251,7 @@ namespace QMA.ViewModel.Practice
             {
                 var questions = _questionRepository.GetByQuestionSetId(SelectedQuestionSet.PrimaryKey, false);
 
-                foreach (var item in questions)
+                foreach (var item in questions.Where(x => !MaxQuestionPointValue.HasValue || x.Points <= MaxQuestionPointValue))
                 {
                     retVal.Add(new ObservablePracticeQuestion(item));
                 }
@@ -338,8 +313,6 @@ namespace QMA.ViewModel.Practice
         public IRelayCommand SelectQuestions { get; }
 
         public IRelayCommand<CancelEventArgs> Closing { get; }
-
-        public IRelayCommand BibleFactPakHelp { get; }
 
         #endregion
 
