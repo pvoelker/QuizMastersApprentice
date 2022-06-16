@@ -14,11 +14,13 @@ namespace QMA.ViewModel.Observables.Practice
         public ObservableTeamQuizzer(
             string primaryKey,
             string teamName,
+            int? teamMaxPointValue,
             string firstName,
             string lastName)
         {
             _primaryKey = primaryKey;
             _teamName = teamName;
+            _teamMaxPointValue = teamMaxPointValue;
             _firstName = firstName;
             _lastName = lastName;
         }
@@ -33,6 +35,12 @@ namespace QMA.ViewModel.Observables.Practice
         public string TeamName
         {
             get => _teamName;
+        }
+
+        private int? _teamMaxPointValue;
+        public int? TeamMaxPointValue
+        {
+            get => _teamMaxPointValue;
         }
 
         private string _firstName;

@@ -54,12 +54,14 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
-        public int CountByQuestionSetId(string id, bool includeDeleted)
+        public int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted)
         {
             using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
             {
                 var coll = ds.GetCollection<Question>();
-                return coll.AsQueryable().Where(x => x.QuestionSetId == id && (includeDeleted || x.Deleted == null)).Count();
+                return coll.AsQueryable().Where(x => x.QuestionSetId == id
+                && (includeDeleted || x.Deleted == null)
+                && (!maxQuestionPointValue.HasValue || x.Points <= maxQuestionPointValue)).Count();
             }
         }
 

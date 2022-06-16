@@ -14,7 +14,7 @@ namespace QMA.DataAccess
 
         IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted);
 
-        int CountByQuestionSetId(string id, bool includeDeleted);
+        int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted);
 
         void Add(Question value);
 

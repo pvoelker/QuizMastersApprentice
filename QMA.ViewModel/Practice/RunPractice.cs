@@ -23,21 +23,11 @@ namespace QMA.ViewModel.Practice
 
         private IMessageBoxService _messageBoxService;
 
-        private ISeasonRepository _seasonRepository;
-        private ITeamRepository _teamRepository;
         private IQuizzerRepository _quizzerRepository;
-        private ITeamMemberRepository _teamMemberRepository;
-        private IQuestionSetRepository _questionSetRepository;
-        private IQuestionRepository _questionRepository;
 
         public RunPractice(
             IMessageBoxService messageBoxService,
-            ISeasonRepository seasonRepository,
-            ITeamRepository teamRepository,
             IQuizzerRepository quizzerRepository,
-            ITeamMemberRepository teamMemberRepository,
-            IQuestionSetRepository questionSetRepository,
-            IQuestionRepository questionRepository,
             IEnumerable<string> quizzerIds,
             string seasonName,
             IEnumerable<ObservablePracticeQuestion> questions)
@@ -51,12 +41,7 @@ namespace QMA.ViewModel.Practice
 
             SeasonName = seasonName;
 
-            _seasonRepository = seasonRepository;
-            _teamRepository = teamRepository;
             _quizzerRepository = quizzerRepository;
-            _teamMemberRepository = teamMemberRepository;
-            _questionSetRepository = questionSetRepository;
-            _questionRepository = questionRepository;
 
             Initialize = new RelayCommand(() =>
             {

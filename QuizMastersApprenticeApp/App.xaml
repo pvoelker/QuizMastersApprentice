@@ -23,6 +23,11 @@
                 <Setter Property="FontSize" Value="14"/>
             </Style>
 
+            <Style TargetType="{x:Type TextBlock}" x:Key="txtInfoBig">
+                <Setter Property="Foreground" Value="DarkBlue"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+
             <Style TargetType="{x:Type TextBlock}" x:Key="txtInfoBold">
                 <Setter Property="Foreground" Value="Blue"/>
                 <Setter Property="FontWeight" Value="Bold"/>
