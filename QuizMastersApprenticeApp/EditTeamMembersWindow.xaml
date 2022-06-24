@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMastersApprenticeApp"
         xmlns:datagrid="clr-namespace:QuizMastersApprenticeApp.Controls.DataGrid"
+        xmlns:controls="clr-namespace:QuizMastersApprenticeApp.Controls"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Edit Team Members" Height="450" Width="800"
@@ -23,7 +24,7 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="False" Grid.ColumnSpan="2" Margin="0,0,0,10" Grid.RowSpan="2" CanUserDeleteRows="False">
+        <DataGrid ItemsSource="{Binding TeamMembers}" AutoGenerateColumns="False" Grid.ColumnSpan="2" Margin="0,0,0,10" Grid.RowSpan="2" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Quizzer Name" IsReadOnly="True" Binding="{Binding QuizzerName}" MinWidth="200"/>
                 <DataGridCheckBoxColumn Header="Is Member" Binding="{Binding IsMember, UpdateSourceTrigger=PropertyChanged}"/>
@@ -39,12 +40,10 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBlock>Assigned questions for team:</TextBlock>
-                        <DataGrid>
-                            <DataGridTextColumn Header="Help"/>
-                        </DataGrid>
-                    </StackPanel>
+                    <controls:AssignQuestions Height="200" Margin="5"
+                                              Visibility="{Binding Path=IsMember, Converter={StaticResource BoolToVis}}"
+                                              Questions="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Questions}"
+                                              AssignedQuestions="{Binding Path=AssignedQuestions}"/>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>            
         </DataGrid>
