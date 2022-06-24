@@ -161,6 +161,7 @@ namespace QMA.ViewModel
             {
                 _repository.Add(new Question
                 {
+                    PrimaryKey = Guid.NewGuid().ToString(),
                     QuestionSetId = questionSetId,
                     Number = item.Number,
                     Text = item.Text,
