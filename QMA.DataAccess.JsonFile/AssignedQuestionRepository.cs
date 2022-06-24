@@ -72,20 +72,38 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
-        public void Update(AssignedQuestion value)
+        public void Delete(string id)
         {
-            if (value == null)
+            if (id == null)
             {
-                throw new ArgumentNullException(nameof(value));
+                throw new ArgumentNullException(nameof(id));
             }
 
             using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
-                var success = coll.ReplaceOne(value.PrimaryKey, value);
+                var success = coll.DeleteOne(x => x.PrimaryKey == id);
                 if (success == false)
                 {
-                    throw new OperationFailedException("Update failed");
+                    throw new OperationFailedException("Delete failed");
+                }
+            };
+        }
+
+        public void DeleteAllByTeamMemberId(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            {
+                var coll = ds.GetCollection<AssignedQuestion>();
+                var success = coll.DeleteMany(x => x.TeamMemberId == id);
+                if (success == false)
+                {
+                    throw new OperationFailedException("Delete failed");
                 }
             };
         }

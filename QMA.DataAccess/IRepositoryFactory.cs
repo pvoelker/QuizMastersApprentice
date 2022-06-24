@@ -21,5 +21,7 @@ namespace QMA.DataAccess
         ITeamRepository GetTeamRepository();
 
         ITeamMemberRepository GetTeamMemberRepository();
+
+        IAssignedQuestionRepository GetAssignedQuestionRepository();
     }
 }

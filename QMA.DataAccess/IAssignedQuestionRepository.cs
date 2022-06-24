@@ -16,6 +16,8 @@ namespace QMA.DataAccess
 
         void Add(AssignedQuestion value);
 
-        void Update(AssignedQuestion value);
+        void Delete(string id);
+
+        void DeleteAllByTeamMemberId(string id);
     }
 }
