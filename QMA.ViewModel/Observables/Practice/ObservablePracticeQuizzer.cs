@@ -15,14 +15,22 @@ namespace QMA.ViewModel.Observables.Practice
     {
         protected readonly Model.Quizzer _model;
 
-        public ObservablePracticeQuizzer(Model.Quizzer model)
+        public ObservablePracticeQuizzer(string teamMemberId, Model.Quizzer model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
+            _teamMemberId = teamMemberId;
+
             _model = model;
+        }
+
+        private string _teamMemberId;
+        public string TeamMemberId
+        {
+            get => _teamMemberId;
         }
 
         public string Name
@@ -58,6 +66,13 @@ namespace QMA.ViewModel.Observables.Practice
         public ObservableCollection<ObservablePracticeQuestion> CorrectQuestions { get; } = new ObservableCollection<ObservablePracticeQuestion>();
 
         public ObservableCollection<ObservablePracticeQuestion> WrongQuestions { get; } = new ObservableCollection<ObservablePracticeQuestion>();
+
+        private bool _assignQuestion = false;
+        public bool AssignQuestion
+        {
+            get => _assignQuestion;
+            set => SetProperty(ref _assignQuestion, value);
+        }
 
         private bool _reportSent = false;
         public bool ReportSent

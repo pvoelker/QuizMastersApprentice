@@ -54,3 +54,4 @@
 ## 0.5.0
 - Implement assignment of questions to quizzers on a team
 - Fix bug with generating primary keys on imported questions
+- Fix bugs in GetByKey methods in some of the repositories

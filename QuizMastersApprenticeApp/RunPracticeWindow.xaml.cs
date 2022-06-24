@@ -27,7 +27,7 @@ namespace QuizMastersApprenticeApp
         private IRepositoryFactory _repoFactory;
 
         public RunPracticeWindow(IRepositoryFactory repoFactory,
-            IEnumerable<string> quizzerIds,
+            IEnumerable<string> teamMemberIds,
             string seasonName,
             IEnumerable<ObservablePracticeQuestion> questions)
         {
@@ -38,7 +38,9 @@ namespace QuizMastersApprenticeApp
             DataContext = new RunPractice(
                 new MessageBoxService(this),
                 repoFactory.GetQuizzerRepository(),
-                quizzerIds,
+                repoFactory.GetTeamMemberRepository(),
+                repoFactory.GetAssignedQuestionRepository(),
+                teamMemberIds,
                 seasonName,
                 questions);
         }

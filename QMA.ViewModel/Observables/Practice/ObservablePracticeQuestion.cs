@@ -23,6 +23,12 @@ namespace QMA.ViewModel.Observables.Practice
             this._model = model;
         }
 
+        public string PrimaryKey
+        {
+            get => _model.PrimaryKey;
+        }
+
+
         public string QuestionSetId
         {
             get => _model.QuestionSetId;
