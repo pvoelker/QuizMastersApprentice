@@ -67,6 +67,23 @@ namespace QMA.ViewModel.Observables.Practice
 
         public ObservableCollection<ObservablePracticeQuestion> WrongQuestions { get; } = new ObservableCollection<ObservablePracticeQuestion>();
 
+        public ObservableCollection<string> AssignedQuestionIds { get; } = new ObservableCollection<string>();
+
+        private bool _questionAlreadyAssigned = false;
+        public bool QuestionAlreadyAssigned
+        {
+            get => _questionAlreadyAssigned;
+            set
+            {
+                SetProperty(ref _questionAlreadyAssigned, value);
+                OnPropertyChanged(nameof(QuestionNotAlreadyAssigned));
+            }
+        }
+        public bool QuestionNotAlreadyAssigned
+        {
+            get => !_questionAlreadyAssigned;
+        }
+
         private bool _assignQuestion = false;
         public bool AssignQuestion
         {

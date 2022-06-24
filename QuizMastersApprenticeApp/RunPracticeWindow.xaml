@@ -73,7 +73,13 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.ColumnSpan="3" Style="{StaticResource txtBuzzInName}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}" />
-                            <CheckBox Grid.Row="2" Grid.ColumnSpan="3" Style="{StaticResource cbAssignQuestion}" IsChecked="{Binding AssignQuestion}" >Assign Question</CheckBox>
+                            <Grid Grid.Row="2" Grid.ColumnSpan="3" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BoolToVis}}">
+                                <CheckBox Style="{StaticResource cbAssignQuestion}"
+                                          IsChecked="{Binding AssignQuestion}"
+                                          Visibility="{Binding Path=QuestionNotAlreadyAssigned, Converter={StaticResource BoolToVis}}">Assign Question</CheckBox>
+                                <TextBlock Style="{StaticResource txtQuestionAlreadyAssigned}"
+                                           Visibility="{Binding Path=QuestionAlreadyAssigned, Converter={StaticResource BoolToVis}}">Question Already Assigned</TextBlock>
+                            </Grid>
                             <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource btnBuzzInCorrect}" Command="{Binding Path=DataContext.CorrectAnswer, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" Margin="4" Content="✔ Correct" />
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource btnBuzzInWrong}" Command="{Binding Path=DataContext.WrongAnswer, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" Margin="4" Content="❌ Wrong" />
                         </Grid>

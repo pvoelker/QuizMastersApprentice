@@ -59,6 +59,10 @@ namespace QMA.ViewModel.Practice
 
                     var practiceQuizzer = new ObservablePracticeQuizzer(id, quizzer);
 
+                    var assigned = _assignedRepository.GetByTeamMemberId(id);
+
+                    practiceQuizzer.AssignedQuestionIds.AddRange(assigned.Select(x => x.QuestionId));
+
                     PracticeQuizzers.Add(practiceQuizzer);
                 }
 
@@ -125,6 +129,8 @@ namespace QMA.ViewModel.Practice
                     TeamMemberId = selectedQuizzer.TeamMemberId,
                     QuestionId = currentQuestion.PrimaryKey
                 });
+
+                selectedQuizzer.AssignedQuestionIds.Add(currentQuestion.PrimaryKey);
 
                 selectedQuizzer.AssignQuestion = false;
             }
@@ -197,6 +203,11 @@ namespace QMA.ViewModel.Practice
             nextQuestion.UsageCount = nextQuestion.UsageCount + 1;
 
             TotalQuestionsAsked = TotalQuestionsAsked + 1;
+
+            foreach(var quizzer in PracticeQuizzers)
+            {
+                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestionIds.Contains(nextQuestion.PrimaryKey);
+            }
 
             return nextQuestion;
         }
