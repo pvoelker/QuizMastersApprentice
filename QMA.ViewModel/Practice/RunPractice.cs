@@ -23,8 +23,6 @@ namespace QMA.ViewModel.Practice
 
         private IMessageBoxService _messageBoxService;
 
-        private IQuizzerRepository _quizzerRepository;
-
         private IAssignedQuestionRepository _assignedRepository;
 
         public RunPractice(
@@ -45,8 +43,6 @@ namespace QMA.ViewModel.Practice
 
             SeasonName = seasonName;
 
-            _quizzerRepository = quizzerRepository;
-
             _assignedRepository = assignedRepository;
 
             Initialize = new RelayCommand(() =>
@@ -55,7 +51,7 @@ namespace QMA.ViewModel.Practice
                 {
                     var teamMember = teamMemberRepository.GetByKey(id);
 
-                    var quizzer = _quizzerRepository.GetByKey(teamMember.QuizzerId);
+                    var quizzer = quizzerRepository.GetByKey(teamMember.QuizzerId);
 
                     var practiceQuizzer = new ObservablePracticeQuizzer(id, quizzer);
 
@@ -111,6 +107,10 @@ namespace QMA.ViewModel.Practice
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
+                if(messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                {
+                    e.Cancel = true;
+                }
             });
         }
 

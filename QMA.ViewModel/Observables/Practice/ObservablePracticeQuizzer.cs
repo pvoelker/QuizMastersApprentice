@@ -17,6 +17,10 @@ namespace QMA.ViewModel.Observables.Practice
 
         public ObservablePracticeQuizzer(string teamMemberId, Model.Quizzer model)
         {
+            if (teamMemberId == null)
+            {
+                throw new ArgumentNullException(nameof(teamMemberId));
+            }
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
