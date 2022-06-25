@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
 using QMA.Model.Season;
+using QMA.ViewModel.Observables;
 using QMA.ViewModel.Observables.Season;
 using QMA.ViewModel.Services;
 using System;
@@ -16,83 +17,137 @@ namespace QMA.ViewModel.Season
     {
         private IMessageBoxService _messageBoxService;
 
-        private ITeamMemberRepository _repository;
+        private ITeamMemberRepository _teamMemberRepository;
+        private IAssignedQuestionRepository _assignedRepository;
 
         private string _teamId;
         public EditTeamMembers(
             IMessageBoxService messageBoxService,
             ITeamMemberRepository repository,
+            IAssignedQuestionRepository assignedRepository,
             IQuizzerRepository quizzerRepository,
-            string teamId)
+            IQuestionRepository questionRepository,
+            string teamId,
+            string questionsSetId)
         {
             _messageBoxService = messageBoxService;
 
-            _repository = repository;
+            _teamMemberRepository = repository;
+
+            _assignedRepository = assignedRepository;
 
             _teamId = teamId;
 
             Initialize = new RelayCommand(() =>
             {
                 var quizzers = quizzerRepository.GetAll(true);
+                var teamMembers = _teamMemberRepository.GetByTeamId(_teamId);
+
+                var questions = questionRepository.GetByQuestionSetId(questionsSetId, false);
+
                 // TODO: What to do with deleted quizzers?
                 foreach (var quizzer in quizzers)
                 {
+                    var teamMember = teamMembers.SingleOrDefault(x => x.QuizzerId == quizzer.PrimaryKey);
+                    var teamMemberId = teamMember == null ? null : teamMember.PrimaryKey;
+
                     var newItem = new ObservableTeamMember(
                         true,
+                        teamMemberId,
                         quizzer.PrimaryKey,
                         $"{quizzer.LastName}, {quizzer.FirstName}"
                     );
-                    Items.Add(newItem);
+
+                    if(teamMemberId != null)
+                    {
+                        newItem.IsMember = true;
+                        //newItem.Persisted = true;
+                    }
+
+                    var assignedQuestions = _assignedRepository.GetByTeamMemberId(teamMemberId);
+                    foreach (var assignedQuestion in assignedQuestions)
+                    {
+                        var foundQuestion = questions.SingleOrDefault(x => x.PrimaryKey == assignedQuestion.QuestionId);
+
+                        if (foundQuestion != null)
+                        {
+                            newItem.AssignedQuestions.Add(new ObservableAssignedQuestion(true, foundQuestion));
+                        }
+                    }
+
+                    TeamMembers.Add(newItem);
                 }
 
-                var items = _repository.GetByTeamId(_teamId);
-
-                foreach(var item in items)
+                foreach(var item in teamMembers)
                 {
-                    var found = Items.SingleOrDefault(x => x.QuizzerId == item.QuizzerId);
+                    var found = TeamMembers.SingleOrDefault(x => x.QuizzerId == item.QuizzerId);
                     found.IsMember = true;
                     found.Persisted = true;
+                }
+
+                foreach(var item in questions)
+                {
+                    Questions.Add(new ObservableAssignedQuestion(false, item));
                 }
             });
 
             Save = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
-                var existingQuizzers = _repository.GetByTeamId(_teamId);
+                var existingQuizzers = _teamMemberRepository.GetByTeamId(_teamId);
                 var existingQuizzerIds = existingQuizzers.Select(x => x.QuizzerId);
-                var newQuizzerIds = Items.Where(x => x.IsMember == true).Select(x => x.QuizzerId);
+                var newQuizzerIds = TeamMembers.Where(x => x.IsMember == true).Select(x => x.QuizzerId);
 
                 var quizzerIdsToDelete = existingQuizzerIds.Except(newQuizzerIds);
                 var quizzerIdsToAdd = newQuizzerIds.Except(existingQuizzerIds);
+                var quizzerIdsToUpdate = existingQuizzerIds.Union(newQuizzerIds);
 
                 foreach (var quizzerId in quizzerIdsToDelete)
                 {
                     var id = existingQuizzers.Single(x => x.QuizzerId == quizzerId).PrimaryKey;
-                    _repository.Delete(id);
+
+                    DeleteTeamAssignedQuestions(id);
+
+                    _teamMemberRepository.Delete(id);
                 }
 
                 foreach (var quizzerId in quizzerIdsToAdd)
                 {
-                    _repository.Add(new TeamMember {
+                    var newTeamMember = new TeamMember
+                    {
                         PrimaryKey = Guid.NewGuid().ToString(),
                         TeamId = _teamId,
                         QuizzerId = quizzerId
-                    });
+                    };
+
+                    var gridTeamMember = TeamMembers.Single(x => x.QuizzerId == quizzerId);
+
+                    gridTeamMember.TeamMemberId = newTeamMember.PrimaryKey;
+
+                    _teamMemberRepository.Add(newTeamMember);
+
+                    AddTeamAssignedQuestions(gridTeamMember);
                 }
 
-                foreach(var item in Items)
+                foreach (var quizzerId in quizzerIdsToUpdate)
                 {
-                    item.Persisted = true;
+                    var gridTeamMember = TeamMembers.Single(x => x.QuizzerId == quizzerId);
+                    UpdateTeamAssignedQuestions(gridTeamMember);
                 }
+
+                //foreach (var item in TeamMembers)
+                //{
+                //    item.Persisted = true;
+                //}
             });
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
-                if(Items.Any(x => x.HasErrors))
+                if(TeamMembers.Any(x => x.HasErrors))
                 {
                     e.Cancel = true;
                 }
 
-                if(Items.Any(x => x.NotPersisted))
+                if(TeamMembers.Any(x => x.NotPersisted))
                 {
                     if(_messageBoxService.PromptToContinue("Changes are not saved. If you continue any changes will be lost.") == false)
                     {
@@ -102,7 +157,61 @@ namespace QMA.ViewModel.Season
             });
         }
 
-        public ObservableCollection<ObservableTeamMember> Items { get; } = new ObservableCollection<ObservableTeamMember>();
+        private void AddTeamAssignedQuestions(ObservableTeamMember newTeamMember)
+        {
+            foreach(var item in newTeamMember.AssignedQuestions)
+            {
+                _assignedRepository.Add(new AssignedQuestion
+                {
+                    PrimaryKey = Guid.NewGuid().ToString(),
+                    TeamMemberId = newTeamMember.TeamMemberId,
+                    QuestionId = item.PrimaryKey
+                });
+
+                item.Persisted = true;
+            }
+        }
+
+        private void UpdateTeamAssignedQuestions(ObservableTeamMember newTeamMember)
+        {
+            var existingAssigned = _assignedRepository.GetByTeamMemberId(newTeamMember.TeamMemberId);
+            var existingQuestionIds = existingAssigned.Select(x => x.QuestionId);
+            var newQuestionIds = newTeamMember.AssignedQuestions.Select(x => x.PrimaryKey);
+
+            var questionIdsToDelete = existingQuestionIds.Except(newQuestionIds);
+            var questionIdsToAdd = newQuestionIds.Except(existingQuestionIds);
+
+            foreach(var questionId in questionIdsToDelete)
+            {
+                var assignedId = existingAssigned.Single(x => x.TeamMemberId == newTeamMember.TeamMemberId && x.QuestionId == questionId).PrimaryKey;
+                _assignedRepository.Delete(assignedId);
+            }
+
+            foreach(var questionId in questionIdsToAdd)
+            {
+                _assignedRepository.Add(new AssignedQuestion
+                {
+                    PrimaryKey= Guid.NewGuid().ToString(),
+                    TeamMemberId = newTeamMember.TeamMemberId,
+                    QuestionId = questionId
+                });
+            }
+
+            foreach(var item in newTeamMember.AssignedQuestions)
+            {
+                item.Persisted = true;
+            }
+        }
+
+        private void DeleteTeamAssignedQuestions(string teamMemberId)
+        {
+            _assignedRepository.DeleteAllByTeamMemberId(teamMemberId);
+        }
+
+        public ObservableCollection<ObservableTeamMember> TeamMembers { get; } = new ObservableCollection<ObservableTeamMember>();
+
+        public ObservableCollection<ObservableAssignedQuestion> Questions { get; } = new ObservableCollection<ObservableAssignedQuestion>();
+
 
         #region Commands
 

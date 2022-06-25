@@ -7,27 +7,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace QMA.ViewModel.Observables.Practice
+namespace QMA.ViewModel.Observables
 {
-    public class ObservablePracticeQuestion : ObservableValidator
+    public class ObservableAssignedQuestion : ObservableValidator
     {
         protected readonly Model.Question _model;
 
-        public ObservablePracticeQuestion(Model.Question model)
+        public ObservableAssignedQuestion(bool persisted, Model.Question model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            this._model = model;
+            _model = model;
+
+            Persisted = persisted;
+
+            ValidateAllProperties();
         }
+
+        public Model.Question GetModel() { return _model; }
 
         public string PrimaryKey
         {
             get => _model.PrimaryKey;
         }
-
 
         public string QuestionSetId
         {
@@ -59,18 +64,19 @@ namespace QMA.ViewModel.Observables.Practice
             get => _model.Points;
         }
 
-        private int _usageCount = 0;
-        public int UsageCount
+        private bool _persisted = false;
+        public bool Persisted
         {
-            get => _usageCount;
-            set => SetProperty(ref _usageCount, value);
+            get => _persisted;
+            set
+            {
+                SetProperty(ref _persisted, value, nameof(Persisted));
+                OnPropertyChanged(nameof(NotPersisted));
+            }
         }
-
-        private bool _justLearned = false;
-        public bool JustLearned
+        public bool NotPersisted
         {
-            get => _justLearned;
-            set => SetProperty(ref _justLearned, value);
+            get => !_persisted;
         }
     }
 }

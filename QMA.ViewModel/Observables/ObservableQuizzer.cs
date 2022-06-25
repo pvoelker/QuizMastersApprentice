@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel.Observables
 {
-    public class ObservableQuizzer : ObservableBase<Model.Quizzer>
+    public class ObservableQuizzer : DeleteableObservableBase<Model.Quizzer>
     {
         public ObservableQuizzer(bool persisted, Model.Quizzer model, ICommand delete, ICommand restore, ICommand save)
             : base(persisted, model, delete, restore, save)

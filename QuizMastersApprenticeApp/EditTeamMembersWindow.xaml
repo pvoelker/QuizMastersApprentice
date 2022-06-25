@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMastersApprenticeApp"
         xmlns:datagrid="clr-namespace:QuizMastersApprenticeApp.Controls.DataGrid"
+        xmlns:controls="clr-namespace:QuizMastersApprenticeApp.Controls"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Edit Team Members" Height="450" Width="800"
@@ -21,9 +22,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="False" Grid.ColumnSpan="2" Margin="0,0,0,10" Grid.RowSpan="2" CanUserDeleteRows="False">
+        <DataGrid ItemsSource="{Binding TeamMembers}" AutoGenerateColumns="False" Grid.ColumnSpan="2" Margin="0,0,0,10" Grid.RowSpan="2" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Quizzer Name" IsReadOnly="True" Binding="{Binding QuizzerName}" MinWidth="200"/>
                 <DataGridCheckBoxColumn Header="Is Member" Binding="{Binding IsMember, UpdateSourceTrigger=PropertyChanged}"/>
@@ -37,7 +40,17 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <controls:AssignQuestions Height="200" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsPresenter}}, Path=ActualWidth, Converter={StaticResource SubtractVerticalScrollbarWidth}}"
+                                              Margin="5"
+                                              Visibility="{Binding Path=IsMember, Converter={StaticResource BoolToVis}}"
+                                              Questions="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Questions}"
+                                              AssignedQuestions="{Binding Path=AssignedQuestions}"/>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>            
         </DataGrid>
+        <TextBlock Style="{StaticResource txtNotes}" Grid.Row="2">Select a quizzer that is member of the team to edit assigned questions.</TextBlock>
         <Button Grid.Row="4" Style="{StaticResource btnAdd}" Command="{Binding Save}" Grid.ColumnSpan="2" Margin="4,4,4,4">
             <AccessText>_Save Changes</AccessText>
         </Button>

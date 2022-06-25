@@ -25,9 +25,13 @@ namespace QuizMastersApprenticeApp
     {
         private IRepositoryFactory _repoFactory;
 
-        public EditTeamsWindow(string seasonId, IRepositoryFactory repoFactory)
+        private string _questionSetId;
+
+        public EditTeamsWindow(string seasonId, string questionSetId, IRepositoryFactory repoFactory)
         {
             _repoFactory = repoFactory;
+
+            _questionSetId = questionSetId;
 
             InitializeComponent();
 
@@ -51,7 +55,7 @@ namespace QuizMastersApprenticeApp
         {
             var selected = ((EditTeams)DataContext).Selected;
 
-            var win = new EditTeamMembersWindow(selected.PrimaryKey, _repoFactory);
+            var win = new EditTeamMembersWindow(selected.PrimaryKey, _questionSetId, _repoFactory);
             win.ShowDialog();
         }
     }

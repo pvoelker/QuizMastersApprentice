@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel.Observables
 {
-    public class ObservableQuestion : ObservableBase<Model.Question>
+    public class ObservableQuestion : DeleteableObservableBase<Model.Question>
     {
         public ObservableQuestion(bool persisted, Model.Question model, ICommand delete, ICommand restore, ICommand save)
             : base(persisted, model, delete, restore, save)

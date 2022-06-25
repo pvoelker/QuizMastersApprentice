@@ -82,7 +82,7 @@ namespace QuizMastersApprenticeApp.Controls.Import
         }
 
         public static readonly DependencyProperty ParsedImportQuestionsProperty = DependencyProperty.Register(nameof(ParsedImportQuestions), typeof(ObservableCollection<ObservableImportQuestion>), typeof(DirectTextImport),
-            new FrameworkPropertyMetadata(new ObservableCollection<ObservableImportQuestion>(), FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public ObservableCollection<ObservableImportQuestion> ParsedImportQuestions
         {

@@ -32,7 +32,8 @@ namespace QMA.DataAccess.JsonFile
         {
             using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
             {
-                return ds.GetItem<SeasonInfo>(key);
+                var coll = ds.GetCollection<SeasonInfo>();
+                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 

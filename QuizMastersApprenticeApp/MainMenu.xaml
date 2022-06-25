@@ -16,7 +16,7 @@
         <Button Style="{StaticResource btnMainMenu}" Click="Quizzers_Click">Edit Quizzers</Button>
         <Separator Height="20"></Separator>
         <TextBlock Style="{StaticResource txtMainMenu}">Create a quizzing season,</TextBlock>
-        <TextBlock Style="{StaticResource txtMainMenu}" Margin="10,0,0,0">edit teams...</TextBlock>
+        <TextBlock Style="{StaticResource txtMainMenu}" Margin="10,0,0,0">edit teams, edit assigned questions...</TextBlock>
         <Button Style="{StaticResource btnMainMenu}" Click="Seasons_Click">Edit Seasons</Button>
         <Separator Height="20"></Separator>
         <TextBlock Style="{StaticResource txtMainMenu}">Start a practice session...</TextBlock>

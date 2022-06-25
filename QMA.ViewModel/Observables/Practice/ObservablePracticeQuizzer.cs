@@ -15,14 +15,26 @@ namespace QMA.ViewModel.Observables.Practice
     {
         protected readonly Model.Quizzer _model;
 
-        public ObservablePracticeQuizzer(Model.Quizzer model)
+        public ObservablePracticeQuizzer(string teamMemberId, Model.Quizzer model)
         {
+            if (teamMemberId == null)
+            {
+                throw new ArgumentNullException(nameof(teamMemberId));
+            }
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
+            _teamMemberId = teamMemberId;
+
             _model = model;
+        }
+
+        private string _teamMemberId;
+        public string TeamMemberId
+        {
+            get => _teamMemberId;
         }
 
         public string Name
@@ -58,6 +70,30 @@ namespace QMA.ViewModel.Observables.Practice
         public ObservableCollection<ObservablePracticeQuestion> CorrectQuestions { get; } = new ObservableCollection<ObservablePracticeQuestion>();
 
         public ObservableCollection<ObservablePracticeQuestion> WrongQuestions { get; } = new ObservableCollection<ObservablePracticeQuestion>();
+
+        public ObservableCollection<string> AssignedQuestionIds { get; } = new ObservableCollection<string>();
+
+        private bool _questionAlreadyAssigned = false;
+        public bool QuestionAlreadyAssigned
+        {
+            get => _questionAlreadyAssigned;
+            set
+            {
+                SetProperty(ref _questionAlreadyAssigned, value);
+                OnPropertyChanged(nameof(QuestionNotAlreadyAssigned));
+            }
+        }
+        public bool QuestionNotAlreadyAssigned
+        {
+            get => !_questionAlreadyAssigned;
+        }
+
+        private bool _assignQuestion = false;
+        public bool AssignQuestion
+        {
+            get => _assignQuestion;
+            set => SetProperty(ref _assignQuestion, value);
+        }
 
         private bool _reportSent = false;
         public bool ReportSent

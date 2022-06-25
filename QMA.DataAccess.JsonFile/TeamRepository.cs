@@ -40,7 +40,8 @@ namespace QMA.DataAccess.JsonFile
         {
             using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
             {
-                return ds.GetItem<Team>(key);
+                var coll = ds.GetCollection<Team>();
+                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 

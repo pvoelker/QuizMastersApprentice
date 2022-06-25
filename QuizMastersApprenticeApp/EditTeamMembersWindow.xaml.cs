@@ -24,15 +24,18 @@ namespace QuizMastersApprenticeApp
     /// </summary>
     public partial class EditTeamMembersWindow : Window
     {
-        public EditTeamMembersWindow(string teamId, IRepositoryFactory repoFactory)
+        public EditTeamMembersWindow(string teamId, string questionSetId, IRepositoryFactory repoFactory)
         {
             InitializeComponent();
 
             DataContext = new EditTeamMembers(
                 new MessageBoxService(this),
                 repoFactory.GetTeamMemberRepository(),
+                repoFactory.GetAssignedQuestionRepository(),
                 repoFactory.GetQuizzerRepository(),
-                teamId);
+                repoFactory.GetQuestionRepository(),
+                teamId,
+                questionSetId);
         }
     }
 }

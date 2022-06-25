@@ -102,6 +102,7 @@ namespace QMA.ViewModel.Practice
                     var quizzer = quizzers.Single(x => x.PrimaryKey == teamMember.QuizzerId);
 
                     TeamQuizzers.Add(new ObservableTeamQuizzer(
+                        teamMember.PrimaryKey,
                         quizzer.PrimaryKey,
                         team.Name,
                         team.MaxPointValue,
@@ -320,7 +321,7 @@ namespace QMA.ViewModel.Practice
         {
             var retVal = false;
 
-            var groupedQuizzers = TeamQuizzers.Where(x => x.IsSelected).GroupBy(x => x.PrimaryKey);
+            var groupedQuizzers = TeamQuizzers.Where(x => x.IsSelected).GroupBy(x => x.QuizzerId);
 
             foreach (var item in groupedQuizzers)
             {
@@ -333,8 +334,8 @@ namespace QMA.ViewModel.Practice
                 }
                 else if (item.Count() == 1)
                 {
-                    var itemToCheck = item.First().PrimaryKey;
-                    foreach (var dups in TeamQuizzers.Where(x => x.PrimaryKey == itemToCheck))
+                    var itemToCheck = item.First().QuizzerId;
+                    foreach (var dups in TeamQuizzers.Where(x => x.QuizzerId == itemToCheck))
                     {
                         dups.IsDuplicate = false;
                     }

@@ -53,7 +53,7 @@ namespace QuizMastersApprenticeApp
         {
             var selected = ((EditSeasons)DataContext).Selected;
 
-            var win = new EditTeamsWindow(selected.PrimaryKey, _repoFactory);
+            var win = new EditTeamsWindow(selected.PrimaryKey, selected.QuestionSetId, _repoFactory);
             win.ShowDialog();
         }
     }

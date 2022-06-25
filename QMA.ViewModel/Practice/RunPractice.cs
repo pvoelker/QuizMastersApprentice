@@ -23,12 +23,14 @@ namespace QMA.ViewModel.Practice
 
         private IMessageBoxService _messageBoxService;
 
-        private IQuizzerRepository _quizzerRepository;
+        private IAssignedQuestionRepository _assignedRepository;
 
         public RunPractice(
             IMessageBoxService messageBoxService,
             IQuizzerRepository quizzerRepository,
-            IEnumerable<string> quizzerIds,
+            ITeamMemberRepository teamMemberRepository,
+            IAssignedQuestionRepository assignedRepository,
+            IEnumerable<string> teamMemberIds,
             string seasonName,
             IEnumerable<ObservablePracticeQuestion> questions)
         {
@@ -41,15 +43,21 @@ namespace QMA.ViewModel.Practice
 
             SeasonName = seasonName;
 
-            _quizzerRepository = quizzerRepository;
+            _assignedRepository = assignedRepository;
 
             Initialize = new RelayCommand(() =>
             {
-                foreach(var id in quizzerIds)
+                foreach(var id in teamMemberIds)
                 {
-                    var quizzer = _quizzerRepository.GetByKey(id);
+                    var teamMember = teamMemberRepository.GetByKey(id);
 
-                    var practiceQuizzer = new ObservablePracticeQuizzer(quizzer);
+                    var quizzer = quizzerRepository.GetByKey(teamMember.QuizzerId);
+
+                    var practiceQuizzer = new ObservablePracticeQuizzer(id, quizzer);
+
+                    var assigned = _assignedRepository.GetByTeamMemberId(id);
+
+                    practiceQuizzer.AssignedQuestionIds.AddRange(assigned.Select(x => x.QuestionId));
 
                     PracticeQuizzers.Add(practiceQuizzer);
                 }
@@ -79,6 +87,8 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
+                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+
                 SelectedQuizzer = null;
 
                 CurrentQuestion = GetNextQuestion();
@@ -88,6 +98,8 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
+                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+
                 SelectedQuizzer = null;
 
                 CurrentQuestion = GetNextQuestion();
@@ -95,7 +107,33 @@ namespace QMA.ViewModel.Practice
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
+                if(messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                {
+                    e.Cancel = true;
+                }
             });
+        }
+
+        private void AssignQuestion(ObservablePracticeQuizzer selectedQuizzer, ObservablePracticeQuestion currentQuestion)
+        {
+            if (selectedQuizzer == null)
+            {
+                throw new ArgumentNullException(nameof(selectedQuizzer));
+            }
+
+            if(selectedQuizzer.AssignQuestion)
+            {
+                _assignedRepository.Add(new AssignedQuestion
+                {
+                    PrimaryKey = Guid.NewGuid().ToString(),
+                    TeamMemberId = selectedQuizzer.TeamMemberId,
+                    QuestionId = currentQuestion.PrimaryKey
+                });
+
+                selectedQuizzer.AssignedQuestionIds.Add(currentQuestion.PrimaryKey);
+
+                selectedQuizzer.AssignQuestion = false;
+            }
         }
 
         private string _seasonName = null;
@@ -165,6 +203,11 @@ namespace QMA.ViewModel.Practice
             nextQuestion.UsageCount = nextQuestion.UsageCount + 1;
 
             TotalQuestionsAsked = TotalQuestionsAsked + 1;
+
+            foreach(var quizzer in PracticeQuizzers)
+            {
+                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestionIds.Contains(nextQuestion.PrimaryKey);
+            }
 
             return nextQuestion;
         }

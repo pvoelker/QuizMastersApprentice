@@ -82,5 +82,15 @@ namespace QMA.DataAccess.JsonFile
 
             return new TeamMemberRepository(_fileName);
         }
+
+        public IAssignedQuestionRepository GetAssignedQuestionRepository()
+        {
+            if (_fileName == null)
+            {
+                throw new NullReferenceException("File name is not set");
+            }
+
+            return new AssignedQuestionRepository(_fileName);
+        }
     }
 }
