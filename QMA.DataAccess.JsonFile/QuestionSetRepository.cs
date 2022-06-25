@@ -19,7 +19,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<QuestionSet> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(QuestionSet.PrimaryKey)))
             {
                 var coll = ds.GetCollection<QuestionSet>();
                 return coll.AsQueryable();
@@ -28,7 +28,7 @@ namespace QMA.DataAccess.JsonFile
 
         public QuestionSet GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(QuestionSet.PrimaryKey)))
             {
                 var coll = ds.GetCollection<QuestionSet>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -42,7 +42,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(QuestionSet.PrimaryKey)))
             {
                 var coll = ds.GetCollection<QuestionSet>();
                 var success = coll.InsertOne(value);
@@ -60,7 +60,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(QuestionSet.PrimaryKey)))
             {
                 var coll = ds.GetCollection<QuestionSet>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);

@@ -20,7 +20,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<TeamMember> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 return coll.AsQueryable();
@@ -29,7 +29,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<TeamMember> GetByTeamId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 return coll.AsQueryable().Where(x => x.TeamId == id);
@@ -38,7 +38,7 @@ namespace QMA.DataAccess.JsonFile
 
         public TeamMember GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -52,7 +52,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 var success = coll.InsertOne(value);
@@ -70,7 +70,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 var success = coll.DeleteOne(x => x.PrimaryKey == id);

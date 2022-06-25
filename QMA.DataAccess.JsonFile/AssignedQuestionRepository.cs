@@ -20,7 +20,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<AssignedQuestion> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.AsQueryable();
@@ -29,7 +29,7 @@ namespace QMA.DataAccess.JsonFile
 
         public AssignedQuestion GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -38,7 +38,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<AssignedQuestion> GetByQuestionId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.Find((x) => x.QuestionId == id);
@@ -47,7 +47,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<AssignedQuestion> GetByTeamMemberId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.AsQueryable().Where(x => x.TeamMemberId == id);
@@ -56,12 +56,12 @@ namespace QMA.DataAccess.JsonFile
 
         public void Add(AssignedQuestion value)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 var success = coll.InsertOne(value);
@@ -79,7 +79,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 var success = coll.DeleteOne(x => x.PrimaryKey == id);
@@ -97,7 +97,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 var success = coll.DeleteMany(x => x.TeamMemberId == id);

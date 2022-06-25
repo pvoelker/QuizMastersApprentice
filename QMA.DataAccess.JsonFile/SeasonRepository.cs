@@ -19,7 +19,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<SeasonInfo> GetAll(bool includedDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 return includedDeleted ?
@@ -30,7 +30,7 @@ namespace QMA.DataAccess.JsonFile
 
         public SeasonInfo GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -44,7 +44,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 var success = coll.InsertOne(value);
@@ -62,7 +62,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);

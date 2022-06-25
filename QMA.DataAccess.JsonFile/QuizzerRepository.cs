@@ -19,7 +19,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Quizzer> GetAll(bool includedDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 return includedDeleted ?
@@ -30,7 +30,7 @@ namespace QMA.DataAccess.JsonFile
 
         public Quizzer GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -44,7 +44,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 var success = coll.InsertOne(value);
@@ -62,7 +62,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);
@@ -72,23 +72,5 @@ namespace QMA.DataAccess.JsonFile
                 }
             }
         }
-
-        //public void Delete(string key)
-        //{
-        //    if (key == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(key));
-        //    }
-
-        //    using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-        //    {
-        //        var coll = ds.GetCollection<Quizzer>();
-        //        var success = coll.DeleteOne(key);
-        //        if (success == false)
-        //        {
-        //            throw new OperationFailedException("Delete failed");
-        //        }
-        //    }
-        //}
     }
 }

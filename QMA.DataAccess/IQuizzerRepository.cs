@@ -24,7 +24,5 @@ namespace QMA.DataAccess
         void Add(Quizzer value);
 
         void Update(Quizzer value);
-
-        //void Delete(string key);
     }
 }

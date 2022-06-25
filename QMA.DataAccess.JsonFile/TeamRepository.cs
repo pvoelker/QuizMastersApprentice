@@ -20,7 +20,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Team> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 return coll.AsQueryable();
@@ -29,7 +29,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Team> GetBySeasonId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 return coll.AsQueryable().Where(x => x.SeasonId == id);
@@ -38,7 +38,7 @@ namespace QMA.DataAccess.JsonFile
 
         public Team GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -52,7 +52,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 var success = coll.InsertOne(value);
@@ -70,7 +70,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);

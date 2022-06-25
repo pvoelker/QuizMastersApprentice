@@ -20,7 +20,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Question> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.AsQueryable();
@@ -29,7 +29,7 @@ namespace QMA.DataAccess.JsonFile
 
         public Question GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
@@ -38,7 +38,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Question> GetByQuestionNumber(string questionsSetId, int questionNumber, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.Find((x) => x.QuestionSetId == questionsSetId && x.Number == questionNumber && (includeDeleted || x.Deleted == null));
@@ -47,7 +47,7 @@ namespace QMA.DataAccess.JsonFile
 
         public IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.AsQueryable().Where(x => x.QuestionSetId == id && (includeDeleted || x.Deleted == null));
@@ -56,7 +56,7 @@ namespace QMA.DataAccess.JsonFile
 
         public int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.AsQueryable().Where(x => x.QuestionSetId == id
@@ -72,7 +72,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 var success = coll.InsertOne(value);
@@ -90,7 +90,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);
