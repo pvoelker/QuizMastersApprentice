@@ -14,9 +14,14 @@ namespace QMA.DataAccess.JsonFile
         {
         }
 
-        public RepositoryFactory(string filename)
+        public RepositoryFactory(string fileName)
         {
-            _fileName = filename;
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            _fileName = fileName;
         }
 
         public string Name { get { return "Local File"; } }

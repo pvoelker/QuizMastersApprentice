@@ -14,6 +14,11 @@ namespace QMA.DataAccess.JsonFile
 
         public QuizzerRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
