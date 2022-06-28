@@ -58,6 +58,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted)
         {
             using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
@@ -69,6 +70,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Add(Question value)
         {
             if(value == null)

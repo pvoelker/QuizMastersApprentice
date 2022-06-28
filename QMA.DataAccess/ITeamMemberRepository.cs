@@ -27,6 +27,10 @@ namespace QMA.DataAccess
         /// <returns>Team member values. Empty collection if no values</returns>
         IEnumerable<TeamMember> GetByTeamId(string id);
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(TeamMember value);
 
         void Delete(string id);

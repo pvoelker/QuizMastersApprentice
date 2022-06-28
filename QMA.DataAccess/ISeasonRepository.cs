@@ -21,6 +21,10 @@ namespace QMA.DataAccess
         /// <returns>Quizzing season values. Empty collection if no values</returns>
         IEnumerable<SeasonInfo> GetAll(bool includeDeleted);
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(SeasonInfo value);
 
         void Update(SeasonInfo value);

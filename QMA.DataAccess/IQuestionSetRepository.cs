@@ -21,6 +21,10 @@ namespace QMA.DataAccess
         /// <returns>Question set values. Empty collection if no values</returns>
         IEnumerable<QuestionSet> GetAll();
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(QuestionSet value);
 
         void Update(QuestionSet value);

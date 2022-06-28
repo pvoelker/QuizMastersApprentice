@@ -39,6 +39,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Add(SeasonInfo value)
         {
             if (value == null)

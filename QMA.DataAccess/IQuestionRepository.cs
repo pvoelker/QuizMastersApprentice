@@ -36,8 +36,19 @@ namespace QMA.DataAccess
         /// <returns>Question values. Empty collection if no values</returns>
         IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted);
 
-        int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted);
+        /// <summary>
+        /// Returns the number of questions by Question Set ID and Max Point Value (optional) 
+        /// </summary>
+        /// <param name="questionSetId">Questions Set ID</param>
+        /// <param name="maxQuestionPointValue">Max Point Value. Null if no limit applied</param>
+        /// <param name="includeDeleted">True to include deleted values in the count</param>
+        /// <returns>The number of questions found</returns>
+        int CountByQuestionSetId(string questionSetId, int? maxQuestionPointValue, bool includeDeleted);
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(Question value);
 
         void Update(Question value);

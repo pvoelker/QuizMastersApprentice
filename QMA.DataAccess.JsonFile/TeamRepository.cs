@@ -48,6 +48,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Add(Team value)
         {
             if(value == null)

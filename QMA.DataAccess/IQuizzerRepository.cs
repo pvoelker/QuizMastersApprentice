@@ -22,6 +22,10 @@ namespace QMA.DataAccess
         /// <returns>Question set values. Empty collection if no values</returns>
         IEnumerable<Quizzer> GetAll(bool includeDeleted);
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(Quizzer value);
 
         void Update(Quizzer value);

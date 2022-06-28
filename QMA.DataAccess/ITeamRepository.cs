@@ -27,6 +27,10 @@ namespace QMA.DataAccess
         /// <returns>Team values. Empty collection if no values</returns>
         IEnumerable<Team> GetBySeasonId(string id);
 
+        /// <summary>
+        /// Add a new value, cannot update an existing value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Add(Team value);
 
         void Update(Team value);
