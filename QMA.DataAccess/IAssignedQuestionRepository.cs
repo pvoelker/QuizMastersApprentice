@@ -42,8 +42,8 @@ namespace QMA.DataAccess
         /// <summary>
         /// Delete value by primary key
         /// </summary>
-        /// <param name="id">Primary key</param>
-        void Delete(string id);
+        /// <param name="key">Primary key</param>
+        void Delete(string key);
 
         /// <summary>
         /// Delete multiple values by Team Member ID

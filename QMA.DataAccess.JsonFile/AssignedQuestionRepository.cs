@@ -88,17 +88,17 @@ namespace QMA.DataAccess.JsonFile
         }
 
         /// <inheritdoc/>
-        public void Delete(string id)
+        public void Delete(string key)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
             using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
-                var success = coll.DeleteOne(x => x.PrimaryKey == id);
+                var success = coll.DeleteOne(x => x.PrimaryKey == key);
                 if (success == false)
                 {
                     throw new OperationFailedException("Delete failed");
