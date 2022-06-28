@@ -18,21 +18,23 @@ namespace QMA.DataAccess.JsonFile
             _fileName = fileName;
         }
 
-        public IEnumerable<AssignedQuestion> GetAll()
-        {
-            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<AssignedQuestion>();
-                return coll.AsQueryable();
-            }
-        }
-
+        /// <inheritdoc/>
         public AssignedQuestion GetByKey(string key)
         {
             using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<AssignedQuestion> GetAll()
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<AssignedQuestion>();
+                return coll.AsQueryable();
             }
         }
 

@@ -17,6 +17,17 @@ namespace QMA.DataAccess.JsonFile
             _fileName = fileName;
         }
 
+        /// <inheritdoc/>
+        public Quizzer GetByKey(string key)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<Quizzer>();
+                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            }
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<Quizzer> GetAll(bool includedDeleted)
         {
             using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
@@ -25,15 +36,6 @@ namespace QMA.DataAccess.JsonFile
                 return includedDeleted ?
                     coll.AsQueryable() :
                     coll.AsQueryable().Where(x => x.Deleted == null);
-            }
-       }
-
-        public Quizzer GetByKey(string key)
-        {
-            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<Quizzer>();
-                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 

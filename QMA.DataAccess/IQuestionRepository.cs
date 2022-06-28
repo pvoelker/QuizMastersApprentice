@@ -6,8 +6,17 @@ namespace QMA.DataAccess
 {
     public interface IQuestionRepository
     {
+        /// <summary>
+        /// Get value by primary key
+        /// </summary>
+        /// <param name="key">Primary key</param>
+        /// <returns>A question value</returns>
         Question GetByKey(string key);
 
+        /// <summary>
+        /// Get all values
+        /// </summary>
+        /// <returns>Question values. Empty collection if no values</returns>
         IEnumerable<Question> GetAll();
 
         IEnumerable<Question> GetByQuestionNumber(string questionsSetId, int questionNumber, bool includeDeleted);

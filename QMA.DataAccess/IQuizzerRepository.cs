@@ -9,16 +9,17 @@ namespace QMA.DataAccess
     public interface IQuizzerRepository
     {
         /// <summary>
-        /// Get a quizzer by ID
+        /// Get value by primary key
         /// </summary>
-        /// <param name="key">The ID of the quizzer to retrieve</param>
-        /// <returns>A quizzer</returns>
+        /// <param name="key">Primary key</param>
+        /// <returns>A quizzer value</returns>
         Quizzer GetByKey(string key);
 
         /// <summary>
-        /// Gets all quizzers
+        /// Get all values
         /// </summary>
-        /// <returns>A list of quizzers</returns>
+        /// <param name="includeDeleted">True to include deleted values</param>
+        /// <returns>Question set values. Empty collection if no values</returns>
         IEnumerable<Quizzer> GetAll(bool includeDeleted);
 
         void Add(Quizzer value);

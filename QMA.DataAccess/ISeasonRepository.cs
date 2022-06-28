@@ -8,12 +8,18 @@ namespace QMA.DataAccess
     public interface ISeasonRepository
     {
         /// <summary>
-        /// Gets all quizzing season information
+        /// Get value by primary key
         /// </summary>
-        /// <returns>A list of seasons</returns>
-        IEnumerable<SeasonInfo> GetAll(bool includeDeleted);
-
+        /// <param name="key">Primary key</param>
+        /// <returns>A quizzing season value</returns>
         SeasonInfo GetByKey(string key);
+
+        /// <summary>
+        /// Get all values
+        /// </summary>
+        /// <param name="includeDeleted">True to include deleted values</param>
+        /// <returns>Quizzing season values. Empty collection if no values</returns>
+        IEnumerable<SeasonInfo> GetAll(bool includeDeleted);
 
         void Add(SeasonInfo value);
 

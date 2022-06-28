@@ -18,6 +18,17 @@ namespace QMA.DataAccess.JsonFile
             _fileName = fileName;
         }
 
+        /// <inheritdoc/>
+        public TeamMember GetByKey(string key)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<TeamMember>();
+                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            }
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<TeamMember> GetAll()
         {
             using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
@@ -33,15 +44,6 @@ namespace QMA.DataAccess.JsonFile
             {
                 var coll = ds.GetCollection<TeamMember>();
                 return coll.AsQueryable().Where(x => x.TeamId == id);
-            }
-        }
-
-        public TeamMember GetByKey(string key)
-        {
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
