@@ -58,6 +58,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Update(Quizzer value)
         {
             if (value == null)

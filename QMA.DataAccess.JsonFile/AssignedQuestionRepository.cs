@@ -77,6 +77,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Delete(string id)
         {
             if (id == null)
@@ -95,6 +96,7 @@ namespace QMA.DataAccess.JsonFile
             };
         }
 
+        /// <inheritdoc/>
         public void DeleteAllByTeamMemberId(string id)
         {
             if (id == null)

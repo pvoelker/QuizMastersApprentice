@@ -67,6 +67,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Delete(string id)
         {
             if (id == null)

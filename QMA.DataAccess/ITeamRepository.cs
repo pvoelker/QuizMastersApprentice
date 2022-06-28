@@ -30,9 +30,13 @@ namespace QMA.DataAccess
         /// <summary>
         /// Add a new value, cannot update an existing value
         /// </summary>
-        /// <param name="value">The value to update</param>
+        /// <param name="value">The value to add</param>
         void Add(Team value);
 
+        /// <summary>
+        /// Update an existing value, cannot add a new value
+        /// </summary>
+        /// <param name="value">The value to update</param>
         void Update(Team value);
     }
 }
