@@ -25,6 +25,11 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public QuestionSet GetByKey(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
             using (var ds = new DataStore(_fileName, true, nameof(QuestionSet.PrimaryKey)))
             {
                 var coll = ds.GetCollection<QuestionSet>();
