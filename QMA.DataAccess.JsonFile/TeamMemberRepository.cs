@@ -15,36 +15,50 @@ namespace QMA.DataAccess.JsonFile
 
         public TeamMemberRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<TeamMember> GetAll()
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.AsQueryable();
-            }
-        }
-
-        public IEnumerable<TeamMember> GetByTeamId(string id)
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.AsQueryable().Where(x => x.TeamId == id);
-            }
-        }
-
+        /// <inheritdoc/>
         public TeamMember GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<TeamMember> GetAll()
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<TeamMember>();
+                return coll.AsQueryable();
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<TeamMember> GetByTeamId(string id)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<TeamMember>();
+                return coll.AsQueryable().Where(x => x.TeamId == id);
+            }
+        }
+
+        /// <inheritdoc/>
         public void Add(TeamMember value)
         {
             if(value == null)
@@ -52,7 +66,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
                 var success = coll.InsertOne(value);
@@ -63,17 +77,18 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
-        public void Delete(string id)
+        /// <inheritdoc/>
+        public void Delete(string key)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
             {
                 var coll = ds.GetCollection<TeamMember>();
-                var success = coll.DeleteOne(x => x.PrimaryKey == id);
+                var success = coll.DeleteOne(x => x.PrimaryKey == key);
                 if (success == false)
                 {
                     throw new OperationFailedException("Delete failed");

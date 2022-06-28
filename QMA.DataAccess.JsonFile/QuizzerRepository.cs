@@ -14,29 +14,42 @@ namespace QMA.DataAccess.JsonFile
 
         public QuizzerRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<Quizzer> GetAll(bool includedDeleted)
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<Quizzer>();
-                return includedDeleted ?
-                    coll.AsQueryable() :
-                    coll.AsQueryable().Where(x => x.Deleted == null);
-            }
-       }
-
+        /// <inheritdoc/>
         public Quizzer GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<Quizzer> GetAll(bool includedDeleted)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<Quizzer>();
+                return includedDeleted ?
+                    coll.AsQueryable() :
+                    coll.AsQueryable().Where(x => x.Deleted == null);
+            }
+        }
+
+        /// <inheritdoc/>
         public void Add(Quizzer value)
         {
             if (value == null)
@@ -44,7 +57,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 var success = coll.InsertOne(value);
@@ -55,6 +68,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Update(Quizzer value)
         {
             if (value == null)
@@ -62,7 +76,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Quizzer.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Quizzer>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);
@@ -72,23 +86,5 @@ namespace QMA.DataAccess.JsonFile
                 }
             }
         }
-
-        //public void Delete(string key)
-        //{
-        //    if (key == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(key));
-        //    }
-
-        //    using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-        //    {
-        //        var coll = ds.GetCollection<Quizzer>();
-        //        var success = coll.DeleteOne(key);
-        //        if (success == false)
-        //        {
-        //            throw new OperationFailedException("Delete failed");
-        //        }
-        //    }
-        //}
     }
 }

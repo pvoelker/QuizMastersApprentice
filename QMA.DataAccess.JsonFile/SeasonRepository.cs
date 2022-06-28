@@ -14,29 +14,42 @@ namespace QMA.DataAccess.JsonFile
 
         public SeasonRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<SeasonInfo> GetAll(bool includedDeleted)
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<SeasonInfo>();
-                return includedDeleted ?
-                    coll.AsQueryable() :
-                    coll.AsQueryable().Where(x => x.Deleted == null);
-            }
-       }
-
+        /// <inheritdoc/>
         public SeasonInfo GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<SeasonInfo> GetAll(bool includedDeleted)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<SeasonInfo>();
+                return includedDeleted ?
+                    coll.AsQueryable() :
+                    coll.AsQueryable().Where(x => x.Deleted == null);
+            }
+        }
+
+        /// <inheritdoc/>
         public void Add(SeasonInfo value)
         {
             if (value == null)
@@ -44,7 +57,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 var success = coll.InsertOne(value);
@@ -55,6 +68,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Update(SeasonInfo value)
         {
             if (value == null)
@@ -62,7 +76,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
             {
                 var coll = ds.GetCollection<SeasonInfo>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);

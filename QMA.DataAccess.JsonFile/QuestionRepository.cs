@@ -15,48 +15,63 @@ namespace QMA.DataAccess.JsonFile
 
         public QuestionRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<Question> GetAll()
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<Question>();
-                return coll.AsQueryable();
-            }
-        }
-
+        /// <inheritdoc/>
         public Question GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<Question> GetAll()
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<Question>();
+                return coll.AsQueryable();
+            }
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionNumber(string questionsSetId, int questionNumber, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.Find((x) => x.QuestionSetId == questionsSetId && x.Number == questionNumber && (includeDeleted || x.Deleted == null));
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.AsQueryable().Where(x => x.QuestionSetId == id && (includeDeleted || x.Deleted == null));
             }
         }
 
+        /// <inheritdoc/>
         public int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 return coll.AsQueryable().Where(x => x.QuestionSetId == id
@@ -65,6 +80,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Add(Question value)
         {
             if(value == null)
@@ -72,7 +88,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 var success = coll.InsertOne(value);
@@ -83,6 +99,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Update(Question value)
         {
             if (value == null)
@@ -90,7 +107,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Question>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);

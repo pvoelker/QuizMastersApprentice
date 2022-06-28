@@ -15,53 +15,68 @@ namespace QMA.DataAccess.JsonFile
 
         public AssignedQuestionRepository(string fileName)
         {
+            if(string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<AssignedQuestion> GetAll()
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<AssignedQuestion>();
-                return coll.AsQueryable();
-            }
-        }
-
+        /// <inheritdoc/>
         public AssignedQuestion GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<AssignedQuestion> GetAll()
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<AssignedQuestion>();
+                return coll.AsQueryable();
+            }
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByQuestionId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.Find((x) => x.QuestionId == id);
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByTeamMemberId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 return coll.AsQueryable().Where(x => x.TeamMemberId == id);
             }
         }
 
+        /// <inheritdoc/>
         public void Add(AssignedQuestion value)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 var success = coll.InsertOne(value);
@@ -72,17 +87,18 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
-        public void Delete(string id)
+        /// <inheritdoc/>
+        public void Delete(string key)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
-                var success = coll.DeleteOne(x => x.PrimaryKey == id);
+                var success = coll.DeleteOne(x => x.PrimaryKey == key);
                 if (success == false)
                 {
                     throw new OperationFailedException("Delete failed");
@@ -90,6 +106,7 @@ namespace QMA.DataAccess.JsonFile
             };
         }
 
+        /// <inheritdoc/>
         public void DeleteAllByTeamMemberId(string id)
         {
             if (id == null)
@@ -97,7 +114,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
             {
                 var coll = ds.GetCollection<AssignedQuestion>();
                 var success = coll.DeleteMany(x => x.TeamMemberId == id);

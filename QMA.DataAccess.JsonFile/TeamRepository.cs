@@ -15,36 +15,50 @@ namespace QMA.DataAccess.JsonFile
 
         public TeamRepository(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             _fileName = fileName;
         }
 
-        public IEnumerable<Team> GetAll()
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<Team>();
-                return coll.AsQueryable();
-            }
-        }
-
-        public IEnumerable<Team> GetBySeasonId(string id)
-        {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
-            {
-                var coll = ds.GetCollection<Team>();
-                return coll.AsQueryable().Where(x => x.SeasonId == id);
-            }
-        }
-
+        /// <inheritdoc/>
         public Team GetByKey(string key)
         {
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Primary key is required");
+            }
+
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
             }
         }
 
+        /// <inheritdoc/>
+        public IEnumerable<Team> GetAll()
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<Team>();
+                return coll.AsQueryable();
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<Team> GetBySeasonId(string id)
+        {
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
+            {
+                var coll = ds.GetCollection<Team>();
+                return coll.AsQueryable().Where(x => x.SeasonId == id);
+            }
+        }
+
+        /// <inheritdoc/>
         public void Add(Team value)
         {
             if(value == null)
@@ -52,7 +66,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 var success = coll.InsertOne(value);
@@ -63,6 +77,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public void Update(Team value)
         {
             if (value == null)
@@ -70,7 +85,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, "PrimaryKey"))
+            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
             {
                 var coll = ds.GetCollection<Team>();
                 var success = coll.ReplaceOne(value.PrimaryKey, value);
