@@ -38,6 +38,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Team> GetBySeasonId(string id)
         {
             using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))

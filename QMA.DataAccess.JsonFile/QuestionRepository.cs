@@ -38,6 +38,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionNumber(string questionsSetId, int questionNumber, bool includeDeleted)
         {
             using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))
@@ -47,6 +48,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted)
         {
             using (var ds = new DataStore(_fileName, true, nameof(Question.PrimaryKey)))

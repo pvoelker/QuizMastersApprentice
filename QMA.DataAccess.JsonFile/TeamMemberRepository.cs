@@ -38,6 +38,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<TeamMember> GetByTeamId(string id)
         {
             using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))

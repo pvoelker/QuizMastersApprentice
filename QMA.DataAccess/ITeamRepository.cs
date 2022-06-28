@@ -20,6 +20,11 @@ namespace QMA.DataAccess
         /// <returns>Team values. Empty collection if no values</returns>
         IEnumerable<Team> GetAll();
 
+        /// <summary>
+        /// Get values by Season ID
+        /// </summary>
+        /// <param name="id">Season ID</param>
+        /// <returns>Team values. Empty collection if no values</returns>
         IEnumerable<Team> GetBySeasonId(string id);
 
         void Add(Team value);

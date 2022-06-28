@@ -38,6 +38,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByQuestionId(string id)
         {
             using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
@@ -47,6 +48,7 @@ namespace QMA.DataAccess.JsonFile
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByTeamMemberId(string id)
         {
             using (var ds = new DataStore(_fileName, true, nameof(AssignedQuestion.PrimaryKey)))
