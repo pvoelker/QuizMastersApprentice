@@ -58,6 +58,8 @@ namespace QMA.ViewModel.Practice
                 {
                     try
                     {
+                        IsSending = true;
+
                         email.Connect(SmtpAddress, SmtpPort, UserName, Password);
                         foreach (var item in PracticeQuizzers)
                         {
@@ -88,6 +90,10 @@ namespace QMA.ViewModel.Practice
                     catch (Exception ex)
                     {
                         _messageBoxService.ShowError(ex.Message);
+                    }
+                    finally
+                    {
+                        IsSending = false;
                     }
                 }
             });
@@ -156,6 +162,13 @@ namespace QMA.ViewModel.Practice
         {
             get => _fromEmail;
             set => SetProperty(ref _fromEmail, value);
+        }
+
+        private bool _isSending;
+        public bool IsSending
+        {
+            get => _isSending;
+            set => SetProperty(ref _isSending, value);
         }
 
         #region Commands
