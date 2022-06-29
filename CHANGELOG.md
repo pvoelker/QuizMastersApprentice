@@ -63,3 +63,4 @@
 - Add assigned questions to practice report
 - Clean up closing of practice and practice report windows when practice reports are successfully sent
 - Add progress bar to sending of reports
+- Adjust practice run user interface on how questions are assigned

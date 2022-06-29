@@ -83,6 +83,8 @@ namespace QMA.ViewModel.Practice
             {
                 NoAnswerQuestions.Add(CurrentQuestion);
 
+                CheckAndAssignQuestions(CurrentQuestion);
+
                 CurrentQuestion = GetNextQuestion();
             });
 
@@ -92,6 +94,8 @@ namespace QMA.ViewModel.Practice
 
                 JustLearningQuestions.Add(CurrentQuestion);
 
+                CheckAndAssignQuestions(CurrentQuestion);
+
                 CurrentQuestion = GetNextQuestion();
             });
 
@@ -99,7 +103,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
-                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+                CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
@@ -110,7 +114,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
-                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+                CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
@@ -129,25 +133,23 @@ namespace QMA.ViewModel.Practice
             });
         }
 
-        private void AssignQuestion(ObservablePracticeQuizzer selectedQuizzer, ObservablePracticeQuestion currentQuestion)
+        private void CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
         {
-            if (selectedQuizzer == null)
+            foreach (var quizzer in PracticeQuizzers)
             {
-                throw new ArgumentNullException(nameof(selectedQuizzer));
-            }
-
-            if(selectedQuizzer.AssignQuestion)
-            {
-                _assignedRepository.Add(new AssignedQuestion
+                if (quizzer.AssignQuestion)
                 {
-                    PrimaryKey = Guid.NewGuid().ToString(),
-                    TeamMemberId = selectedQuizzer.TeamMemberId,
-                    QuestionId = currentQuestion.PrimaryKey
-                });
+                    _assignedRepository.Add(new AssignedQuestion
+                    {
+                        PrimaryKey = Guid.NewGuid().ToString(),
+                        TeamMemberId = quizzer.TeamMemberId,
+                        QuestionId = currentQuestion.PrimaryKey
+                    });
 
-                selectedQuizzer.AssignedQuestions.Add(currentQuestion);
+                    quizzer.AssignedQuestions.Add(currentQuestion);
 
-                selectedQuizzer.AssignQuestion = false;
+                    quizzer.AssignQuestion = false;
+                }
             }
         }
 
