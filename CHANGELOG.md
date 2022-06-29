@@ -58,3 +58,6 @@
 
 ## 0.5.1
 - Clean up of repository objects
+
+## 0.5.2
+- Add assigned questions to practice report

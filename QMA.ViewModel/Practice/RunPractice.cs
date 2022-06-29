@@ -57,7 +57,19 @@ namespace QMA.ViewModel.Practice
 
                     var assigned = _assignedRepository.GetByTeamMemberId(id);
 
-                    practiceQuizzer.AssignedQuestionIds.AddRange(assigned.Select(x => x.QuestionId));
+                    foreach(var item in assigned)
+                    {
+                        var question = questions.SingleOrDefault(x => x.PrimaryKey == item.QuestionId);
+
+                        if (question != null)
+                        {
+                            practiceQuizzer.AssignedQuestions.Add(question);
+                        }
+                        else
+                        {
+                            throw new Exception($"Question ID '{item.QuestionId}' is missing");
+                        }
+                    }
 
                     PracticeQuizzers.Add(practiceQuizzer);
                 }
@@ -130,7 +142,7 @@ namespace QMA.ViewModel.Practice
                     QuestionId = currentQuestion.PrimaryKey
                 });
 
-                selectedQuizzer.AssignedQuestionIds.Add(currentQuestion.PrimaryKey);
+                selectedQuizzer.AssignedQuestions.Add(currentQuestion);
 
                 selectedQuizzer.AssignQuestion = false;
             }
@@ -206,7 +218,7 @@ namespace QMA.ViewModel.Practice
 
             foreach(var quizzer in PracticeQuizzers)
             {
-                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestionIds.Contains(nextQuestion.PrimaryKey);
+                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestions.Any(x => x.PrimaryKey == nextQuestion.PrimaryKey);
             }
 
             return nextQuestion;
