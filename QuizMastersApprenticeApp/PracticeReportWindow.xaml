@@ -19,8 +19,11 @@
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closed">
+            <i:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="20" />

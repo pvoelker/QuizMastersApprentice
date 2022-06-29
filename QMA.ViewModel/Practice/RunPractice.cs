@@ -119,9 +119,12 @@ namespace QMA.ViewModel.Practice
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
-                if(messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                if (CurrentQuestion != null)
                 {
-                    e.Cancel = true;
+                    if (messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                    {
+                        e.Cancel = true;
+                    }
                 }
             });
         }
@@ -196,7 +199,17 @@ namespace QMA.ViewModel.Practice
 
         public IRelayCommand WrongAnswer { get; }
 
-        public IRelayCommand<CancelEventArgs> Closing { get; }      
+        public IRelayCommand<CancelEventArgs> Closing { get; }
+
+        #endregion
+
+        #region Bindable events
+
+        public event EventHandler Closed;
+        private void Close()
+        {
+            if (Closed != null) Closed(this, EventArgs.Empty);
+        }
 
         #endregion
 

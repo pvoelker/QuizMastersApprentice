@@ -19,6 +19,9 @@
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closed">
+            <i:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>        
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>

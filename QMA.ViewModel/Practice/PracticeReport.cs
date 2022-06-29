@@ -1,10 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
-using QMA.Importers;
-using QMA.Model;
-using QMA.Model.Season;
-using QMA.ViewModel.Observables;
 using QMA.ViewModel.Observables.Practice;
 using QMA.ViewModel.Provider;
 using QMA.ViewModel.Services;
@@ -86,6 +82,8 @@ namespace QMA.ViewModel.Practice
                                 }
                             }
                         }
+
+                        Close();
                     }
                     catch (Exception ex)
                     {
@@ -166,7 +164,17 @@ namespace QMA.ViewModel.Practice
 
         public IRelayCommand SendReports { get; }
 
-        public IRelayCommand<CancelEventArgs> Closing { get; }      
+        public IRelayCommand<CancelEventArgs> Closing { get; }
+
+        #endregion
+
+        #region Bindable events
+
+        public event EventHandler Closed;
+        private void Close()
+        {
+            if (Closed != null) Closed(this, EventArgs.Empty);
+        }
 
         #endregion
     }
