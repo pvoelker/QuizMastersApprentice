@@ -49,6 +49,9 @@ namespace QuizMastersApprenticeApp
         {
             var dataContext = (RunPractice)DataContext;
 
+            // Indicate that practice is over
+            dataContext.CurrentQuestion = null;
+
             var runPracticeWindow = new PracticeReportWindow(_repoFactory,
                 dataContext.SeasonName,
                 dataContext.PracticeQuizzers,
@@ -56,6 +59,8 @@ namespace QuizMastersApprenticeApp
                 dataContext.NoAnswerQuestions,
                 dataContext.JustLearningQuestions);
             runPracticeWindow.Show();
+
+            Close();
         }
     }
 }

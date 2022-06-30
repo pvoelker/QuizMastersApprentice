@@ -129,6 +129,22 @@ namespace QMA.ViewModel.Provider
             {
                 builder.AppendLine($"<p><i>No wrong answers were given during practice by {quizzer.FirstName}</i></p>");
             }
+            builder.AppendLine();
+            if (quizzer.AssignedQuestions.Any())
+            {
+                builder.AppendLine($"<p><b>Questions assigned to {quizzer.FirstName}:</b></p>");
+                builder.AppendLine("<ul>");
+                foreach (var item in quizzer.AssignedQuestions)
+                {
+                    builder.AppendLine($"<li>#{item.Number} --- {item.Text}</li>");
+                }
+                builder.AppendLine("</ul>");
+            }
+            else
+            {
+                builder.AppendLine($"<p><i>No questions are assigned to {quizzer.FirstName}</i></p>");
+            }
+            builder.AppendLine($"<p><i>Assigned Questions</i> are questions that the quizzer is expected to focus on to know so other quizzers on the team can focus on other questions.</p>");
 
             return builder.ToString();
         }

@@ -58,3 +58,9 @@
 
 ## 0.5.1
 - Clean up of repository objects
+
+## 0.5.2
+- Add assigned questions to practice report
+- Clean up closing of practice and practice report windows when practice reports are successfully sent
+- Add progress bar to sending of reports
+- Adjust practice run user interface on how questions are assigned

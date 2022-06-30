@@ -1,10 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
-using QMA.Importers;
-using QMA.Model;
-using QMA.Model.Season;
-using QMA.ViewModel.Observables;
 using QMA.ViewModel.Observables.Practice;
 using QMA.ViewModel.Provider;
 using QMA.ViewModel.Services;
@@ -62,6 +58,8 @@ namespace QMA.ViewModel.Practice
                 {
                     try
                     {
+                        IsSending = true;
+
                         email.Connect(SmtpAddress, SmtpPort, UserName, Password);
                         foreach (var item in PracticeQuizzers)
                         {
@@ -86,10 +84,16 @@ namespace QMA.ViewModel.Practice
                                 }
                             }
                         }
+
+                        Close();
                     }
                     catch (Exception ex)
                     {
                         _messageBoxService.ShowError(ex.Message);
+                    }
+                    finally
+                    {
+                        IsSending = false;
                     }
                 }
             });
@@ -160,13 +164,30 @@ namespace QMA.ViewModel.Practice
             set => SetProperty(ref _fromEmail, value);
         }
 
+        private bool _isSending;
+        public bool IsSending
+        {
+            get => _isSending;
+            set => SetProperty(ref _isSending, value);
+        }
+
         #region Commands
 
         public IRelayCommand Initialize { get; }
 
         public IRelayCommand SendReports { get; }
 
-        public IRelayCommand<CancelEventArgs> Closing { get; }      
+        public IRelayCommand<CancelEventArgs> Closing { get; }
+
+        #endregion
+
+        #region Bindable events
+
+        public event EventHandler Closed;
+        private void Close()
+        {
+            if (Closed != null) Closed(this, EventArgs.Empty);
+        }
 
         #endregion
     }

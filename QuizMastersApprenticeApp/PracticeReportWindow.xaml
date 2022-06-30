@@ -19,8 +19,11 @@
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding Closing}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closed">
+            <i:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="20" />
@@ -65,6 +68,11 @@
                 <DataGridCheckBoxColumn Header="Sent" IsReadOnly="True" Binding="{Binding ReportSent}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Border Grid.Row="2">
+            <ProgressBar IsIndeterminate="True" Margin="20"
+                         VerticalAlignment="Center" Height="20"
+                         Visibility="{Binding Path=IsSending, Converter={StaticResource BoolToVis}}"/>
+        </Border>
         <Button Style="{StaticResource btnWizardNext}" Grid.Row="4" Command="{Binding SendReports}">📧 Send Reports</Button>
     </Grid>
 </Window>

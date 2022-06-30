@@ -57,7 +57,19 @@ namespace QMA.ViewModel.Practice
 
                     var assigned = _assignedRepository.GetByTeamMemberId(id);
 
-                    practiceQuizzer.AssignedQuestionIds.AddRange(assigned.Select(x => x.QuestionId));
+                    foreach(var item in assigned)
+                    {
+                        var question = questions.SingleOrDefault(x => x.PrimaryKey == item.QuestionId);
+
+                        if (question != null)
+                        {
+                            practiceQuizzer.AssignedQuestions.Add(question);
+                        }
+                        else
+                        {
+                            throw new Exception($"Question ID '{item.QuestionId}' is missing");
+                        }
+                    }
 
                     PracticeQuizzers.Add(practiceQuizzer);
                 }
@@ -71,6 +83,8 @@ namespace QMA.ViewModel.Practice
             {
                 NoAnswerQuestions.Add(CurrentQuestion);
 
+                CheckAndAssignQuestions(CurrentQuestion);
+
                 CurrentQuestion = GetNextQuestion();
             });
 
@@ -80,6 +94,8 @@ namespace QMA.ViewModel.Practice
 
                 JustLearningQuestions.Add(CurrentQuestion);
 
+                CheckAndAssignQuestions(CurrentQuestion);
+
                 CurrentQuestion = GetNextQuestion();
             });
 
@@ -87,7 +103,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
-                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+                CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
@@ -98,7 +114,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
-                AssignQuestion(SelectedQuizzer, CurrentQuestion);
+                CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
@@ -107,32 +123,33 @@ namespace QMA.ViewModel.Practice
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
             {
-                if(messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                if (CurrentQuestion != null)
                 {
-                    e.Cancel = true;
+                    if (messageBoxService.PromptToContinue("Practice is in progress, are you sure you want to cancel the practice?") == false)
+                    {
+                        e.Cancel = true;
+                    }
                 }
             });
         }
 
-        private void AssignQuestion(ObservablePracticeQuizzer selectedQuizzer, ObservablePracticeQuestion currentQuestion)
+        private void CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
         {
-            if (selectedQuizzer == null)
+            foreach (var quizzer in PracticeQuizzers)
             {
-                throw new ArgumentNullException(nameof(selectedQuizzer));
-            }
-
-            if(selectedQuizzer.AssignQuestion)
-            {
-                _assignedRepository.Add(new AssignedQuestion
+                if (quizzer.AssignQuestion)
                 {
-                    PrimaryKey = Guid.NewGuid().ToString(),
-                    TeamMemberId = selectedQuizzer.TeamMemberId,
-                    QuestionId = currentQuestion.PrimaryKey
-                });
+                    _assignedRepository.Add(new AssignedQuestion
+                    {
+                        PrimaryKey = Guid.NewGuid().ToString(),
+                        TeamMemberId = quizzer.TeamMemberId,
+                        QuestionId = currentQuestion.PrimaryKey
+                    });
 
-                selectedQuizzer.AssignedQuestionIds.Add(currentQuestion.PrimaryKey);
+                    quizzer.AssignedQuestions.Add(currentQuestion);
 
-                selectedQuizzer.AssignQuestion = false;
+                    quizzer.AssignQuestion = false;
+                }
             }
         }
 
@@ -184,7 +201,17 @@ namespace QMA.ViewModel.Practice
 
         public IRelayCommand WrongAnswer { get; }
 
-        public IRelayCommand<CancelEventArgs> Closing { get; }      
+        public IRelayCommand<CancelEventArgs> Closing { get; }
+
+        #endregion
+
+        #region Bindable events
+
+        public event EventHandler Closed;
+        private void Close()
+        {
+            if (Closed != null) Closed(this, EventArgs.Empty);
+        }
 
         #endregion
 
@@ -206,7 +233,7 @@ namespace QMA.ViewModel.Practice
 
             foreach(var quizzer in PracticeQuizzers)
             {
-                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestionIds.Contains(nextQuestion.PrimaryKey);
+                quizzer.QuestionAlreadyAssigned = quizzer.AssignedQuestions.Any(x => x.PrimaryKey == nextQuestion.PrimaryKey);
             }
 
             return nextQuestion;

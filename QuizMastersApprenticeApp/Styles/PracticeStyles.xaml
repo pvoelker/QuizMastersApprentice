@@ -110,7 +110,7 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="Violet"/>
-                <Setter Property="Foreground" Value="#fff"/>
+                <Setter Property="Foreground" Value="BlueViolet"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="LightGray"/>
