@@ -11,16 +11,8 @@ namespace QMA.DataAccess.JsonFile
 {
     public class TeamRepository : ITeamRepository
     {
-        private string _fileName;
-
-        public TeamRepository(string fileName)
+        public TeamRepository()
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-
-            _fileName = fileName;
         }
 
         /// <inheritdoc/>
@@ -31,31 +23,22 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<Team>();
-                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Team> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<Team>();
-                return coll.AsQueryable();
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            return coll.AsQueryable();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Team> GetBySeasonId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<Team>();
-                return coll.AsQueryable().Where(x => x.SeasonId == id);
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            return coll.AsQueryable().Where(x => x.SeasonId == id);
         }
 
         /// <inheritdoc/>
@@ -66,14 +49,11 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            var success = coll.InsertOne(value);
+            if (success == false)
             {
-                var coll = ds.GetCollection<Team>();
-                var success = coll.InsertOne(value);
-                if (success == false)
-                {
-                    throw new OperationFailedException("Add failed");
-                }
+                throw new OperationFailedException("Add failed");
             }
         }
 
@@ -85,15 +65,12 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(Team.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            var success = coll.ReplaceOne(value.PrimaryKey, value);
+            if (success == false)
             {
-                var coll = ds.GetCollection<Team>();
-                var success = coll.ReplaceOne(value.PrimaryKey, value);
-                if (success == false)
-                {
-                    throw new OperationFailedException("Update failed");
-                }
-            };
+                throw new OperationFailedException("Update failed");
+            }
         }
     }
 }

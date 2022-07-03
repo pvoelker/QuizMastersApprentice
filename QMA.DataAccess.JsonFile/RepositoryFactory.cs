@@ -8,8 +8,6 @@ namespace QMA.DataAccess.JsonFile
     {
         static private Guid _id = new Guid("cc284335-86e8-4bd2-b4fb-3dfbe503bb28");
 
-        private string _fileName = null;
-
         public RepositoryFactory()
         {
         }
@@ -21,7 +19,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            _fileName = fileName;
+            DataStoreSingleton.FileName = fileName;
         }
 
         public string Name { get { return "Local File"; } }
@@ -30,72 +28,37 @@ namespace QMA.DataAccess.JsonFile
 
         public IQuestionRepository GetQuestionRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new QuestionRepository(_fileName);
+            return new QuestionRepository();
         }
 
         public IQuestionSetRepository GetQuestionSetRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new QuestionSetRepository(_fileName);
+            return new QuestionSetRepository();
         }
 
         public IQuizzerRepository GetQuizzerRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new QuizzerRepository(_fileName);
+            return new QuizzerRepository();
         }
 
         public ISeasonRepository GetSeasonRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new SeasonRepository(_fileName);
+            return new SeasonRepository();
         }
 
         public ITeamRepository GetTeamRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new TeamRepository(_fileName);
+            return new TeamRepository();
         }
 
         public ITeamMemberRepository GetTeamMemberRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new TeamMemberRepository(_fileName);
+            return new TeamMemberRepository();
         }
 
         public IAssignedQuestionRepository GetAssignedQuestionRepository()
         {
-            if (_fileName == null)
-            {
-                throw new NullReferenceException("File name is not set");
-            }
-
-            return new AssignedQuestionRepository(_fileName);
+            return new AssignedQuestionRepository();
         }
     }
 }

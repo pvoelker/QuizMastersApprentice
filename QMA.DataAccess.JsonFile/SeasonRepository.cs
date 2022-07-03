@@ -10,16 +10,8 @@ namespace QMA.DataAccess.JsonFile
 {
     public class SeasonRepository : ISeasonRepository
     {
-        private string _fileName;
-
-        public SeasonRepository(string fileName)
+        public SeasonRepository()
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-
-            _fileName = fileName;
         }
 
         /// <inheritdoc/>
@@ -30,23 +22,17 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<SeasonInfo>();
-                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
+            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<SeasonInfo> GetAll(bool includedDeleted)
         {
-            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<SeasonInfo>();
-                return includedDeleted ?
-                    coll.AsQueryable() :
-                    coll.AsQueryable().Where(x => x.Deleted == null);
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
+            return includedDeleted ?
+                coll.AsQueryable() :
+                coll.AsQueryable().Where(x => x.Deleted == null);
         }
 
         /// <inheritdoc/>
@@ -57,14 +43,11 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
+            var success = coll.InsertOne(value);
+            if(success == false)
             {
-                var coll = ds.GetCollection<SeasonInfo>();
-                var success = coll.InsertOne(value);
-                if(success == false)
-                {
-                    throw new OperationFailedException("Add failed");
-                }
+                throw new OperationFailedException("Add failed");
             }
         }
 
@@ -76,15 +59,12 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(SeasonInfo.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
+            var success = coll.ReplaceOne(value.PrimaryKey, value);
+            if (success == false)
             {
-                var coll = ds.GetCollection<SeasonInfo>();
-                var success = coll.ReplaceOne(value.PrimaryKey, value);
-                if (success == false)
-                {
-                    throw new OperationFailedException("Update failed");
-                }
-            };
+                throw new OperationFailedException("Update failed");
+            }
         }
     }
 }

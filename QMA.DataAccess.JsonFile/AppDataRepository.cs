@@ -82,7 +82,6 @@ namespace QMA.DataAccess.JsonFile
             File.WriteAllText(_fileName, text);
         }
 
-
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
