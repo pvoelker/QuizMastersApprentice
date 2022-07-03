@@ -11,16 +11,8 @@ namespace QMA.DataAccess.JsonFile
 {
     public class TeamMemberRepository : ITeamMemberRepository
     {
-        private string _fileName;
-
-        public TeamMemberRepository(string fileName)
+        public TeamMemberRepository()
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-
-            _fileName = fileName;
         }
 
         /// <inheritdoc/>
@@ -31,31 +23,22 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<TeamMember>();
+            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<TeamMember> GetAll()
         {
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.AsQueryable();
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<TeamMember>();
+            return coll.AsQueryable();
         }
 
         /// <inheritdoc/>
         public IEnumerable<TeamMember> GetByTeamId(string id)
         {
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
-            {
-                var coll = ds.GetCollection<TeamMember>();
-                return coll.AsQueryable().Where(x => x.TeamId == id);
-            }
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<TeamMember>();
+            return coll.AsQueryable().Where(x => x.TeamId == id);
         }
 
         /// <inheritdoc/>
@@ -66,14 +49,11 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<TeamMember>();
+            var success = coll.InsertOne(value);
+            if (success == false)
             {
-                var coll = ds.GetCollection<TeamMember>();
-                var success = coll.InsertOne(value);
-                if (success == false)
-                {
-                    throw new OperationFailedException("Add failed");
-                }
+                throw new OperationFailedException("Add failed");
             }
         }
 
@@ -85,15 +65,12 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            using (var ds = new DataStore(_fileName, true, nameof(TeamMember.PrimaryKey)))
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<TeamMember>();
+            var success = coll.DeleteOne(x => x.PrimaryKey == key);
+            if (success == false)
             {
-                var coll = ds.GetCollection<TeamMember>();
-                var success = coll.DeleteOne(x => x.PrimaryKey == key);
-                if (success == false)
-                {
-                    throw new OperationFailedException("Delete failed");
-                }
-            };
+                throw new OperationFailedException("Delete failed");
+            }
         }
     }
 }

@@ -64,3 +64,6 @@
 - Clean up closing of practice and practice report windows when practice reports are successfully sent
 - Add progress bar to sending of reports
 - Adjust practice run user interface on how questions are assigned
+
+## 0.6.0
+- Refactor QMA.DataAccess.JsonFile to use DataStore object from a singleton
