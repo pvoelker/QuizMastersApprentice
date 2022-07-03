@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using QMA.Model;
 
 namespace QMA.DataAccess
@@ -49,12 +50,14 @@ namespace QMA.DataAccess
         /// Add a new value, cannot update an existing value
         /// </summary>
         /// <param name="value">The value to add</param>
-        void Add(Question value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task AddAsync(Question value);
 
         /// <summary>
         /// Update an existing value, cannot add a new value
         /// </summary>
         /// <param name="value">The value to update</param>
-        void Update(Question value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task UpdateAsync(Question value);
     }
 }

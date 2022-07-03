@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables;
@@ -132,7 +133,7 @@ namespace QMA.ViewModel.Practice
                 {
                     if (item.AlreadyExists == false)
                     {
-                        _questionRepository.Add(new Question
+                        AsyncHelper.RunSync(() => _questionRepository.AddAsync(new Question
                         {
                             QuestionSetId = SelectedQuestionSet.PrimaryKey,
                             Number = item.Number,
@@ -140,7 +141,7 @@ namespace QMA.ViewModel.Practice
                             Answer = item.Answer,
                             Points = item.Points,
                             Notes = $"Imported on {DateTimeOffset.Now}"
-                        });
+                        }));
                     }
                 }
 

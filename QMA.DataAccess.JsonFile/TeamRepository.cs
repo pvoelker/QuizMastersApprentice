@@ -42,7 +42,7 @@ namespace QMA.DataAccess.JsonFile
         }
 
         /// <inheritdoc/>
-        public void Add(Team value)
+        public async Task AddAsync(Team value)
         {
             if(value == null)
             {
@@ -50,7 +50,7 @@ namespace QMA.DataAccess.JsonFile
             }
 
             var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            var success = coll.InsertOne(value);
+            var success = await coll.InsertOneAsync(value);
             if (success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -58,7 +58,7 @@ namespace QMA.DataAccess.JsonFile
         }
 
         /// <inheritdoc/>
-        public void Update(Team value)
+        public async Task UpdateAsync(Team value)
         {
             if (value == null)
             {
@@ -66,7 +66,7 @@ namespace QMA.DataAccess.JsonFile
             }
 
             var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            var success = coll.ReplaceOne(value.PrimaryKey, value);
+            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");

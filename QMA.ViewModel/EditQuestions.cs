@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using QMA.ViewModel.Services;
+using QMA.Helpers;
 
 namespace QMA.ViewModel
 {
@@ -149,7 +150,7 @@ namespace QMA.ViewModel
             if (Selected.Persisted == true)
             {
                 Selected.Deleted = DateTimeOffset.UtcNow;
-                _repository.Update(Selected.GetModel());
+                AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
             }
             else
             {
@@ -166,7 +167,7 @@ namespace QMA.ViewModel
             }
 
             Selected.Deleted = null;
-            _repository.Update(Selected.GetModel());
+            AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
         }
 
         private void SaveCommand()
@@ -175,11 +176,11 @@ namespace QMA.ViewModel
             {
                 if (Selected.Persisted)
                 {
-                    _repository.Update(Selected.GetModel());
+                    AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
                 }
                 else
                 {
-                    _repository.Add(Selected.GetModel());
+                    AsyncHelper.RunSync(() => _repository.AddAsync(Selected.GetModel()));
                     Selected.Persisted = true;
                 }
             }

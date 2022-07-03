@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Importers;
 using QMA.Model;
 using QMA.Model.Season;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QMA.ViewModel.Practice
@@ -83,7 +85,7 @@ namespace QMA.ViewModel.Practice
             {
                 NoAnswerQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
 
                 CurrentQuestion = GetNextQuestion();
             });
@@ -94,7 +96,7 @@ namespace QMA.ViewModel.Practice
 
                 JustLearningQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
 
                 CurrentQuestion = GetNextQuestion();
             });
@@ -103,7 +105,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
 
                 SelectedQuizzer = null;
 
@@ -114,7 +116,7 @@ namespace QMA.ViewModel.Practice
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
 
                 SelectedQuizzer = null;
 
@@ -133,13 +135,13 @@ namespace QMA.ViewModel.Practice
             });
         }
 
-        private void CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
+        private async Task CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
         {
             foreach (var quizzer in PracticeQuizzers)
             {
                 if (quizzer.AssignQuestion)
                 {
-                    _assignedRepository.Add(new AssignedQuestion
+                    await _assignedRepository.AddAsync(new AssignedQuestion
                     {
                         PrimaryKey = Guid.NewGuid().ToString(),
                         TeamMemberId = quizzer.TeamMemberId,

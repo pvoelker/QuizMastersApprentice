@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.ViewModel.Observables;
 using QMA.ViewModel.Services;
@@ -127,7 +128,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AddQuestions(_questionSetId, CsvParsedImportQuestions);
+                        AsyncHelper.RunSync(() => AddQuestions(_questionSetId, CsvParsedImportQuestions));
                     }
                     catch (Exception ex)
                     {
@@ -141,7 +142,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AddQuestions(_questionSetId, BfpParsedImportQuestions);
+                        AsyncHelper.RunSync(() => AddQuestions(_questionSetId, BfpParsedImportQuestions));
                     }
                     catch (Exception ex)
                     {
@@ -155,11 +156,11 @@ namespace QMA.ViewModel
             }
         }
 
-        private void AddQuestions(string questionSetId, ObservableCollection<ObservableImportQuestion> imported)
+        private async Task AddQuestions(string questionSetId, ObservableCollection<ObservableImportQuestion> imported)
         {
             foreach(var item in imported.Where(x => x.AlreadyExists == false))
             {
-                _repository.Add(new Question
+                await _repository.AddAsync(new Question
                 {
                     PrimaryKey = Guid.NewGuid().ToString(),
                     QuestionSetId = questionSetId,

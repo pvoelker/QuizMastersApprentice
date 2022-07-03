@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.ViewModel.Observables;
 using System;
@@ -121,7 +122,7 @@ namespace QMA.ViewModel
             if (Selected.Persisted == true)
             {
                 Selected.Deleted = DateTimeOffset.UtcNow;
-                _repository.Update(Selected.GetModel());
+                AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
             }
             else
             {
@@ -138,7 +139,7 @@ namespace QMA.ViewModel
             }
 
             Selected.Deleted = null;
-            _repository.Update(Selected.GetModel());
+            AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
         }
 
         private void SaveCommand()
@@ -147,11 +148,11 @@ namespace QMA.ViewModel
             {
                 if (Selected.Persisted)
                 {
-                    _repository.Update(Selected.GetModel());
+                    AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
                 }
                 else
                 {
-                    _repository.Add(Selected.GetModel());
+                    AsyncHelper.RunSync(() => _repository.AddAsync(Selected.GetModel()));
                     Selected.Persisted = true;
                 }
             }
