@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QMA.ViewModel
@@ -29,9 +30,9 @@ namespace QMA.ViewModel
                     var newItem = new ObservableQuizzer(
                         true,
                         item,
-                        new RelayCommand(DeleteCommand),
-                        new RelayCommand(RestoreCommand),
-                        new RelayCommand(SaveCommand)
+                        new AsyncRelayCommand(DeleteAsyncCommand),
+                        new AsyncRelayCommand(RestoreAsyncCommand),
+                        new AsyncRelayCommand(SaveAsyncCommand)
                     );
                     Items.Add(newItem);
                 }
@@ -50,9 +51,9 @@ namespace QMA.ViewModel
                         LastName = null,
                         ParentFullName = null
                     },
-                    new RelayCommand(DeleteCommand),
-                    new RelayCommand(RestoreCommand),
-                    new RelayCommand(SaveCommand)
+                    new AsyncRelayCommand(DeleteAsyncCommand),
+                    new AsyncRelayCommand(RestoreAsyncCommand),
+                    new AsyncRelayCommand(SaveAsyncCommand)
                 );
                 Items.Add(newItem);
                 Selected = newItem;
@@ -77,7 +78,7 @@ namespace QMA.ViewModel
                 }
                 else
                 {
-                    SaveCommand();
+                    await SaveAsyncCommand();
                     Add.NotifyCanExecuteChanged();
                 }
             });
@@ -100,7 +101,7 @@ namespace QMA.ViewModel
 
         #endregion
 
-        private void DeleteCommand()
+        private async Task DeleteAsyncCommand()
         {
             if(Selected.Deleted != null)
             {
@@ -110,7 +111,7 @@ namespace QMA.ViewModel
             if (Selected.Persisted == true)
             {
                 Selected.Deleted = DateTimeOffset.UtcNow;
-                AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
+                await _repository.UpdateAsync(Selected.GetModel());
             }
             else
             {
@@ -119,7 +120,7 @@ namespace QMA.ViewModel
             Add.NotifyCanExecuteChanged();
         }
 
-        private void RestoreCommand()
+        private async Task RestoreAsyncCommand()
         {
             if (Selected.Deleted == null)
             {
@@ -127,20 +128,20 @@ namespace QMA.ViewModel
             }
 
             Selected.Deleted = null;
-            AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
+            await _repository.UpdateAsync(Selected.GetModel());
         }
 
-        private void SaveCommand()
+        private async Task SaveAsyncCommand()
         {
             if(Selected != null)
             {
                 if (Selected.Persisted)
                 {
-                    AsyncHelper.RunSync(() => _repository.UpdateAsync(Selected.GetModel()));
+                    await _repository.UpdateAsync(Selected.GetModel());
                 }
                 else
                 {
-                    AsyncHelper.RunSync(() => _repository.AddAsync(Selected.GetModel()));
+                    await _repository.AddAsync(Selected.GetModel());
                     Selected.Persisted = true;
                 }
             }

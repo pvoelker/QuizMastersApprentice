@@ -40,7 +40,7 @@ namespace QMA.ViewModel
             {
             });
 
-            Import = new RelayCommand(ImportCommand,
+            Import = new AsyncRelayCommand(ImportAsyncCommand,
                 () =>
                 (CsvImport && CsvImportParseSuccess && CsvParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !CsvParsedImportQuestions.Any(x => x.HasParseError)) ||
                 (BibleFactPacImport && BfpImportParseSuccess && BfpParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !BfpParsedImportQuestions.Any(x => x.HasParseError))
@@ -120,7 +120,7 @@ namespace QMA.ViewModel
 
         #endregion
 
-        private void ImportCommand()
+        private async Task ImportAsyncCommand()
         {
             if(CsvImport == true)
             {
@@ -128,7 +128,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AsyncHelper.RunSync(() => AddQuestions(_questionSetId, CsvParsedImportQuestions));
+                        await AddQuestions(_questionSetId, CsvParsedImportQuestions);
                     }
                     catch (Exception ex)
                     {
@@ -142,7 +142,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AsyncHelper.RunSync(() => AddQuestions(_questionSetId, BfpParsedImportQuestions));
+                        await AddQuestions(_questionSetId, BfpParsedImportQuestions);
                     }
                     catch (Exception ex)
                     {

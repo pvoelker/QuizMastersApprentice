@@ -81,42 +81,42 @@ namespace QMA.ViewModel.Practice
                 CurrentQuestion = GetNextQuestion();
             });
 
-            NoAnswer = new RelayCommand(() =>
+            NoAnswer = new AsyncRelayCommand(async () =>
             {
                 NoAnswerQuestions.Add(CurrentQuestion);
 
-                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            JustLearning = new RelayCommand(() =>
+            JustLearning = new AsyncRelayCommand(async () =>
             {
                 CurrentQuestion.JustLearned = true;
 
                 JustLearningQuestions.Add(CurrentQuestion);
 
-                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            CorrectAnswer = new RelayCommand(() =>
+            CorrectAnswer = new AsyncRelayCommand(async () =>
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
-                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            WrongAnswer = new RelayCommand(() =>
+            WrongAnswer = new AsyncRelayCommand(async () =>
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
-                AsyncHelper.RunSync(() => CheckAndAssignQuestions(CurrentQuestion));
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
