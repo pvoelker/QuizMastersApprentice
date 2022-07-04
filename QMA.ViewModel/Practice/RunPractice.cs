@@ -210,7 +210,8 @@ namespace QMA.ViewModel.Practice
         #region Bindable events
 
         public event EventHandler Closed;
-        private void Close()
+        /// <remarks>Must be public for CallMethodAction to work</remarks>
+        public void Close()
         {
             if (Closed != null) Closed(this, EventArgs.Empty);
         }
