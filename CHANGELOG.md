@@ -73,3 +73,4 @@
 - Implement AsyncRelayCommands to handle user interface commands
 - Fix CallMethodAction bindings
 - Implement handling of unhandled exceptions (for implementation of async relay commands)
+- Implement async methods in practice report sending
