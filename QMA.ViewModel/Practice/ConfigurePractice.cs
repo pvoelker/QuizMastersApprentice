@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables;
@@ -126,13 +127,13 @@ namespace QMA.ViewModel.Practice
                 return TeamQuizzers.Any(x => x.IsSelected) && !TeamQuizzers.Any(x => x.IsDuplicate);
             });
 
-            SelectQuestions = new RelayCommand(() =>
+            SelectQuestions = new AsyncRelayCommand(async () =>
             {
                 foreach (var item in ParsedImportQuestions)
                 {
                     if (item.AlreadyExists == false)
                     {
-                        _questionRepository.Add(new Question
+                        await _questionRepository.AddAsync(new Question
                         {
                             QuestionSetId = SelectedQuestionSet.PrimaryKey,
                             Number = item.Number,

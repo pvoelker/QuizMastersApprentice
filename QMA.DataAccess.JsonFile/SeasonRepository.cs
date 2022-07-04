@@ -36,7 +36,7 @@ namespace QMA.DataAccess.JsonFile
         }
 
         /// <inheritdoc/>
-        public void Add(SeasonInfo value)
+        public async Task AddAsync(SeasonInfo value)
         {
             if (value == null)
             {
@@ -44,7 +44,7 @@ namespace QMA.DataAccess.JsonFile
             }
 
             var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            var success = coll.InsertOne(value);
+            var success = await coll.InsertOneAsync(value);
             if(success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -52,7 +52,7 @@ namespace QMA.DataAccess.JsonFile
         }
 
         /// <inheritdoc/>
-        public void Update(SeasonInfo value)
+        public async Task UpdateAsync(SeasonInfo value)
         {
             if (value == null)
             {
@@ -60,7 +60,7 @@ namespace QMA.DataAccess.JsonFile
             }
 
             var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            var success = coll.ReplaceOne(value.PrimaryKey, value);
+            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");

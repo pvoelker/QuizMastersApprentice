@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.ViewModel.Observables;
 using QMA.ViewModel.Services;
@@ -39,7 +40,7 @@ namespace QMA.ViewModel
             {
             });
 
-            Import = new RelayCommand(ImportCommand,
+            Import = new AsyncRelayCommand(ImportAsyncCommand,
                 () =>
                 (CsvImport && CsvImportParseSuccess && CsvParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !CsvParsedImportQuestions.Any(x => x.HasParseError)) ||
                 (BibleFactPacImport && BfpImportParseSuccess && BfpParsedImportQuestions.Where(x => x.AlreadyExists == false).Count() > 0 && !BfpParsedImportQuestions.Any(x => x.HasParseError))
@@ -119,7 +120,7 @@ namespace QMA.ViewModel
 
         #endregion
 
-        private void ImportCommand()
+        private async Task ImportAsyncCommand()
         {
             if(CsvImport == true)
             {
@@ -127,7 +128,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AddQuestions(_questionSetId, CsvParsedImportQuestions);
+                        await AddQuestions(_questionSetId, CsvParsedImportQuestions);
                     }
                     catch (Exception ex)
                     {
@@ -141,7 +142,7 @@ namespace QMA.ViewModel
                 {
                     try
                     {
-                        AddQuestions(_questionSetId, BfpParsedImportQuestions);
+                        await AddQuestions(_questionSetId, BfpParsedImportQuestions);
                     }
                     catch (Exception ex)
                     {
@@ -155,11 +156,11 @@ namespace QMA.ViewModel
             }
         }
 
-        private void AddQuestions(string questionSetId, ObservableCollection<ObservableImportQuestion> imported)
+        private async Task AddQuestions(string questionSetId, ObservableCollection<ObservableImportQuestion> imported)
         {
             foreach(var item in imported.Where(x => x.AlreadyExists == false))
             {
-                _repository.Add(new Question
+                await _repository.AddAsync(new Question
                 {
                     PrimaryKey = Guid.NewGuid().ToString(),
                     QuestionSetId = questionSetId,

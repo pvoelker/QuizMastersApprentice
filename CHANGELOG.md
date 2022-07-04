@@ -67,3 +67,10 @@
 
 ## 0.6.0
 - Refactor QMA.DataAccess.JsonFile to use DataStore object from a singleton
+
+## 0.7.0
+- Implement async pattern in repository patterns
+- Implement AsyncRelayCommands to handle user interface commands
+- Fix CallMethodAction bindings
+- Implement handling of unhandled exceptions (for implementation of async relay commands)
+- Implement async methods in practice report sending

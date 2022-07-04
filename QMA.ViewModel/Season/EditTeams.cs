@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QMA.ViewModel.Season
@@ -34,9 +36,9 @@ namespace QMA.ViewModel.Season
                     var newItem = new ObservableTeam(
                         true,
                         item,
-                        new RelayCommand(DeleteCommand),
-                        new RelayCommand(RestoreCommand),
-                        new RelayCommand(SaveCommand)
+                        new AsyncRelayCommand(DeleteAsyncCommand),
+                        new AsyncRelayCommand(RestoreAsyncCommand),
+                        new AsyncRelayCommand(SaveAsyncCommand)
                     );
                     Items.Add(newItem);
                 }
@@ -53,9 +55,9 @@ namespace QMA.ViewModel.Season
                         SeasonId = _seasonId,
                         Name = $"Team {Items.Count + 1}",
                     },
-                    new RelayCommand(DeleteCommand),
-                    new RelayCommand(RestoreCommand),
-                    new RelayCommand(SaveCommand)
+                    new AsyncRelayCommand(DeleteAsyncCommand),
+                    new AsyncRelayCommand(RestoreAsyncCommand),
+                    new AsyncRelayCommand(SaveAsyncCommand)
                 );
                 Items.Add(newItem);
                 Selected = newItem;
@@ -79,7 +81,7 @@ namespace QMA.ViewModel.Season
                 }
                 else
                 {
-                    SaveCommand();
+                    await SaveAsyncCommand();
                     Add.NotifyCanExecuteChanged();
                 }
             });
@@ -102,7 +104,7 @@ namespace QMA.ViewModel.Season
 
         #endregion
 
-        private void DeleteCommand()
+        private async Task DeleteAsyncCommand()
         {
             if (Selected.Deleted != null)
             {
@@ -112,7 +114,7 @@ namespace QMA.ViewModel.Season
             if (Selected.Persisted == true)
             {
                 Selected.Deleted = DateTimeOffset.UtcNow;
-                _repository.Update(Selected.GetModel());
+                await _repository.UpdateAsync(Selected.GetModel());
             }
             else
             {
@@ -120,7 +122,7 @@ namespace QMA.ViewModel.Season
             }
         }
 
-        private void RestoreCommand()
+        private async Task RestoreAsyncCommand()
         {
             if (Selected.Deleted == null)
             {
@@ -128,20 +130,20 @@ namespace QMA.ViewModel.Season
             }
 
             Selected.Deleted = null;
-            _repository.Update(Selected.GetModel());
+            await _repository.UpdateAsync(Selected.GetModel());
         }
 
-        private void SaveCommand()
+        private async Task SaveAsyncCommand()
         {
             if(Selected != null)
             {
                 if (Selected.Persisted)
                 {
-                    _repository.Update(Selected.GetModel());
+                    await _repository.UpdateAsync(Selected.GetModel());
                 }
                 else
                 {
-                    _repository.Add(Selected.GetModel());
+                    await _repository.AddAsync(Selected.GetModel());
                     Selected.Persisted = true;
                 }
             }

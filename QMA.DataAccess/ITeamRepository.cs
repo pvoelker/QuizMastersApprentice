@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
@@ -31,12 +32,14 @@ namespace QMA.DataAccess
         /// Add a new value, cannot update an existing value
         /// </summary>
         /// <param name="value">The value to add</param>
-        void Add(Team value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task AddAsync(Team value);
 
         /// <summary>
         /// Update an existing value, cannot add a new value
         /// </summary>
         /// <param name="value">The value to update</param>
-        void Update(Team value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task UpdateAsync(Team value);
     }
 }

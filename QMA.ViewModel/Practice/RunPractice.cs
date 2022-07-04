@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Importers;
 using QMA.Model;
 using QMA.Model.Season;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QMA.ViewModel.Practice
@@ -79,42 +81,42 @@ namespace QMA.ViewModel.Practice
                 CurrentQuestion = GetNextQuestion();
             });
 
-            NoAnswer = new RelayCommand(() =>
+            NoAnswer = new AsyncRelayCommand(async () =>
             {
                 NoAnswerQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            JustLearning = new RelayCommand(() =>
+            JustLearning = new AsyncRelayCommand(async () =>
             {
                 CurrentQuestion.JustLearned = true;
 
                 JustLearningQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            CorrectAnswer = new RelayCommand(() =>
+            CorrectAnswer = new AsyncRelayCommand(async () =>
             {
                 SelectedQuizzer.CorrectQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
                 CurrentQuestion = GetNextQuestion();
             });
 
-            WrongAnswer = new RelayCommand(() =>
+            WrongAnswer = new AsyncRelayCommand(async () =>
             {
                 SelectedQuizzer.WrongQuestions.Add(CurrentQuestion);
 
-                CheckAndAssignQuestions(CurrentQuestion);
+                await CheckAndAssignQuestions(CurrentQuestion);
 
                 SelectedQuizzer = null;
 
@@ -133,13 +135,13 @@ namespace QMA.ViewModel.Practice
             });
         }
 
-        private void CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
+        private async Task CheckAndAssignQuestions(ObservablePracticeQuestion currentQuestion)
         {
             foreach (var quizzer in PracticeQuizzers)
             {
                 if (quizzer.AssignQuestion)
                 {
-                    _assignedRepository.Add(new AssignedQuestion
+                    await _assignedRepository.AddAsync(new AssignedQuestion
                     {
                         PrimaryKey = Guid.NewGuid().ToString(),
                         TeamMemberId = quizzer.TeamMemberId,
@@ -208,7 +210,8 @@ namespace QMA.ViewModel.Practice
         #region Bindable events
 
         public event EventHandler Closed;
-        private void Close()
+        /// <remarks>Must be public for CallMethodAction to work</remarks>
+        public void Close()
         {
             if (Closed != null) Closed(this, EventArgs.Empty);
         }

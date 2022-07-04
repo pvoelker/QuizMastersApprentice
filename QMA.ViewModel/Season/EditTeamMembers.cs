@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
+using QMA.Helpers;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables;
 using QMA.ViewModel.Observables.Season;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QMA.ViewModel.Season
@@ -91,7 +93,7 @@ namespace QMA.ViewModel.Season
                 }
             });
 
-            Save = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
+            Save = new AsyncRelayCommand<CancelEventArgs>(async (CancelEventArgs e) =>
             {
                 var existingQuizzers = _teamMemberRepository.GetByTeamId(_teamId);
                 var existingQuizzerIds = existingQuizzers.Select(x => x.QuizzerId);
@@ -105,9 +107,9 @@ namespace QMA.ViewModel.Season
                 {
                     var id = existingQuizzers.Single(x => x.QuizzerId == quizzerId).PrimaryKey;
 
-                    DeleteTeamAssignedQuestions(id);
+                    await DeleteTeamAssignedQuestionsAsync(id);
 
-                    _teamMemberRepository.Delete(id);
+                    await _teamMemberRepository.DeleteAsync(id);
                 }
 
                 foreach (var quizzerId in quizzerIdsToAdd)
@@ -123,21 +125,21 @@ namespace QMA.ViewModel.Season
 
                     gridTeamMember.TeamMemberId = newTeamMember.PrimaryKey;
 
-                    _teamMemberRepository.Add(newTeamMember);
+                    await _teamMemberRepository.AddAsync(newTeamMember);
 
-                    AddTeamAssignedQuestions(gridTeamMember);
+                    await AddTeamAssignedQuestionsAsync(gridTeamMember);
                 }
 
                 foreach (var quizzerId in quizzerIdsToUpdate)
                 {
                     var gridTeamMember = TeamMembers.Single(x => x.QuizzerId == quizzerId);
-                    UpdateTeamAssignedQuestions(gridTeamMember);
+                    await UpdateTeamAssignedQuestionsAsync(gridTeamMember);
                 }
 
-                //foreach (var item in TeamMembers)
-                //{
-                //    item.Persisted = true;
-                //}
+                foreach (var item in TeamMembers)
+                {
+                    item.Persisted = true;
+                }
             });
 
             Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
@@ -157,11 +159,11 @@ namespace QMA.ViewModel.Season
             });
         }
 
-        private void AddTeamAssignedQuestions(ObservableTeamMember newTeamMember)
+        private async Task AddTeamAssignedQuestionsAsync(ObservableTeamMember newTeamMember)
         {
             foreach(var item in newTeamMember.AssignedQuestions)
             {
-                _assignedRepository.Add(new AssignedQuestion
+                await _assignedRepository.AddAsync(new AssignedQuestion
                 {
                     PrimaryKey = Guid.NewGuid().ToString(),
                     TeamMemberId = newTeamMember.TeamMemberId,
@@ -172,7 +174,7 @@ namespace QMA.ViewModel.Season
             }
         }
 
-        private void UpdateTeamAssignedQuestions(ObservableTeamMember newTeamMember)
+        private async Task UpdateTeamAssignedQuestionsAsync(ObservableTeamMember newTeamMember)
         {
             var existingAssigned = _assignedRepository.GetByTeamMemberId(newTeamMember.TeamMemberId);
             var existingQuestionIds = existingAssigned.Select(x => x.QuestionId);
@@ -184,12 +186,12 @@ namespace QMA.ViewModel.Season
             foreach(var questionId in questionIdsToDelete)
             {
                 var assignedId = existingAssigned.Single(x => x.TeamMemberId == newTeamMember.TeamMemberId && x.QuestionId == questionId).PrimaryKey;
-                _assignedRepository.Delete(assignedId);
+                await _assignedRepository.DeleteAsync(assignedId);
             }
 
             foreach(var questionId in questionIdsToAdd)
             {
-                _assignedRepository.Add(new AssignedQuestion
+                await _assignedRepository.AddAsync(new AssignedQuestion
                 {
                     PrimaryKey= Guid.NewGuid().ToString(),
                     TeamMemberId = newTeamMember.TeamMemberId,
@@ -203,9 +205,9 @@ namespace QMA.ViewModel.Season
             }
         }
 
-        private void DeleteTeamAssignedQuestions(string teamMemberId)
+        private async Task DeleteTeamAssignedQuestionsAsync(string teamMemberId)
         {
-            _assignedRepository.DeleteAllByTeamMemberId(teamMemberId);
+            await _assignedRepository.DeleteAllByTeamMemberIdAsync(teamMemberId);
         }
 
         public ObservableCollection<ObservableTeamMember> TeamMembers { get; } = new ObservableCollection<ObservableTeamMember>();

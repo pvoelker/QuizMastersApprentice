@@ -50,7 +50,7 @@ namespace QMA.ViewModel.Practice
             {
             });
 
-            SendReports = new RelayCommand(() =>
+            SendReports = new AsyncRelayCommand(async () =>
             {
                 var now = DateTime.Now;
 
@@ -60,14 +60,14 @@ namespace QMA.ViewModel.Practice
                     {
                         IsSending = true;
 
-                        email.Connect(SmtpAddress, SmtpPort, UserName, Password);
+                        await email.ConnectAsync(SmtpAddress, SmtpPort, UserName, Password);
                         foreach (var item in PracticeQuizzers)
                         {
                             if (item.ParentEmail != null)
                             {
                                 try
                                 {
-                                    email.SendPracticeReport(now,
+                                    await email.SendPracticeReportAsync(now,
                                         seasonName,
                                         FromName, FromEmail,
                                         item.ParentFullName, item.ParentEmail,
@@ -184,7 +184,8 @@ namespace QMA.ViewModel.Practice
         #region Bindable events
 
         public event EventHandler Closed;
-        private void Close()
+        /// <remarks>Must be public for CallMethodAction to work</remarks>
+        public void Close()
         {
             if (Closed != null) Closed(this, EventArgs.Empty);
         }

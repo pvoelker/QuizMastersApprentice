@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace QMA.ViewModel.Provider
 {
@@ -17,26 +18,26 @@ namespace QMA.ViewModel.Provider
         {
         }
 
-        public void Connect(string host, int port, string username, string password)
+        public async Task ConnectAsync(string host, int port, string username, string password)
         {
             _client = new SmtpClient();
 
-            _client.Connect(host, port, SecureSocketOptions.Auto);
+            await _client.ConnectAsync(host, port, SecureSocketOptions.Auto);
 
-            _client.Authenticate(username, password);
+            await _client.AuthenticateAsync(username, password);
         }
 
-        public void SendMessage(MimeMessage message)
+        public async Task SendMessageAsync(MimeMessage message)
         {
             if(_client == null)
             {
                 throw new NullReferenceException("Connect must be called first");
             }
 
-            _client.Send(message);
+            await _client.SendAsync(message);
         }
 
-        public void SendPracticeReport(DateTimeOffset now,
+        public async Task SendPracticeReportAsync(DateTimeOffset now,
             string seasonName,
             string fromName, string fromEmail,
             string parentName, string parentEmail,
@@ -54,7 +55,7 @@ namespace QMA.ViewModel.Provider
                 Text = BuildMessageBody(quizzer, totalQuestionsAsked, justLearned, noAnswers)
             };
 
-            SendMessage(message);
+            await SendMessageAsync(message);
         }
 
         private string BuildMessageBody(ObservablePracticeQuizzer quizzer,

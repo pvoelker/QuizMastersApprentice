@@ -25,12 +25,14 @@ namespace QMA.DataAccess
         /// Add a new value, cannot update an existing value
         /// </summary>
         /// <param name="value">The value to add</param>
-        void Add(QuestionSet value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task AddAsync(QuestionSet value);
 
         /// <summary>
         /// Update an existing value, cannot add a new value
         /// </summary>
         /// <param name="value">The value to update</param>
-        void Update(QuestionSet value);
+        /// <returns>Task for asynchronous operation</returns>
+        Task UpdateAsync(QuestionSet value);
     }
 }
