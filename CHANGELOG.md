@@ -74,3 +74,9 @@
 - Fix CallMethodAction bindings
 - Implement handling of unhandled exceptions (for implementation of async relay commands)
 - Implement async methods in practice report sending
+
+## 0.7.1
+- Minor refinement of reloading of data for JSON data store
+- Fix issue when quizzer is deleted that is part of a team when a practice is being configured
+- Refine error message for bad email addresses
+- Remove 'Not for general distribution' message on the main menu

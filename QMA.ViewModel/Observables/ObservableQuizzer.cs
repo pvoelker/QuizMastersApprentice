@@ -39,7 +39,8 @@ namespace QMA.ViewModel.Observables
             set => SetProperty(_model.ParentFullName, value, _model, (u, n) => u.ParentFullName = n, true);
         }
 
-        [RegularExpression(@"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$")]
+        [RegularExpression(@"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$",
+            ErrorMessage = "The Email Address Must be Valid")]
         public string ParentEmail
         {
             get => _model.ParentEmail;
