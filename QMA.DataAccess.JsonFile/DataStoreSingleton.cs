@@ -1,8 +1,6 @@
 ﻿using JsonFlatFileDataStore;
 using QMA.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QMA.DataAccess.JsonFile
 {
@@ -39,7 +37,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new InvalidOperationException($"'{nameof(FileName)}' must be set first");
             }
 
-            _dataStore = new DataStore(FileName, true, nameof(PrimaryKeyBase.PrimaryKey));
+            _dataStore = new DataStore(FileName, true, nameof(PrimaryKeyBase.PrimaryKey), true);
         }
     }
 }

@@ -100,15 +100,22 @@ namespace QMA.ViewModel.Practice
                 foreach (var teamMember in teamMembers)
                 {
                     var team = teams.Single(x => x.PrimaryKey == teamMember.TeamId);
-                    var quizzer = quizzers.Single(x => x.PrimaryKey == teamMember.QuizzerId);
+                    var quizzer = quizzers.SingleOrDefault(x => x.PrimaryKey == teamMember.QuizzerId);
 
-                    TeamQuizzers.Add(new ObservableTeamQuizzer(
-                        teamMember.PrimaryKey,
-                        quizzer.PrimaryKey,
-                        team.Name,
-                        team.MaxPointValue,
-                        quizzer.FirstName,
-                        quizzer.LastName));
+                    if (quizzer != null)
+                    {
+                        TeamQuizzers.Add(new ObservableTeamQuizzer(
+                            teamMember.PrimaryKey,
+                            quizzer.PrimaryKey,
+                            team.Name,
+                            team.MaxPointValue,
+                            quizzer.FirstName,
+                            quizzer.LastName));
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Quizzer id {0} was not found or was deleted", teamMember.QuizzerId);
+                    }
                 }
 
                 WizardState = ConfigurePracticePage.Quizzers;
