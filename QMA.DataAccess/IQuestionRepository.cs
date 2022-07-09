@@ -5,15 +5,8 @@ using QMA.Model;
 
 namespace QMA.DataAccess
 {
-    public interface IQuestionRepository
+    public interface IQuestionRepository : IBaseRepository<Question>
     {
-        /// <summary>
-        /// Get value by primary key
-        /// </summary>
-        /// <param name="key">Primary key</param>
-        /// <returns>A question value</returns>
-        Question GetByKey(string key);
-
         /// <summary>
         /// Get all values
         /// </summary>
@@ -45,19 +38,5 @@ namespace QMA.DataAccess
         /// <param name="includeDeleted">True to include deleted values in the count</param>
         /// <returns>The number of questions found</returns>
         int CountByQuestionSetId(string questionSetId, int? maxQuestionPointValue, bool includeDeleted);
-
-        /// <summary>
-        /// Add a new value, cannot update an existing value
-        /// </summary>
-        /// <param name="value">The value to add</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task AddAsync(Question value);
-
-        /// <summary>
-        /// Update an existing value, cannot add a new value
-        /// </summary>
-        /// <param name="value">The value to update</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task UpdateAsync(Question value);
     }
 }

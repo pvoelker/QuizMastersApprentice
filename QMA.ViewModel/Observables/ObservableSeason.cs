@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel.Observables
 {
-    public class ObservableSeason : DeleteableObservableBase<Model.SeasonInfo>
+    public class ObservableSeason : SoftDeletableObservableBase<Model.SeasonInfo>
     {
         public ObservableSeason(bool persisted, Model.SeasonInfo model, ICommand delete, ICommand restore, ICommand save)
             : base(persisted, model, delete, restore, save)

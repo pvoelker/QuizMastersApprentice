@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QMA.Model.Season
 {
-    public class Team : DeleteablePrimaryKeyBase
+    public class Team : SoftDeletablePrimaryKeyBase
     {
         public string SeasonId { get; set; }
 
