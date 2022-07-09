@@ -9,7 +9,8 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Edit Questions" Height="600" Width="1000"
-        Icon="/QMA.ico">
+        Icon="/QMA.ico"
+        Cursor="{Binding Path=IsBusy, Converter={StaticResource BoolToCursor}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Initialize}"/>

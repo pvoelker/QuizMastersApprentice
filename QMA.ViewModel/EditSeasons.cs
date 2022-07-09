@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel
 {
-    public class EditSeasons : ObservableObject
+    public class EditSeasons : ItemsEditorObservable<ObservableSeason>
     {
         private ISeasonRepository _repository;
 
@@ -93,10 +93,6 @@ namespace QMA.ViewModel
             });
         }
 
-        public ObservableCollection<ObservableSeason> Items { get; } = new ObservableCollection<ObservableSeason>();
-
-        public ObservableSeason Selected { get; set; }
-
         public ObservableCollection<QuestionSet> QuestionSets { get; } = new ObservableCollection<QuestionSet>();
 
         #region Commands
@@ -121,8 +117,16 @@ namespace QMA.ViewModel
 
             if (Selected.Persisted == true)
             {
-                Selected.Deleted = DateTimeOffset.UtcNow;
-                await _repository.UpdateAsync(Selected.GetModel());
+                IsBusy = true;
+                try
+                {
+                    Selected.Deleted = DateTimeOffset.UtcNow;
+                    await _repository.UpdateAsync(Selected.GetModel());
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
             }
             else
             {
@@ -138,22 +142,38 @@ namespace QMA.ViewModel
                 throw new InvalidOperationException($"Season ({Selected.PrimaryKey}) is not deleted");
             }
 
-            Selected.Deleted = null;
-            await _repository.UpdateAsync(Selected.GetModel());
+            IsBusy = true;
+            try
+            {
+                Selected.Deleted = null;
+                await _repository.UpdateAsync(Selected.GetModel());
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task SaveAsyncCommand()
         {
             if(Selected != null)
             {
-                if (Selected.Persisted)
+                IsBusy = true;
+                try
                 {
-                    await _repository.UpdateAsync(Selected.GetModel());
+                    if (Selected.Persisted)
+                    {
+                        await _repository.UpdateAsync(Selected.GetModel());
+                    }
+                    else
+                    {
+                        await _repository.AddAsync(Selected.GetModel());
+                        Selected.Persisted = true;
+                    }
                 }
-                else
+                finally
                 {
-                    await _repository.AddAsync(Selected.GetModel());
-                    Selected.Persisted = true;
+                    IsBusy = false;
                 }
             }
             else
