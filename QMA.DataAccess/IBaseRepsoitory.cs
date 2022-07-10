@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace QMA.DataAccess
 {
     /// <summary>
-    /// Base repository interface
+    /// Base repository interface for add and update functionality
     /// </summary>
-    /// <typeparam name="T">Data type handled</typeparam>
+    /// <typeparam name="T">The data model to use</typeparam>
     public interface IBaseRepository<T> where T : class
     {
         /// <summary>

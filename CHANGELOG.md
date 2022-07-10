@@ -79,3 +79,7 @@
 - Minor refinement of reloading of data for JSON data store
 - Fix issue when quizzer is deleted that is part of a team when a practice is being configured
 - Refine error message for bad email addresses
+
+## 0.8.0
+- Major code refactor to create ItemsEditorObservable viewmodel base class in order to reduce duplicated code
+- Implement 'busy' property and wait cursor during async operations

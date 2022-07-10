@@ -22,7 +22,7 @@ namespace QMA.ViewModel
     public abstract class ItemsEditorObservable<T1, T2, T3> : ObservableObject
         where T1 : SoftDeletablePrimaryKeyBase
         where T2 : SoftDeletableObservableBase<T1>
-        where T3 : IBaseRepository <T1>
+        where T3 : IBaseRepository<T1>
     {
         protected T3 _repository;
 
