@@ -1,11 +1,9 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using Microsoft.Toolkit.Mvvm.Input;
 using QMA.DataAccess;
 using QMA.Model;
 using QMA.ViewModel.Observables;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.Json;
 using System.Linq;
@@ -14,15 +12,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using QMA.ViewModel.Services;
-using QMA.Helpers;
 
 namespace QMA.ViewModel
 {
-    public class EditQuestions : ObservableObject
+    public class EditQuestions : ItemsEditorObservable<Question, ObservableQuestion, IQuestionRepository>
     {
         private ISaveFileDialogService _saveFileDialogService;
-
-        private IQuestionRepository _repository;
 
         private string _questionSetId;
 
@@ -44,7 +39,7 @@ namespace QMA.ViewModel
                     var newItem = new ObservableQuestion(
                         true,
                         item,
-                        new AsyncRelayCommand(DeleteAsyncCommand),
+                        new AsyncRelayCommand(SoftDeleteAsyncCommand),
                         new AsyncRelayCommand(RestoreAsyncCommand),
                         new AsyncRelayCommand(SaveAsyncCommand)
                     );
@@ -63,7 +58,7 @@ namespace QMA.ViewModel
                         QuestionSetId = _questionSetId,
                         Text = $"Question {Items.Count + 1}"
                     },
-                    new AsyncRelayCommand(DeleteAsyncCommand),
+                    new AsyncRelayCommand(SoftDeleteAsyncCommand),
                     new AsyncRelayCommand(RestoreAsyncCommand),
                     new AsyncRelayCommand(SaveAsyncCommand)
                 );
@@ -72,27 +67,6 @@ namespace QMA.ViewModel
                 Add.NotifyCanExecuteChanged();
             },
             () => !Items.Any(x => x.HasErrors));
-
-            Closing = new RelayCommand<CancelEventArgs>((CancelEventArgs e) =>
-            {
-                if(Items.Any(x => x.HasErrors))
-                {
-                    e.Cancel = true;
-                }
-            });
-
-            RowEditEnding = new AsyncRelayCommand<CancelEventArgs>(async (CancelEventArgs e) =>
-            {
-                if (Selected.HasErrors)
-                {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    await SaveAsyncCommand();
-                    Add.NotifyCanExecuteChanged();
-                }
-            });
 
             Export = new RelayCommand(() =>
             {
@@ -121,73 +95,10 @@ namespace QMA.ViewModel
             });
         }
 
-        public ObservableCollection<ObservableQuestion> Items { get; } = new ObservableCollection<ObservableQuestion>();
-
-        public ObservableQuestion Selected { get; set; }
-
         #region Commands
-
-        public IRelayCommand Initialize { get; }
-
-        public IRelayCommand Add { get; }
-
-        public IRelayCommand<CancelEventArgs> Closing { get; }
-
-        // https://docs.microsoft.com/en-us/windows/communitytoolkit/controls/datagrid_guidance/editing_inputvalidation
-        public IRelayCommand<CancelEventArgs> RowEditEnding { get; }
-        
+       
         public IRelayCommand Export { get; }
 
         #endregion
-
-        private async Task DeleteAsyncCommand()
-        {
-            if (Selected.Deleted != null)
-            {
-                throw new InvalidOperationException($"Question ({Selected.PrimaryKey}) is already deleted");
-            }
-
-            if (Selected.Persisted == true)
-            {
-                Selected.Deleted = DateTimeOffset.UtcNow;
-                await _repository.UpdateAsync(Selected.GetModel());
-            }
-            else
-            {
-                Items.Remove(Selected);
-            }
-            Add.NotifyCanExecuteChanged();
-        }
-
-        private async Task RestoreAsyncCommand()
-        {
-            if (Selected.Deleted == null)
-            {
-                throw new InvalidOperationException($"Question ({Selected.PrimaryKey}) is not deleted");
-            }
-
-            Selected.Deleted = null;
-            await _repository.UpdateAsync(Selected.GetModel());
-        }
-
-        private async Task SaveAsyncCommand()
-        {
-            if(Selected != null)
-            {
-                if (Selected.Persisted)
-                {
-                    await _repository.UpdateAsync(Selected.GetModel());
-                }
-                else
-                {
-                    await _repository.AddAsync(Selected.GetModel());
-                    Selected.Persisted = true;
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Save cannot occur with no selected question");
-            }
-        }
     }
 }

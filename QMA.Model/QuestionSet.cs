@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QMA.Model
 {
-    public class QuestionSet : DeleteablePrimaryKeyBase
+    public class QuestionSet : SoftDeletablePrimaryKeyBase
     {
         public string Name { get; set; }
 

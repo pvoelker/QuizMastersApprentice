@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QMA.Model
 {
-    public abstract class DeleteablePrimaryKeyBase : PrimaryKeyBase
+    public abstract class SoftDeletablePrimaryKeyBase : PrimaryKeyBase
     {
         public DateTimeOffset? Deleted { get; set; }
     }

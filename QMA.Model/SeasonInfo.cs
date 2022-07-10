@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace QMA.Model
 {
-    public class SeasonInfo : DeleteablePrimaryKeyBase
+    public class SeasonInfo : SoftDeletablePrimaryKeyBase
     {
         public string Name { get; set; }
 

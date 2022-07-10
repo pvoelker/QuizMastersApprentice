@@ -8,7 +8,8 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Edit Quizzers" Height="600" Width="1000"
-        Icon="/QMA.ico">
+        Icon="/QMA.ico"
+        Cursor="{Binding Path=IsBusy, Converter={StaticResource BoolToCursor}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Initialize}"/>
@@ -25,7 +26,9 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False" CanUserDeleteRows="False">
+        <DataGrid Grid.Row="0" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}"
+                  RowEditEnding="DataGrid_RowEditEnding"
+                  AutoGenerateColumns="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="First Name" Binding="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" Width="100">
                     <DataGridTextColumn.CellStyle>

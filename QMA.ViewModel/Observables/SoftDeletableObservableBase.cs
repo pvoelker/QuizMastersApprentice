@@ -9,11 +9,11 @@ using System.Windows.Input;
 
 namespace QMA.ViewModel.Observables
 {
-    public abstract class DeleteableObservableBase<T> : ObservableValidator where T : DeleteablePrimaryKeyBase
+    public abstract class SoftDeletableObservableBase<T> : ObservableValidator where T : SoftDeletablePrimaryKeyBase
     {
         protected readonly T _model;
 
-        public DeleteableObservableBase(bool persisted, T model, ICommand delete, ICommand restore, ICommand save)
+        public SoftDeletableObservableBase(bool persisted, T model, ICommand delete, ICommand restore, ICommand save)
         {
             if(model == null)
             {

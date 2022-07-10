@@ -6,34 +6,13 @@ using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
-    public interface IQuizzerRepository
+    public interface IQuizzerRepository : IBaseRepository<Quizzer>
     {
-        /// <summary>
-        /// Get value by primary key
-        /// </summary>
-        /// <param name="key">Primary key</param>
-        /// <returns>A quizzer value</returns>
-        Quizzer GetByKey(string key);
-
         /// <summary>
         /// Get all values
         /// </summary>
         /// <param name="includeDeleted">True to include deleted values</param>
         /// <returns>Question set values. Empty collection if no values</returns>
         IEnumerable<Quizzer> GetAll(bool includeDeleted);
-
-        /// <summary>
-        /// Add a new value, cannot update an existing value
-        /// </summary>
-        /// <param name="value">The value to add</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task AddAsync(Quizzer value);
-
-        /// <summary>
-        /// Update an existing value, cannot add a new value
-        /// </summary>
-        /// <param name="value">The value to update</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task UpdateAsync(Quizzer value);
     }
 }
