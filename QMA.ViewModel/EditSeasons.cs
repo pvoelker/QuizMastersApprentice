@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using QMA.DataAccess;
 using QMA.Model;
 using QMA.ViewModel.Observables;
@@ -24,26 +24,29 @@ namespace QMA.ViewModel
 
             Initialize = new RelayCommand(() =>
             {
-                var questionSets = _questionSetRepository.GetAll();
-
-                foreach(var questionSet in questionSets)
+                ShowBusy(() =>
                 {
-                    QuestionSets.Add(questionSet);
-                }
+                    var questionSets = _questionSetRepository.GetAll();
 
-                var items = _repository.GetAll(true);
+                    foreach (var questionSet in questionSets)
+                    {
+                        QuestionSets.Add(questionSet);
+                    }
 
-                foreach(var item in items)
-                {
-                    var newItem = new ObservableSeason(
-                        true,
-                        item,
-                        new AsyncRelayCommand(SoftDeleteAsyncCommand),
-                        new AsyncRelayCommand(RestoreAsyncCommand),
-                        new AsyncRelayCommand(SaveAsyncCommand)
-                    );
-                    Items.Add(newItem);
-                }
+                    var items = _repository.GetAll(true);
+
+                    foreach (var item in items)
+                    {
+                        var newItem = new ObservableSeason(
+                            true,
+                            item,
+                            new AsyncRelayCommand(SoftDeleteAsyncCommand),
+                            new AsyncRelayCommand(RestoreAsyncCommand),
+                            new AsyncRelayCommand(SaveAsyncCommand)
+                        );
+                        Items.Add(newItem);
+                    }
+                });
                 Add.NotifyCanExecuteChanged();
             });
 

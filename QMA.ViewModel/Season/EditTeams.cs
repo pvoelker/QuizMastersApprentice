@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using QMA.DataAccess;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables.Season;
@@ -22,19 +22,22 @@ namespace QMA.ViewModel.Season
 
             Initialize = new RelayCommand(() =>
             {
-                var items = _repository.GetBySeasonId(_seasonId);
-
-                foreach(var item in items)
+                ShowBusy(() =>
                 {
-                    var newItem = new ObservableTeam(
-                        true,
-                        item,
-                        new AsyncRelayCommand(SoftDeleteAsyncCommand),
-                        new AsyncRelayCommand(RestoreAsyncCommand),
-                        new AsyncRelayCommand(SaveAsyncCommand)
-                    );
-                    Items.Add(newItem);
-                }
+                    var items = _repository.GetBySeasonId(_seasonId);
+
+                    foreach (var item in items)
+                    {
+                        var newItem = new ObservableTeam(
+                            true,
+                            item,
+                            new AsyncRelayCommand(SoftDeleteAsyncCommand),
+                            new AsyncRelayCommand(RestoreAsyncCommand),
+                            new AsyncRelayCommand(SaveAsyncCommand)
+                        );
+                        Items.Add(newItem);
+                    }
+                });
                 Add.NotifyCanExecuteChanged();
             });
 
