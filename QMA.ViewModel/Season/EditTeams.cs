@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using QMA.DataAccess;
 using QMA.Model.Season;
 using QMA.ViewModel.Observables.Season;
