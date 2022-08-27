@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
-    public interface IQuestionSetRepository : IBaseRepository<QuestionSet>
+    public interface IQuestionSetRepository : IUpdatableBaseRepository<QuestionSet>
     {
 
         /// <summary>

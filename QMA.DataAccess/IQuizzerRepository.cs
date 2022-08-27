@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
-    public interface IQuizzerRepository : IBaseRepository<Quizzer>
+    public interface IQuizzerRepository : IUpdatableBaseRepository<Quizzer>
     {
         /// <summary>
         /// Get all values

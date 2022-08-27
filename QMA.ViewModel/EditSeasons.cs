@@ -56,7 +56,7 @@ namespace QMA.ViewModel
                     false,
                     new SeasonInfo
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _repository.GetNewPrimaryKey(),
                         Name = $"Season {Items.Count + 1}",
                     },
                     new AsyncRelayCommand(SoftDeleteAsyncCommand),

@@ -143,7 +143,7 @@ namespace QMA.ViewModel.Practice
                 {
                     await _assignedRepository.AddAsync(new AssignedQuestion
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _assignedRepository.GetNewPrimaryKey(),
                         TeamMemberId = quizzer.TeamMemberId,
                         QuestionId = currentQuestion.PrimaryKey
                     });

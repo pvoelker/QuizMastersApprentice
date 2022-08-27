@@ -95,5 +95,12 @@ namespace QMA.DataAccess.JsonFile
                 throw new OperationFailedException("Delete failed");
             }
         }
+
+        /// <inheritdoc/>
+        public string GetNewPrimaryKey()
+        {
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
+            return coll.GetNextIdValue().ToString();
+        }        
     }
 }

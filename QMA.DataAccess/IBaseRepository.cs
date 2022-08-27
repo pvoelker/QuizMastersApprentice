@@ -1,5 +1,4 @@
-﻿using QMA.Model.Season;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 namespace QMA.DataAccess
 {
     /// <summary>
-    /// Base repository interface for add and update functionality
+    /// Base repository interface for add functionality
     /// </summary>
     /// <typeparam name="T">The data model to use</typeparam>
     public interface IBaseRepository<T> where T : class
@@ -27,10 +26,9 @@ namespace QMA.DataAccess
         Task AddAsync(T value);
 
         /// <summary>
-        /// Update an existing value, cannot add a new value
+        /// Returns a primary to use with <see cref="AddAsync(T)" />
         /// </summary>
-        /// <param name="value">The value to update</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task UpdateAsync(T value);
+        /// <returns></returns>
+        string GetNewPrimaryKey();
     }
 }
