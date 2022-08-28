@@ -5,7 +5,7 @@ using QMA.Model;
 
 namespace QMA.DataAccess
 {
-    public interface IQuestionRepository : IBaseRepository<Question>
+    public interface IQuestionRepository : IUpdatableBaseRepository<Question>
     {
         /// <summary>
         /// Get all values

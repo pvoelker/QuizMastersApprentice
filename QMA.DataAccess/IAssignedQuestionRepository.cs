@@ -5,15 +5,8 @@ using QMA.Model.Season;
 
 namespace QMA.DataAccess
 {
-    public interface IAssignedQuestionRepository
+    public interface IAssignedQuestionRepository : IBaseRepository<AssignedQuestion>
     {
-        /// <summary>
-        /// Get value by primary key
-        /// </summary>
-        /// <param name="key">Primary key</param>
-        /// <returns>An assigned question value</returns>
-        AssignedQuestion GetByKey(string key);
-
         /// <summary>
         /// Get all values
         /// </summary>
@@ -33,13 +26,6 @@ namespace QMA.DataAccess
         /// <param name="id">Team Member ID</param>
         /// <returns>Assigned question values. Empty collection if no values</returns>
         IEnumerable<AssignedQuestion> GetByTeamMemberId(string id);
-
-        /// <summary>
-        /// Add a new value, cannot update an existing value
-        /// </summary>
-        /// <param name="value">The value to add</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task AddAsync(AssignedQuestion value);
 
         /// <summary>
         /// Delete value by primary key

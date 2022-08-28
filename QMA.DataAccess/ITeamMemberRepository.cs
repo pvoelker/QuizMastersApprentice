@@ -6,15 +6,8 @@ using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
-    public interface ITeamMemberRepository
+    public interface ITeamMemberRepository : IBaseRepository<TeamMember>
     {
-        /// <summary>
-        /// Get value by primary key
-        /// </summary>
-        /// <param name="key">Primary key</param>
-        /// <returns>A team member value</returns>
-        TeamMember GetByKey(string key);
-
         /// <summary>
         /// Get all values
         /// </summary>
@@ -27,13 +20,6 @@ namespace QMA.DataAccess
         /// <param name="id">Team ID</param>
         /// <returns>Team member values. Empty collection if no values</returns>
         IEnumerable<TeamMember> GetByTeamId(string id);
-
-        /// <summary>
-        /// Add a new value, cannot update an existing value
-        /// </summary>
-        /// <param name="value">The value to add</param>
-        /// <returns>Task for asynchronous operation</returns>
-        Task AddAsync(TeamMember value);
 
         /// <summary>
         /// Delete value by primary key

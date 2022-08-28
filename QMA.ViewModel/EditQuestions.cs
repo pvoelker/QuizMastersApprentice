@@ -57,7 +57,7 @@ namespace QMA.ViewModel
                     false,
                     new Question
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _repository.GetNewPrimaryKey(),
                         QuestionSetId = _questionSetId,
                         Text = $"Question {Items.Count + 1}"
                     },

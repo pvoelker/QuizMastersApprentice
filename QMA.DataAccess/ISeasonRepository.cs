@@ -6,7 +6,7 @@ using QMA.Model.Season;
 
 namespace QMA.DataAccess
 {
-    public interface ISeasonRepository : IBaseRepository<SeasonInfo>
+    public interface ISeasonRepository : IUpdatableBaseRepository<SeasonInfo>
     {
         /// <summary>
         /// Get all values

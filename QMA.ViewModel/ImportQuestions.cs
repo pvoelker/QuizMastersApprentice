@@ -162,7 +162,7 @@ namespace QMA.ViewModel
             {
                 await _repository.AddAsync(new Question
                 {
-                    PrimaryKey = Guid.NewGuid().ToString(),
+                    PrimaryKey = _repository.GetNewPrimaryKey(),
                     QuestionSetId = questionSetId,
                     Number = item.Number,
                     Text = item.Text,

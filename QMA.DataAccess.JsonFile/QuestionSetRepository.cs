@@ -1,5 +1,6 @@
 ﻿using JsonFlatFileDataStore;
 using QMA.Model;
+using QMA.Model.Season;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,13 @@ namespace QMA.DataAccess.JsonFile
             {
                 throw new OperationFailedException("Update failed");
             }
+        }
+
+        /// <inheritdoc/>
+        public string GetNewPrimaryKey()
+        {
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
+            return coll.GetNextIdValue().ToString();
         }
     }
 }

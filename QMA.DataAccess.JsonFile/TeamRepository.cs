@@ -72,5 +72,12 @@ namespace QMA.DataAccess.JsonFile
                 throw new OperationFailedException("Update failed");
             }
         }
+
+        /// <inheritdoc/>
+        public string GetNewPrimaryKey()
+        {
+            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
+            return coll.GetNextIdValue().ToString();
+        }
     }
 }

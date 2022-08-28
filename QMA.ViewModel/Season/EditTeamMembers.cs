@@ -116,7 +116,7 @@ namespace QMA.ViewModel.Season
                 {
                     var newTeamMember = new TeamMember
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _teamMemberRepository.GetNewPrimaryKey(),
                         TeamId = _teamId,
                         QuizzerId = quizzerId
                     };
@@ -165,7 +165,7 @@ namespace QMA.ViewModel.Season
             {
                 await _assignedRepository.AddAsync(new AssignedQuestion
                 {
-                    PrimaryKey = Guid.NewGuid().ToString(),
+                    PrimaryKey = _assignedRepository.GetNewPrimaryKey(),
                     TeamMemberId = newTeamMember.TeamMemberId,
                     QuestionId = item.PrimaryKey
                 });
@@ -193,7 +193,7 @@ namespace QMA.ViewModel.Season
             {
                 await _assignedRepository.AddAsync(new AssignedQuestion
                 {
-                    PrimaryKey= Guid.NewGuid().ToString(),
+                    PrimaryKey= _assignedRepository.GetNewPrimaryKey(),
                     TeamMemberId = newTeamMember.TeamMemberId,
                     QuestionId = questionId
                 });

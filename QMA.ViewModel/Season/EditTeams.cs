@@ -47,7 +47,7 @@ namespace QMA.ViewModel.Season
                     false,
                     new Team
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _repository.GetNewPrimaryKey(),
                         SeasonId = _seasonId,
                         Name = $"Team {Items.Count + 1}",
                     },

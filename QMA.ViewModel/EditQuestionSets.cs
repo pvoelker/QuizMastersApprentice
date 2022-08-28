@@ -44,7 +44,7 @@ namespace QMA.ViewModel
                     false,
                     new QuestionSet
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _repository.GetNewPrimaryKey(),
                         Name = $"Question Set {Items.Count + 1}",
                     },
                     new AsyncRelayCommand(SoftDeleteAsyncCommand),

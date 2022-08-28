@@ -43,7 +43,7 @@ namespace QMA.ViewModel
                     false,
                     new Quizzer
                     {
-                        PrimaryKey = Guid.NewGuid().ToString(),
+                        PrimaryKey = _repository.GetNewPrimaryKey(),
                         FirstName = null,
                         LastName = null,
                         ParentFullName = null

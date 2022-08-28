@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QMA.DataAccess
 {
-    public interface ITeamRepository : IBaseRepository<Team>
+    public interface ITeamRepository : IUpdatableBaseRepository<Team>
     {
         /// <summary>
         /// Get all values
