@@ -11,8 +11,11 @@ namespace QMA.DataAccess.JsonFile
 {
     public class QuestionSetRepository : IQuestionSetRepository
     {
+        private IDocumentCollection<QuestionSet> _coll;
+
         public QuestionSetRepository()
         {
+            _coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
         }
 
         /// <inheritdoc/>
@@ -23,15 +26,13 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
-            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            return _coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<QuestionSet> GetAll()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
-            return coll.AsQueryable();
+            return _coll.AsQueryable();
         }
 
         /// <inheritdoc/>
@@ -42,8 +43,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
-            var success = await coll.InsertOneAsync(value);
+            var success = await _coll.InsertOneAsync(value);
             if (success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -58,8 +58,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
-            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
+            var success = await _coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");
@@ -69,8 +68,7 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public string GetNewPrimaryKey()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<QuestionSet>();
-            return coll.GetNextIdValue().ToString();
+            return _coll.GetNextIdValue().ToString();
         }
     }
 }

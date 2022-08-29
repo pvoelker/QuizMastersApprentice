@@ -11,8 +11,11 @@ namespace QMA.DataAccess.JsonFile
 {
     public class SeasonRepository : ISeasonRepository
     {
+        private IDocumentCollection<SeasonInfo> _coll;
+
         public SeasonRepository()
         {
+            _coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
         }
 
         /// <inheritdoc/>
@@ -23,17 +26,15 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            return _coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<SeasonInfo> GetAll(bool includedDeleted)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
             return includedDeleted ?
-                coll.AsQueryable() :
-                coll.AsQueryable().Where(x => x.Deleted == null);
+                _coll.AsQueryable() :
+                _coll.AsQueryable().Where(x => x.Deleted == null);
         }
 
         /// <inheritdoc/>
@@ -44,8 +45,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            var success = await coll.InsertOneAsync(value);
+            var success = await _coll.InsertOneAsync(value);
             if(success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -60,8 +60,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
+            var success = await _coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");
@@ -71,8 +70,7 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public string GetNewPrimaryKey()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<SeasonInfo>();
-            return coll.GetNextIdValue().ToString();
+            return _coll.GetNextIdValue().ToString();
         }
     }
 }

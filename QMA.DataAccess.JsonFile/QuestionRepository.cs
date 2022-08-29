@@ -11,8 +11,11 @@ namespace QMA.DataAccess.JsonFile
 {
     public class QuestionRepository : IQuestionRepository
     {
+        private IDocumentCollection<Question> _coll;
+
         public QuestionRepository()
         {
+            _coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
         }
 
         /// <inheritdoc/>
@@ -23,36 +26,31 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            return _coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Question> GetAll()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.AsQueryable();
+            return _coll.AsQueryable();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionNumber(string questionsSetId, int questionNumber, bool includeDeleted)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.Find((x) => x.QuestionSetId == questionsSetId && x.Number == questionNumber && (includeDeleted || x.Deleted == null));
+            return _coll.Find((x) => x.QuestionSetId == questionsSetId && x.Number == questionNumber && (includeDeleted || x.Deleted == null));
         }
 
         /// <inheritdoc/>
         public IEnumerable<Question> GetByQuestionSetId(string id, bool includeDeleted)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.AsQueryable().Where(x => x.QuestionSetId == id && (includeDeleted || x.Deleted == null));
+            return _coll.AsQueryable().Where(x => x.QuestionSetId == id && (includeDeleted || x.Deleted == null));
         }
 
         /// <inheritdoc/>
         public int CountByQuestionSetId(string id, int? maxQuestionPointValue, bool includeDeleted)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.AsQueryable().Where(x => x.QuestionSetId == id
+            return _coll.AsQueryable().Where(x => x.QuestionSetId == id
                 && (includeDeleted || x.Deleted == null)
                 && (!maxQuestionPointValue.HasValue || x.Points <= maxQuestionPointValue)).Count();
         }
@@ -65,8 +63,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            var success = await coll.InsertOneAsync(value);
+            var success = await _coll.InsertOneAsync(value);
             if (success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -81,8 +78,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
+            var success = await _coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");
@@ -92,8 +88,7 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public string GetNewPrimaryKey()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Question>();
-            return coll.GetNextIdValue().ToString();
+            return _coll.GetNextIdValue().ToString();
         }
     }
 }

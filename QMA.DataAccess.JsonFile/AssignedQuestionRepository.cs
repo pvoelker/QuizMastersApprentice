@@ -11,8 +11,11 @@ namespace QMA.DataAccess.JsonFile
 {
     public class AssignedQuestionRepository : IAssignedQuestionRepository
     {
+        private IDocumentCollection<AssignedQuestion> _coll;
+
         public AssignedQuestionRepository()
         {
+            _coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
         }
 
         /// <inheritdoc/>
@@ -23,29 +26,25 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            return _coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetAll()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            return coll.AsQueryable();
+            return _coll.AsQueryable();
         }
 
         /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByQuestionId(string id)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            return coll.Find((x) => x.QuestionId == id);
+            return _coll.Find((x) => x.QuestionId == id);
         }
 
         /// <inheritdoc/>
         public IEnumerable<AssignedQuestion> GetByTeamMemberId(string id)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            return coll.AsQueryable().Where(x => x.TeamMemberId == id);
+            return _coll.AsQueryable().Where(x => x.TeamMemberId == id);
         }
 
         /// <inheritdoc/>
@@ -56,8 +55,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            var success = await coll.InsertOneAsync(value);
+            var success = await _coll.InsertOneAsync(value);
             if (success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -72,8 +70,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            var success = await coll.DeleteOneAsync(x => x.PrimaryKey == key);
+            var success = await _coll.DeleteOneAsync(x => x.PrimaryKey == key);
             if (success == false)
             {
                 throw new OperationFailedException("Delete failed");
@@ -88,8 +85,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            var success = await coll.DeleteManyAsync(x => x.TeamMemberId == id);
+            var success = await _coll.DeleteManyAsync(x => x.TeamMemberId == id);
             if (success == false)
             {
                 throw new OperationFailedException("Delete failed");
@@ -99,8 +95,7 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public string GetNewPrimaryKey()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<AssignedQuestion>();
-            return coll.GetNextIdValue().ToString();
+            return _coll.GetNextIdValue().ToString();
         }        
     }
 }
