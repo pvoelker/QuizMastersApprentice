@@ -25,7 +25,7 @@ namespace QuizMastersApprenticeApp
     {
         private readonly string _questionsSetId;
 
-        private readonly IRepositoryFactory _repoFactory;
+        private readonly IQuestionRepository _repository;
 
         public EditQuestionsWindow(string questionSetId, IRepositoryFactory repoFactory)
         {
@@ -33,10 +33,10 @@ namespace QuizMastersApprenticeApp
 
             _questionsSetId = questionSetId;
 
-            _repoFactory = repoFactory;
+            _repository = repoFactory.GetQuestionRepository();
 
             DataContext = new EditQuestions(new SaveFileDialogService(this),
-                repoFactory.GetQuestionRepository(),
+                _repository,
                 questionSetId);
         }
 
@@ -56,7 +56,7 @@ namespace QuizMastersApprenticeApp
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            var importDlg = new ImportQuestionsWindow(_questionsSetId, _repoFactory);
+            var importDlg = new ImportQuestionsWindow(_questionsSetId, _repository);
             importDlg.ShowDialog();
 
             var thisDataContext = DataContext as EditQuestions;

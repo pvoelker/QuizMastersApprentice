@@ -114,7 +114,7 @@ namespace QMA.ViewModel
 
         public ICommand Initialize { get; }
 
-        public IRelayCommand Import { get; }
+        public IAsyncRelayCommand Import { get; }
 
         public IRelayCommand<CancelEventArgs> Closing { get; }   
 
