@@ -30,7 +30,8 @@ namespace QuizMastersApprenticeApp
             _csvImport.Initialize(repository);
             _bfpImport.Initialize(repository);
 
-            DataContext = new ImportQuestions(repository, new MessageBoxService(this), questionSetId);
+            DataContext = new ImportQuestions(repository, new MessageBoxService(this), new CloseWindowService(this),
+                questionSetId);
         }
     }
 }

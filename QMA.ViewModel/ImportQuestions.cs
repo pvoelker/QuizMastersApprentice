@@ -23,7 +23,9 @@ namespace QMA.ViewModel
 
         private IMessageBoxService _messageBoxService;
 
-        public ImportQuestions(IQuestionRepository repository, IMessageBoxService messageBoxService, string questionSetId)
+        private ICloseWindowService _closeWindowService;
+
+        public ImportQuestions(IQuestionRepository repository, IMessageBoxService messageBoxService, ICloseWindowService closeWindowService, string questionSetId)
         {
             if(messageBoxService == null)
             {
@@ -33,6 +35,7 @@ namespace QMA.ViewModel
             _repository = repository;
 
             _messageBoxService = messageBoxService;
+            _closeWindowService = closeWindowService;
 
             _questionSetId = questionSetId;
 
@@ -134,6 +137,8 @@ namespace QMA.ViewModel
                     {
                         _messageBoxService.ShowError(ex.Message);
                     }
+
+                    _closeWindowService.CloseWindow();
                 }
             }
             else if(BibleFactPacImport == true)
@@ -148,6 +153,8 @@ namespace QMA.ViewModel
                     {
                         _messageBoxService.ShowError(ex.Message);
                     }
+
+                    _closeWindowService.CloseWindow();
                 }
             }
             else
