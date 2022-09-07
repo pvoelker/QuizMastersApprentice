@@ -23,15 +23,15 @@ namespace QuizMastersApprenticeApp
     /// </summary>
     public partial class ImportQuestionsWindow : Window
     {
-        public ImportQuestionsWindow(string questionSetId, IRepositoryFactory repoFactory)
+        public ImportQuestionsWindow(string questionSetId, IQuestionRepository repository)
         {
             InitializeComponent();
 
-            _csvImport.Initialize(repoFactory.GetQuestionRepository());
-            _bfpImport.Initialize(repoFactory.GetQuestionRepository());
+            _csvImport.Initialize(repository);
+            _bfpImport.Initialize(repository);
 
-            DataContext = new ImportQuestions(repoFactory.GetQuestionRepository(),
-                new MessageBoxService(this), questionSetId);
+            DataContext = new ImportQuestions(repository, new MessageBoxService(this), new CloseWindowService(this),
+                questionSetId);
         }
     }
 }

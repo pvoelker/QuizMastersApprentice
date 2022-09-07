@@ -47,13 +47,6 @@
                     ParsedImportQuestions="{Binding Path=BfpParsedImportQuestions}"/>
             </TabItem>
         </TabControl>
-        <Button Grid.Row="2" Style="{StaticResource btnFunction}" Command="{Binding Import}" Content="Import">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <i:CallMethodAction MethodName="Close"
-                           TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Button>
+        <Button Grid.Row="2" Style="{StaticResource btnFunction}" Command="{Binding Import}" Content="Import"/>
     </Grid>
 </Window>

@@ -11,8 +11,11 @@ namespace QMA.DataAccess.JsonFile
 {
     public class TeamRepository : ITeamRepository
     {
+        private IDocumentCollection<Team> _coll;
+
         public TeamRepository()
         {
+            _coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
         }
 
         /// <inheritdoc/>
@@ -23,22 +26,19 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(key), "Primary key is required");
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            return coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
+            return _coll.Find((x) => x.PrimaryKey == key).FirstOrDefault();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Team> GetAll()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            return coll.AsQueryable();
+            return _coll.AsQueryable();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Team> GetBySeasonId(string id)
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            return coll.AsQueryable().Where(x => x.SeasonId == id);
+            return _coll.AsQueryable().Where(x => x.SeasonId == id);
         }
 
         /// <inheritdoc/>
@@ -49,8 +49,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            var success = await coll.InsertOneAsync(value);
+            var success = await _coll.InsertOneAsync(value);
             if (success == false)
             {
                 throw new OperationFailedException("Add failed");
@@ -65,8 +64,7 @@ namespace QMA.DataAccess.JsonFile
                 throw new ArgumentNullException(nameof(value));
             }
 
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            var success = await coll.ReplaceOneAsync(value.PrimaryKey, value);
+            var success = await _coll.ReplaceOneAsync(value.PrimaryKey, value);
             if (success == false)
             {
                 throw new OperationFailedException("Update failed");
@@ -76,8 +74,7 @@ namespace QMA.DataAccess.JsonFile
         /// <inheritdoc/>
         public string GetNewPrimaryKey()
         {
-            var coll = DataStoreSingleton.Instance.DataStore.GetCollection<Team>();
-            return coll.GetNextIdValue().ToString();
+            return _coll.GetNextIdValue().ToString();
         }
     }
 }

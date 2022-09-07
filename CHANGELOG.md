@@ -83,3 +83,9 @@
 ## 0.8.0
 - Major code refactor to create ItemsEditorObservable viewmodel base class in order to reduce duplicated code
 - Implement 'busy' property and wait cursor during async operations
+
+## 0.8.1
+- Switch from deprecated Microsoft.Toolkit.Mvvm to CommunityToolkit.Mvvm
+- Fix issues with primary key values on the JSON database file
+- Show busy during data load and initialization of windows
+- Fix issue with imports where items do not show up in the edit questions window properly
