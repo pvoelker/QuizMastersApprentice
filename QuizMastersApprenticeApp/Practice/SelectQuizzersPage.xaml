@@ -41,7 +41,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Error" Width="250" Foreground="Red">
+                    <DataGridTextColumn Header="Error" IsReadOnly="True" Width="250" Foreground="Red">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="TextBlock.Text" Value="" />
