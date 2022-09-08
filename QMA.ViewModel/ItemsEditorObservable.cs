@@ -47,7 +47,16 @@ namespace QMA.ViewModel
                 }
                 else
                 {
-                    await SaveAsyncCommand();
+                    await SaveAsync(Selected);
+                    Add.NotifyCanExecuteChanged();
+                }
+            });
+
+            RowSave = new AsyncRelayCommand<T2>(async (T2 d) =>
+            {
+                if (!d.HasErrors)
+                {
+                    await SaveAsync(d);
                     Add.NotifyCanExecuteChanged();
                 }
             });
@@ -127,6 +136,11 @@ namespace QMA.ViewModel
         public IRelayCommand Add { get; protected set; }
 
         /// <summary>
+        /// Command for when saving the data for a row
+        /// </summary>
+        public IRelayCommand RowSave { get; }
+
+        /// <summary>
         /// Command for when editting on a data row has finished
         /// </summary>
         public IRelayCommand<CancelEventArgs> RowEditEnding { get; }
@@ -192,23 +206,39 @@ namespace QMA.ViewModel
         {
             if (Selected != null)
             {
-                await ShowBusyAsync(async () =>
-                {
-                    if (Selected.Persisted)
-                    {
-                        await _repository.UpdateAsync(Selected.GetModel());
-                    }
-                    else
-                    {
-                        await _repository.AddAsync(Selected.GetModel());
-                        Selected.Persisted = true;
-                    }
-                });
+                await SaveAsync(Selected);
             }
             else
             {
                 throw new InvalidOperationException("Save cannot occur with no selected value");
             }
+        }
+
+        /// <summary>
+        /// Save a value (add or update)
+        /// </summary>
+        /// <param name="value">The value to save</param>
+        /// <returns>A task for asyncronous operation</returns>
+        /// <exception cref="ArgumentNullException">The value passed in is null</exception>
+        private async Task SaveAsync(T2 value)
+        {
+            if(value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            await ShowBusyAsync(async () =>
+            {
+                if (value.Persisted)
+                {
+                    await _repository.UpdateAsync(value.GetModel());
+                }
+                else
+                {
+                    await _repository.AddAsync(value.GetModel());
+                    Selected.Persisted = true;
+                }
+            });
         }
     }
 }

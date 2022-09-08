@@ -223,6 +223,35 @@
                 </Style.Triggers>
             </Style>
 
+            <Style TargetType="{x:Type Button}" x:Key="btnSave">
+                <Setter Property="Background" Value="#fff"/>
+                <Setter Property="Foreground" Value="DarkOrange"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="4" BorderThickness="1" Padding="2,0" BorderBrush="#000">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                                </ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="DarkOrange"/>
+                        <Setter Property="Foreground" Value="#fff"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Foreground" Value="Gray"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>            
+            
             <Style TargetType="{x:Type Button}" x:Key="btnDrillDown">
                 <Setter Property="Background" Value="#fff"/>
                 <Setter Property="Foreground" Value="Indigo"/>

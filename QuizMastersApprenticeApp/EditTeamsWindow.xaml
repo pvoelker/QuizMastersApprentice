@@ -68,7 +68,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Visibility="{Binding Path=NotPersisted, Converter={StaticResource BoolToVis}}">💾</TextBlock>
+                                <Button Style="{StaticResource btnSave}"
+                                        Visibility="{Binding Path=NotPersisted, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding Path=DataContext.RowSave, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Save changes" ToolTipService.InitialShowDelay="0">💾</Button>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
