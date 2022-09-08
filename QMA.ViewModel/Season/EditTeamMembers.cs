@@ -180,8 +180,8 @@ namespace QMA.ViewModel.Season
             var existingQuestionIds = existingAssigned.Select(x => x.QuestionId);
             var newQuestionIds = newTeamMember.AssignedQuestions.Select(x => x.PrimaryKey);
 
-            var questionIdsToDelete = existingQuestionIds.Except(newQuestionIds);
-            var questionIdsToAdd = newQuestionIds.Except(existingQuestionIds);
+            var questionIdsToDelete = existingQuestionIds.Except(newQuestionIds).ToList();
+            var questionIdsToAdd = newQuestionIds.Except(existingQuestionIds).ToList();
 
             foreach(var questionId in questionIdsToDelete)
             {
