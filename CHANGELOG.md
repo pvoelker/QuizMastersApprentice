@@ -89,3 +89,5 @@
 - Fix issues with primary key values on the JSON database file
 - Show busy during data load and initialization of windows
 - Fix issue with imports where items do not show up in the edit questions window properly
+- Improve how rows are initially committed on data grids
+- Fix problem with editing of assigned questions to team members
