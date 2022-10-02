@@ -159,3 +159,10 @@ Function .onInit
   done:
  
 FunctionEnd
+
+;--------------------------------
+; Sign installer and uninstaller
+
+!finalize 'signfile.bat "QMAInstall.exe"'
+
+!uninstfinalize 'signfile.bat "%1"'
