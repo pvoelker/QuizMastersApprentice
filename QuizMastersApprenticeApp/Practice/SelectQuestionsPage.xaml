@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:QuizMastersApprenticeApp"
+      xmlns:controls="clr-namespace:QuizMastersApprenticeApp.Controls"
       xmlns:import="clr-namespace:QuizMastersApprenticeApp.Controls.Import"
       xmlns:bfpimporter="clr-namespace:QMA.Importers.BibleFactPak;assembly=QMA.Importers.BibleFactPak"
       xmlns:converters="clr-namespace:QuizMastersApprenticeApp.Converters"
@@ -24,16 +25,24 @@
         <TabControl Grid.Row="2">
             <TabItem Header="Use Question Set As-Is" IsSelected="{Binding UseQuestionSetOnly}">
                 <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Question Question Set Name: {0}'}" />
-                    <TextBlock Grid.Row="2" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=ExistingQuestionCount, StringFormat='Question Set Count: {0}'}" />
-                    <TextBlock Grid.Row="4" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=MaxQuestionPointValue, TargetNullValue='No Limit on Question Point Values', StringFormat='Max Question Point Value: {0}'}" />
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=SelectedQuestionSet.Name, StringFormat='Question Question Set Name: {0}'}" />
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=ExistingQuestionCount, StringFormat='Question Set Count: {0}'}" />
+                    <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Style="{StaticResource txtInfoBig}" VerticalAlignment="Center" Text="{Binding Path=MaxQuestionPointValue, TargetNullValue='No Limit on Question Point Values', StringFormat='Max Question Point Value: {0}'}" />
+                    <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource txtInfo}" VerticalAlignment="Center" Margin="0,0,20,0">Question Range (optional):</TextBlock>
+                    <controls:IntListTextBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" IntList="{Binding Path=QuestionNumberList, Mode=OneWayToSource}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Use Questions from Bible Fact-Pak™" IsSelected="{Binding UseGeneratedQuestionSet, Mode=OneWay}">

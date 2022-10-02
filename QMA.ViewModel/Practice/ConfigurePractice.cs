@@ -221,6 +221,13 @@ namespace QMA.ViewModel.Practice
             set => SetProperty(ref _selectedQuestionSet, value);
         }
 
+        private List<int> _questionNumberList = null;
+        public List<int> QuestionNumberList
+        {
+            get => _questionNumberList;
+            set => SetProperty(ref _questionNumberList, value);
+        }
+
         public DeepObservableCollection<ObservableTeamQuizzer> TeamQuizzers { get; } = new DeepObservableCollection<ObservableTeamQuizzer>(new List<string> { nameof(ObservableTeamQuizzer.IsDuplicate), nameof(ObservableTeamQuizzer.IsNotDuplicate) });
 
         private bool _onlyUseImportQuestionsForPractice = false;
@@ -259,6 +266,11 @@ namespace QMA.ViewModel.Practice
             if (UseQuestionSetOnly || !OnlyUseImportQuestionsForPractice)
             {
                 var questions = _questionRepository.GetByQuestionSetId(SelectedQuestionSet.PrimaryKey, false);
+
+                if(QuestionNumberList != null && QuestionNumberList.Count > 0)
+                {
+                    questions = questions.Where(x => QuestionNumberList.Any(y => y == x.Number));
+                }
 
                 foreach (var item in questions.Where(x => !MaxQuestionPointValue.HasValue || x.Points <= MaxQuestionPointValue))
                 {

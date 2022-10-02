@@ -27,7 +27,7 @@ namespace QuizMastersApprenticeApp.Controls
         }
 
         public static readonly DependencyProperty FileNameOnlyProperty = DependencyProperty.Register(nameof(FileNameOnly), typeof(bool), typeof(FileTextBox),
-    new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public bool FileNameOnly
         {
