@@ -98,3 +98,4 @@
 - Change installer build to sign installer and uninstaller
 - Add ability to select ranges of questions for practice
 - When importing Bible Fact Pak™ questions, duplicates are filtered out
+- Add more error checking to import functionality

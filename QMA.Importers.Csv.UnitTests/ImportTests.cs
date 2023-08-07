@@ -64,6 +64,55 @@ namespace QMA.Importers.Csv.UnitTests
         }
 
         [Fact]
+        public void HappyPathDuplicates()
+        {
+            string fakeFileContents = "Number,Text,Answer,Points" + Environment.NewLine +
+                "1234,What color is the sky?,Blue,10" + Environment.NewLine +
+                "2345,What color is coal?,Black,15" + Environment.NewLine +
+                "1234,What color is the sky?,Blue,10";
+            byte[] fakeFileBytes = Encoding.UTF8.GetBytes(fakeFileContents);
+
+            var fakeMemoryStream = new MemoryStream(fakeFileBytes);
+
+            var importer = new QuestionImporter();
+
+            var result = importer.Import(new StreamReader(fakeMemoryStream));
+
+            result.Should().HaveCount(2);
+
+            var resultList = result.ToList();
+
+            resultList[0].Number.Should().Be(1234);
+            resultList[0].Text.Should().Be("What color is the sky?");
+            resultList[0].Answer.Should().Be("Blue");
+            resultList[0].Points.Should().Be(10);
+
+            resultList[1].Number.Should().Be(2345);
+            resultList[1].Text.Should().Be("What color is coal?");
+            resultList[1].Answer.Should().Be("Black");
+            resultList[1].Points.Should().Be(15);
+        }
+
+        [Fact]
+        public void HappyPathNonmatchingDuplicates()
+        {
+            string fakeFileContents = "Number,Text,Answer,Points" + Environment.NewLine +
+                "1234,What color is the sky?,Blue,10" + Environment.NewLine +
+                "2345,What color is coal?,Black,15" + Environment.NewLine +
+                "1234,This does not match...,Blue,10";
+            byte[] fakeFileBytes = Encoding.UTF8.GetBytes(fakeFileContents);
+
+            var fakeMemoryStream = new MemoryStream(fakeFileBytes);
+
+            var importer = new QuestionImporter();
+
+            var act = () => importer.Import(new StreamReader(fakeMemoryStream));
+
+            act.Should().Throw<ImportNonmatchingDuplicatesException>();
+        }
+
+
+        [Fact]
         public void MissingHeaders()
         {
             string fakeFileContents = "1234,What color is the sky?,Blue,10";
