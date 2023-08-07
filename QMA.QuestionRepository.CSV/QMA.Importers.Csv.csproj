@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="28.0.1" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QMA.DataAccess.JsonFile\QMA.DataAccess.JsonFile.csproj" />
     <ProjectReference Include="..\QMA.Importers\QMA.Importers.csproj" />
   </ItemGroup>
 
