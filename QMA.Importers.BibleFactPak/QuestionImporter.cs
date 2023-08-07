@@ -66,7 +66,11 @@ namespace QMA.Importers.BibleFactPak
                     // Clear out Fire Bible page number
                     newQuestion.Answer = Regex.Replace(newQuestion.Answer, @"Fire Bible Page Number: (\d+)", "");
 
-                    retVal.Add(newQuestion);
+                    // Check for repeated questions by question number
+                    if (retVal.Any(x => x.Number == newQuestion.Number) == false)
+                    {
+                        retVal.Add(newQuestion);
+                    }
                 }
 
                 return retVal;

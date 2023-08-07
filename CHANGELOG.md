@@ -94,5 +94,7 @@
 
 ## 1.0.0
 - First production version
+- Update to .NET 7 with associated library updates
 - Change installer build to sign installer and uninstaller
 - Add ability to select ranges of questions for practice
+- When importing Bible Fact Pak™ questions, duplicates are filtered out
