@@ -18,7 +18,7 @@
 ;--------------------------------
 ;General
 
-  !getdllversion ".\QuizMastersApprenticeApp\bin\Release\net6.0-windows\QMA.exe" MyVer_
+  !getdllversion ".\QuizMastersApprenticeApp\bin\Release\net7.0-windows\QMA.exe" MyVer_
 
   ;Name and file
   Name "Quiz Master's Apprentice v${MyVer_1}.${MyVer_2}"
@@ -68,13 +68,13 @@ Section
 
   SetOutPath "$INSTDIR"
   
-  File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.exe
-  File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.dll
-  File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\*.runtimeconfig.json
+  File .\QuizMastersApprenticeApp\bin\Release\net7.0-windows\*.exe
+  File .\QuizMastersApprenticeApp\bin\Release\net7.0-windows\*.dll
+  File .\QuizMastersApprenticeApp\bin\Release\net7.0-windows\*.runtimeconfig.json
 
   SetOutPath "$INSTDIR\Help"
 
-  File .\QuizMastersApprenticeApp\bin\Release\net6.0-windows\Help\*.html
+  File .\QuizMastersApprenticeApp\bin\Release\net7.0-windows\Help\*.html
   
   ;Store installation folder
   WriteRegStr HKCU "Software\${APP_NAME}" "" $INSTDIR
