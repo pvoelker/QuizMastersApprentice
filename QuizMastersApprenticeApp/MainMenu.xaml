@@ -23,6 +23,5 @@
         <Button Style="{StaticResource btnMainMenu}" Click="Practice_Click">⚐ Start Practice</Button>
         <TextBlock HorizontalAlignment="Center" x:Name="tbVersion"/>
         <TextBlock HorizontalAlignment="Center" x:Name="tbCopyright"/>
-        <TextBlock HorizontalAlignment="Center" Foreground="Red">Not for general distribution</TextBlock>
     </StackPanel>
 </Window>

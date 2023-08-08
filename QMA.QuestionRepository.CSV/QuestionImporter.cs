@@ -30,10 +30,25 @@ namespace QMA.Importers.Csv
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    var records = csv.GetRecords<ImportQuestion>();
+                    var records = csv.GetRecords<ImportQuestion>().ToList();
 
-                    return records.ToList();
+                    var distinctRecords = records.Distinct();
+
+                    var duplicateIds = distinctRecords.GroupBy(x => x.Number)
+                        .Where(g => g.Count() > 1)
+                        .Select(x => x.First().Number);
+
+                    if(duplicateIds.Count() > 0)
+                    {
+                        throw new ImportNonmatchingDuplicatesException($"Import failed due to non-matching duplicate questions. Question numbers: {string.Join(",", duplicateIds)}");
+                    }
+
+                    return distinctRecords.ToList();
                 }
+            }
+            catch (ImportNonmatchingDuplicatesException)
+            {
+                throw;
             }
             catch (HeaderValidationException ex)
             {

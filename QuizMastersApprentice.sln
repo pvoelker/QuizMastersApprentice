@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		QMAUninstall.ico = QMAUninstall.ico
 		QuizMasterApprentice.nsi = QuizMasterApprentice.nsi
 		README.md = README.md
+		signfile.bat = signfile.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QMA.Importers.Csv.UnitTests", "QMA.Importers.Csv.UnitTests\QMA.Importers.Csv.UnitTests.csproj", "{4B2DE336-8FC2-4D19-8D07-BDE3C194F048}"

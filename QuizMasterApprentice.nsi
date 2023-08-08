@@ -29,7 +29,7 @@
   VIAddVersionKey FileVersion "${MyVer_1}.${MyVer_2}.${MyVer_3}.${MyVer_4}"
   VIAddVersionKey ProductVersion "${MyVer_1}.${MyVer_2}.${MyVer_3}.${MyVer_4}"
   VIAddVersionKey FileDescription "Installation Package for Quiz Master's Apprentice"
-  VIAddVersionKey LegalCopyright "Copyright © 2022 Paul Voelker"
+  VIAddVersionKey LegalCopyright "Copyright © 2023 Paul Voelker"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\${APP_NAME}"
@@ -159,3 +159,10 @@ Function .onInit
   done:
  
 FunctionEnd
+
+;--------------------------------
+; Sign installer and uninstaller
+
+!finalize 'signfile.bat "QMAInstall.exe"'
+
+!uninstfinalize 'signfile.bat "%1"'
